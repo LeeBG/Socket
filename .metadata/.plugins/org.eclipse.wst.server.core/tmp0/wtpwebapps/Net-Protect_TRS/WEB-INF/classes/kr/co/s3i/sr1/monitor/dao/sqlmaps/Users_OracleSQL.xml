@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="UsersSync">
+	<typeAlias alias="Users" type="kr.co.s3i.sr1.hr.user.model.Users" />
+	<typeAlias alias="UsersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	<typeAlias alias="Department" type="kr.co.s3i.sr1.hr.dept.model.Dept" />
+
+	<select id="selectUserList" resultClass="UsersForm">
+		/* selectUserList - Users_OracleSQL */
+			<!-- SELECT   SABUN USERS_ID 		
+					,USERNAME USERS_NM
+				    ,'5' AUTH_CD		
+				    ,DEPTID DEPT_SEQ		
+				    ,CELLPHONENO HP		
+				    ,USEREMAIL EMAIL		
+					,OFCLEVELID POSITION_ID
+					,OFCLEVELNAME POSITION_NM
+					,'SYSTEM' AS crt_id
+					,TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') AS crt_time
+			FROM kepco.V_ACL_USER		
+			WHERE STATUS = '1' -->
+		<!-- STATUS 상태(1:재직,9:퇴사,2:휴직,8:정지)-->
+		select   sabun as USERS_ID   <!-- "사번" -->
+				,username as USERS_NM  <!-- "성명" -->
+				,deptid as DEPT_SEQ    <!-- "부서코드" -->
+				,useremail as EMAIL   <!-- "이메일주소" -->
+				,positionid as POSITION_ID  <!-- "직급코드" -->
+				,positionname as POSITION_NM  <!-- "직급명" -->
+				,'5' AUTH_CD
+				,'SYSTEM' AS crt_id
+				,TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') AS crt_date
+		from gw.v_acl_user
+		where 1=1
+		and locale='ko'   		  <!--국문 -->
+		and status = 1    		  <!-- 재직 -->
+		and addjobtype = 'BASIC'  <!-- 기본부서만 -->
+		order by username
+	</select>
+	
+	<select id="selectApprovalList" resultClass="UsersForm" >
+		/* selectApprovalList */
+		<!-- SELECT   APPSABUN    appr_id
+				,APPDEPTID	 dept_seq
+				,APPUSERNAME appr_nm
+		FROM V_APP_USERLINE -->
+		<!-- select
+			 appsabun as appr_id "결재권자 사번"
+			,appdeptid as dept_seq "결재권자 부서코드"
+			,appusername as appr_nm "결재권자 성명"
+			,action as "결재단계"
+			,taskno as "Task순서"
+			,sortno as "정렬순서"
+		from v_app_userline -->
+		<!-- where 1=1
+		and sabun = 'A20080811'  개인결재선 사용자 사번
+		order by taskno,lineno,sortno -->
+		<!-- select appr_id from 
+			(
+				select SF_GET_DEPTMNGR(#dept_seq#) as appr_id , rownum as rnum from dual
+			) where rnum = 1 -->
+		select SF_GET_DEPTMNGR(#dept_seq#) as appr_id from dual
+	</select>
+	
+	<select id="selectDepartmentList" resultClass="Department">
+			/* selectDepartmentList - Users_OracleSQL */
+			<!-- SELECT 	 DEPTID DEPT_SEQ	
+					,DEPTNAME DEPT_NM
+			        ,UPDEPTID P_DEPT_SEQ		
+			        ,DEPTH		
+			FROM kepco.V_ACL_DEPT		
+			WHERE USEYN ='Y' -->
+		select   a.deptid as DEPT_SEQ  <!-- "부서코드" -->
+				,a.deptname as DEPT_NM  <!-- "부서명" -->
+				,b.deptid as P_DEPT_SEQ  <!-- "상위부서코드" -->
+				,a.DEPTH
+		from gw.v_acl_dept a
+		left outer join gw.v_acl_dept b
+		on b.treeid = a.uptreeid
+		and b.locale = 'ko'
+		and b.useyn = 'Y'
+		where 1=1
+		and a.locale='ko' <!-- 국문 -->
+		and a.useyn='Y'  <!-- 사용중 -->
+		order by a.treeid
+	</select>
+	
+	<select id="selectNewLegacyDeptCode" resultClass="String">
+	/*  selectNewLegacyDeptCode - Hrdb_OracleSQL */
+		select   LEGACYDEPTCODE
+		from gw.v_acl_dept 
+		where 1=1
+		and locale='ko' 
+		and useyn='Y'  
+		and deptid = #dept_seq#
+	</select>
+	
+	<select id="selectNewProxyApprovalUser"  resultClass="String">
+		/* program_id = selectNewProxyApprovalUser */
+		<!-- SELECT SF_GET_DEPTMNGR2(#users_id#) AS APPR_ID FROM DUAL -->
+		SELECT    DISTINCT REPSABUN AS APPR_ID
+		FROM    GW.V_SCHEDULE_APPREP
+		WHERE   SABUN = #users_id#
+		AND     SYSDATE BETWEEN STARTDATE AND ENDDATE
+	</select>
+	<select id="selectNewApprovalUser"  resultClass="String">
+		/* program_id = selectNewApprovalUser */
+		SELECT SF_GET_DEPTMNGR(#legacydeptcode#) AS APPR_ID FROM DUAL
+	</select>
+
+	<select id="selectMolegUserList" resultClass="UsersForm">
+	/* selectMolegUserList - Users_OracleSQL */
+		select   USER_ID as USERS_ID
+				,USER_NM as USERS_NM
+				,DEPT_CD as DEPT_SEQ
+				,MAIL_ADDR as EMAIL
+				,JIKGUB_CD as POSITION_ID
+				,JIKWI_CD as POSITION_NM
+				,'5' AUTH_CD
+				,TEL1 as HP
+				,'SYSTEM' AS crt_id
+				,TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') AS crt_date
+		from SI_USER
+		where 1=1
+		and USER_STAT_GB = '10' or USER_STAT_GB='05' 
+		order by USERS_NM
+	</select>
+
+	<select id="selectMolegRetireUserList" resultClass="UsersForm">
+	/* selectMolegUserList - Users_OracleSQL */
+		select   USER_ID as USERS_ID
+				,USER_NM as USERS_NM
+				,DEPT_CD as DEPT_SEQ
+				,MAIL_ADDR as EMAIL
+				,JIKGUB_CD as POSITION_ID
+				,JIKWI_CD as POSITION_NM
+				,'5' AUTH_CD
+				,TEL1 as HP
+				,'SYSTEM' AS crt_id
+				,TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') AS crt_date
+		from SI_USER
+		where 1=1
+		and USER_STAT_GB = '30' or USER_STAT_GB='90' 
+		order by USERS_NM
+	</select>
+
+</sqlMap>

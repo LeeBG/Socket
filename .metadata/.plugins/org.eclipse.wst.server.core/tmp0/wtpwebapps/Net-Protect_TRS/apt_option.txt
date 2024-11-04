@@ -1,0 +1,29 @@
+{
+	"options": {
+		"win_xp": 1,
+		"win_7": 0,
+		"win_10": 0,
+		"win_11": 0,
+		"cache": 1,
+		"parameter": "nameOf.DLL,entryPoint"
+	},
+  	"network": {
+		"client_ip": "192.168.1.1",
+		"client_port": 40236,
+		"server_ip": "10.10.10.10",
+		"server_port": 80,
+		"protocol": "TCP"
+	},
+	"web": {
+		"url": "www.sample.com/download.php"
+	},
+	"mail": {
+		"protocol": "SMTP",
+		"sender": "user1@ahnlab.com",
+		"receipant": [
+			"user2@ahnlab.com",
+			"user3@ahnlab.com"
+		],
+		"subject": "mds rest api"
+	}
+}

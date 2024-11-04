@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Messanger">
+	<typeAlias alias="Messanger" type="kr.co.s3i.sr1.site.messanger.model.Messanger" />
+
+	<insert id="insertAlmNoticeData"> <!-- 승인알림 메시지 인서트  -->
+		/* insertAlmNoticeData */
+		 <![CDATA[
+		INSERT INTO T_AIST_ALIMI (
+			ALM_SEQ
+			, ALM_TYPE
+			, ALM_TYPE_NM
+			, ALM_TITLE
+			, ALM_SENDER_ID
+			, ALM_SENDER_NM
+			, ALM_RECV_ID
+			, ALM_RECV_NM
+			, ALM_REG_DT
+		) VALUES (
+			SEQ_AIST_ALIMI.NEXTVAL
+			, '1052'
+			, '자료전송시스템'
+			, #alm_title#
+			, #alm_sender_id#
+			, #alm_sender_nm#
+			, #alm_recv_id#
+			, #alm_recv_nm#
+			, #alm_crtr_time#
+			)
+		]]>
+	</insert>
+</sqlMap>

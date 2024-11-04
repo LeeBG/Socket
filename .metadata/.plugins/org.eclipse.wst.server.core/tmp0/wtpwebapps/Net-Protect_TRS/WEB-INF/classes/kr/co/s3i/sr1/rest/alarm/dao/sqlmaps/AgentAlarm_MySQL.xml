@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AgentAlarm">
+	<typeAlias alias="AgentAlarmForm" type="kr.co.s3i.sr1.rest.alarm.model.AgentAlarm" />
+
+	<insert id="insertAgentAlarm">
+		INSERT INTO agent_alarm
+			(
+				io_cd,
+				alarm_type,
+				alarm_parameter,
+				send_users_id,
+				receive_users_id,
+				message
+			)
+			VALUES
+			(
+				#io_cd#,
+				#alarm_type#,
+				#alarm_parameter#,
+				#send_users_id#,
+				#receive_users_id#,
+				#message#
+			)
+	</insert>
+	
+	<select id="selectAlarmList" resultClass="AgentAlarmForm">
+		SELECT
+			a.*,
+			su.users_nm AS send_users_nm
+		FROM
+			agent_alarm a LEFT OUTER JOIN c_user_mgt su 
+				ON ( 
+					su.rst_seq = 0 
+					AND su.cud_cd != 'D' 
+					AND a.send_users_id = su.users_id
+				)
+		WHERE			
+			a.receive_users_id =  #receive_users_id#
+		<isNotNull property="io_cd" prepend="AND ">
+			a.io_cd = #io_cd#
+		</isNotNull>
+		<isNotNull property="sortBy">
+			<isNotNull property="descending">
+			ORDER BY a.$sortBy$ $descending$, a.seq desc
+			</isNotNull>
+		</isNotNull>
+		<isNull property="sortBy">
+			ORDER BY a.seq asc
+		</isNull>
+		<isGreaterThan compareValue="0" property="currentPage">
+			limit $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+	
+	<select id="selectUntransmittedAlarmList" resultClass="AgentAlarmForm">
+		SELECT 
+			*
+		FROM
+			agent_alarm
+		WHERE			
+			receive_users_id =  #receive_users_id#
+			AND alarm_trans_cnt = 0
+			<isNotNull property="io_cd" prepend="AND ">
+				io_cd = #io_cd#
+			</isNotNull>
+	</select>
+	
+	<select id="selectUnreadAlarmCount" resultClass="java.lang.Integer">
+		SELECT 
+			COUNT(1)
+		FROM
+			agent_alarm a
+		WHERE			
+			a.receive_users_id =  #receive_users_id#
+		<isNotNull property="io_cd" prepend="AND ">
+			a.io_cd = #io_cd#
+		</isNotNull>
+	</select>
+	
+	<select id="selectAlarmListTotalCount" resultClass="java.lang.Integer">
+		SELECT 
+			COUNT(1)
+		FROM
+			agent_alarm
+		WHERE			
+			receive_users_id =  #receive_users_id#
+	</select>
+	
+	<delete id="deleteAlarmList">
+		DELETE FROM 
+		agent_alarm
+		WHERE 1=1 
+		<isNotNull property="seqList" prepend="AND">
+			<iterate prepend=" seq in" property="seqList" open="(" close=")" conjunction=",">
+				#seqList[]#
+			</iterate>
+		</isNotNull>
+		<isNotNull property="receive_users_id" prepend="AND">
+			receive_users_id = #receive_users_id#
+		</isNotNull>
+		<isNotNull property="io_cd" prepend="AND ">
+			io_cd = #io_cd#
+		</isNotNull>
+	</delete>
+	
+	<update id="updateAlarmTransCnt">
+		UPDATE agent_alarm
+		SET alarm_trans_cnt = 
+			<isNull property="action" >
+				alarm_trans_cnt + 1
+			</isNull>
+			<isEqual property="action" compareValue="COUNTUP">
+				alarm_trans_cnt + 1
+			</isEqual>
+			<isEqual property="action" compareValue="COUNTDOWN">
+				alarm_trans_cnt - 1
+			</isEqual>
+		<isNotNull prepend="WHERE seq in" property="alarmList">
+			<iterate property="alarmList" open="(" close=")" conjunction=",">
+				#alarmList[].seq#
+			</iterate>
+		</isNotNull>
+	</update>
+</sqlMap>

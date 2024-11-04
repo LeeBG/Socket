@@ -1,0 +1,1038 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Approval">
+	<typeAlias alias="approvalForm" type="kr.co.s3i.sr1.approval.model.ApprovalForm" />
+	<typeAlias alias="usersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	<typeAlias alias="fPreservationPolInfo" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolInfo" />
+	<typeAlias alias="AfterApprovalLockForm" type="kr.co.s3i.sr1.monitor.model.AfterApprovalLockForm" />
+	
+	<sql id="fromData">
+		<isEqual property="np_cd" compareValue="I">
+			in_data d
+		</isEqual>
+		<isEqual property="np_cd" compareValue="O">
+			out_data d
+		</isEqual>
+	</sql>
+	
+	<sql id="where_searchFieldQuery">
+		<isNotEmpty property="searchApprovalField">
+			<isEqual property="searchApprovalField" compareValue="Y">
+				<isNotEmpty prepend="AND" property="searchApprovalField">
+					a.app_type = #searchApprovalField#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchApprovalField" compareValue="R">
+				<isNotEmpty prepend="AND" property="searchApprovalField">
+					a.app_type = #searchApprovalField#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchApprovalField" compareValue="AC">
+				<isNotEmpty prepend="AND" property="searchApprovalField">
+					a.app_type = #searchApprovalField#
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		
+		<isNotEmpty property="searchField">
+			<isEqual property="searchField" compareValue="title">
+				<isNotEmpty prepend="AND" property="searchValue">
+					d.title LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchField" compareValue="users_nm">
+				<isNotEmpty prepend="AND" property="searchValue">
+					d.users_id IN (SELECT users_id FROM c_user_mgt WHERE rst_seq = 0 and users_nm LIKE CONCAT('%',#searchValue#,'%'))
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchField" compareValue="real_appr_nm">
+				<isNotEmpty prepend="AND" property="searchValue">
+					real_appr.users_nm LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchDate">
+		<isNotEmpty property="startDate">
+			<isEqual property="searchDateType" compareValue="app_time">
+				AND a.app_time BETWEEN #startDate# AND #endDate#
+			</isEqual>
+			<isEqual property="searchDateType" compareValue="crt_time">
+				AND a.crt_time BETWEEN #startDate# AND #endDate#
+			</isEqual>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="time_column">
+		<isEqual property="searchDateType" compareValue="app_time">
+			a.app_time
+		</isEqual>
+		<isEqual property="searchDateType" compareValue="crt_time">
+			a.crt_time
+		</isEqual>
+	</sql>
+
+	<sql id="where_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND <include refid="time_column"/> <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND <include refid="time_column"/> <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND <include refid="time_column"/> <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND <include refid="time_column"/> <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND <include refid="time_column"/> <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND <include refid="time_column"/> <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_custom_in_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND in_d.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND in_d.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND in_d.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND in_d.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND in_d.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND in_d.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_custom_out_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND out_d.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND out_d.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND out_d.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND out_d.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND out_d.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND out_d.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="fromDataCustom">
+		<isNotEqual property="oppsiteApprovalOption" compareValue="N">
+			<isEqual property="searchPosition" compareValue="B">
+				(SELECT 'I' as np_cd, in_d.* FROM in_data as in_d WHERE 1=1
+				<include refid="where_custom_in_searchDateOrTime"/>
+				<isEmpty property="history_yn">
+					AND in_d.STATUS IN ('F' , 'SS', 'AW')
+				</isEmpty>
+				UNION ALL
+				SELECT 'O' as np_cd, out_d.* from out_data as out_d WHERE 1=1
+				<include refid="where_custom_out_searchDateOrTime"/>
+				<isEmpty property="history_yn">
+					AND out_d.STATUS IN ('F' , 'SS', 'AW')
+				</isEmpty>
+				) d
+				<isEqual property="oppsiteApprovalOption" compareValue="N">
+					<include refid="fromData"/>
+				</isEqual>
+			</isEqual>
+			<isEqual property="searchPosition" compareValue="I">
+				(SELECT 'I' as np_cd, in_d.* FROM in_data as in_d WHERE 1=1
+				<include refid="where_custom_in_searchDateOrTime"/>
+				<isEmpty property="history_yn">
+					AND in_d.STATUS IN ('F' , 'SS', 'AW')
+				</isEmpty>
+				) d
+			</isEqual>
+			<isEqual property="searchPosition" compareValue="O">
+				(SELECT 'O' as np_cd, out_d.* FROM out_data as out_d WHERE 1=1
+				<include refid="where_custom_out_searchDateOrTime"/>
+				<isEmpty property="history_yn">
+					AND out_d.STATUS IN ('F' , 'SS', 'AW')
+				</isEmpty>
+				) d
+			</isEqual>
+		</isNotEqual>
+		<isEqual property="oppsiteApprovalOption" compareValue="N">
+			<include refid="fromData"/>
+		</isEqual>
+	</sql>
+
+	<sql id="dataStatusCustom">
+		<isEqual property="oppsiteApprovalOption" compareValue="N">
+			AND d.STATUS IN ('F','SS','AW')
+		</isEqual>
+	</sql>
+
+	<sql id="orderby">
+		<isNotEmpty property="searchDateType">
+			ORDER BY a.$searchDateType$ DESC, a.crt_time DESC 
+		</isNotEmpty>
+		<isEmpty property="searchDateType">
+			ORDER BY a.app_ord ASC
+		</isEmpty>
+	</sql>
+
+	<sql id="networkposition_and">
+		<isNotEqual property="oppsiteApprovalOption" compareValue="N">
+			<isNotEmpty prepend="AND" property="np_cd">
+				a.np_cd = d.np_cd
+			</isNotEmpty>
+		</isNotEqual>
+		<isEqual property="oppsiteApprovalOption" compareValue="N">
+			<isNotEmpty prepend="AND" property="np_cd">
+				a.np_cd = #np_cd#
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<select id="selectExistApproval" resultClass="approvalForm">
+	/* selectExistApproval */
+		SELECT
+			*
+		FROM
+			approval
+		<dynamic prepend="WHERE">
+			<isGreaterThan compareValue="0" prepend="AND" property="approval_seq">
+				approval_seq = #approval_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="app_ord">
+				app_ord = #app_ord#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="np_cd">
+				np_cd = #np_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="appr_id">
+				appr_id = #appr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="real_appr_id">
+				real_appr_id = #real_appr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="app_type">
+				app_type = #app_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="app_turn_yn">
+				app_turn_yn = #app_turn_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="del_yn">
+				del_yn = #del_yn#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="selectApprovalList" resultClass="approvalForm">
+		/* Approval.selectApprovalList */
+		SELECT
+			a.*,
+			d.title AS title,
+			u.users_nm AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and cud_cd != 'D' and users_id = a.real_appr_id limit 1) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and cud_cd != 'D' and users_id = a.appr_id limit 1) AS appr_nm,
+			a.appr_id,
+			a.real_appr_id
+		FROM
+			approval a
+			INNER JOIN 
+				(SELECT users_id, users_nm, dept_seq FROM c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') u ON ( u.users_id = a.users_id ) 
+			INNER JOIN 
+				(SELECT dept_seq FROM c_dept_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq ),
+			<include refid="fromData"/>
+		WHERE
+			a.data_seq = d.data_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			a.np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDate"/>
+		<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+			a.data_seq = #data_seq#
+		</isGreaterThan>
+		<!-- 	
+		<isNotEmpty prepend="AND" property="appr_id">
+			(a.appr_id = #appr_id# OR a.real_appr_id = #appr_id#)
+		</isNotEmpty> 
+		-->
+		<isNotEmpty property="appr_id">
+			<iterate prepend="AND a.appr_id in" property="apprIdsList" open="(" close=")" conjunction=",">
+					#apprIdsList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+		<include refid="orderby"/>
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectApprovalUnionAllProxyList" resultClass="approvalForm">
+	/* selectApprovalUnionAllProxyList */
+	select * from 
+			(
+				SELECT
+					a.*,
+					d.title AS title,
+					(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id limit 1) AS users_nm,
+					(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id limit 1) AS real_appr_nm,
+					(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id limit 1) AS appr_nm
+				FROM
+					c_user_mgt u,
+					approval a,
+					<include refid="fromDataCustom"/>
+				WHERE
+				a.data_seq = d.data_seq
+				<isNotEmpty prepend="AND" property="del_yn">
+					a.del_yn = #del_yn#
+				</isNotEmpty>
+				<include refid="networkposition_and"/>
+				<isNotEmpty prepend="AND" property="app_yn">
+					a.app_yn = #app_yn#
+				</isNotEmpty>
+				<include refid="where_searchFieldQuery"/>
+				<isEqual property="oppsiteApprovalOption" compareValue="N">
+					<include refid="where_searchDateOrTime"/>
+				</isEqual>
+				<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+					a.data_seq = #data_seq#
+				</isGreaterThan>
+				<isNotEmpty prepend="AND" property="appr_id">
+					a.appr_id = #appr_id#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="app_type">
+					app_type = #app_type#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="app_turn_yn">
+					app_turn_yn = #app_turn_yn#
+				</isNotEmpty>	
+				<include refid="dataStatusCustom"/>
+				AND a.users_id = u.users_id
+				AND u.rst_seq = 0
+		UNION ALL
+			SELECT
+					a.*,
+					d.title AS title,
+					(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id limit 1) AS users_nm,
+					(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id limit 1) AS real_appr_nm,
+					(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id limit 1) AS appr_nm
+				FROM
+					(SELECT 
+							* 
+						FROM 
+							f_private_approval
+						WHERE
+							proxy_id = #users_id#
+						<isNotEmpty prepend="AND" property="np_cd">
+							io_cd = #np_cd#
+						</isNotEmpty>
+					) f,
+					c_user_mgt u,
+					approval a,
+					<include refid="fromDataCustom"/>
+				WHERE
+					a.data_seq = d.data_seq
+				<isEqual property="period_yn" compareValue="Y" prepend="AND">
+					f.start_date &lt; a.crt_time AND f.end_date &gt; a.crt_time
+				</isEqual>
+					AND f.user_id = a.appr_id
+				<isNotEmpty prepend="AND" property="del_yn">
+					a.del_yn = #del_yn#
+				</isNotEmpty>
+				<include refid="networkposition_and"/>
+				<isNotEmpty prepend="AND" property="app_yn">
+					a.app_yn = #app_yn#
+				</isNotEmpty>
+				<include refid="where_searchFieldQuery"/>
+				<isEqual property="oppsiteApprovalOption" compareValue="N">
+					<include refid="where_searchDateOrTime"/>
+				</isEqual>
+				<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+					a.data_seq = #data_seq#
+				</isGreaterThan>
+				<isNotEmpty prepend="AND" property="app_type">
+					app_type = #app_type#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="app_turn_yn">
+					app_turn_yn = #app_turn_yn#
+				</isNotEmpty>
+				<include refid="dataStatusCustom"/>
+				AND a.users_id = u.users_id
+				AND u.rst_seq = 0
+			) as a
+		GROUP BY a.data_seq, a.np_cd
+		ORDER BY a.crt_time DESC
+		LIMIT $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectApprovalTotalList" resultClass="approvalForm">
+	/* selectApprovalTotalList */
+		SELECT
+			a.*,
+			d.title AS title,
+			u.users_nm AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and cud_cd != 'D' and users_id = a.real_appr_id limit 1) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and cud_cd != 'D' and users_id = a.appr_id limit 1) AS appr_nm
+		FROM
+			approval a
+			INNER JOIN 
+				(SELECT users_id as id, users_nm, dept_seq FROM c_user_mgt WHERE rst_seq = 0 AND cud_cd != 'D') u ON ( u.id = a.users_id ) 
+			INNER JOIN 
+				(SELECT dept_seq FROM c_dept_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq ),
+			(select 'I' as np_cd, inD.* from in_data inD
+				<isGreaterThan compareValue="0" prepend="WHERE" property="data_seq">
+					data_seq = #data_seq#
+				</isGreaterThan> 
+			union all 
+			select 'O' as np_cd, outD.* from out_data outD
+				<isGreaterThan compareValue="0" prepend="WHERE" property="data_seq">
+					data_seq = #data_seq#
+				</isGreaterThan> 
+			) d
+		WHERE
+			a.data_seq = d.data_seq
+		AND
+			a.np_cd = d.np_cd 
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDate"/>
+		<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+			a.data_seq = #data_seq#
+		</isGreaterThan>
+		<!-- 	
+		<isNotEmpty prepend="AND" property="appr_id">
+			(a.appr_id = #appr_id# OR a.real_appr_id = #appr_id#)
+		</isNotEmpty> 
+		-->
+		<isNotEmpty property="appr_id">
+			<iterate prepend="AND a.appr_id in" property="apprIdsList" open="(" close=")" conjunction=",">
+					#apprIdsList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+		<include refid="orderby"/>
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	
+	<!--2018.11.19 본인에게 올라온 미결재이력만 조회 하도록 변경함. #RedMine 744  참고-->
+	<select id="selectApprovalListCount" resultClass="Integer">
+	<![CDATA[
+	 /** selectApprovalListCount */
+	 ]]>
+		SELECT
+			count(a.data_seq)
+		FROM
+			c_user_mgt u,
+			approval a,
+			<include refid="fromDataCustom"/>
+		WHERE
+			a.data_seq = d.data_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<include refid="networkposition_and"/>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<isEqual property="oppsiteApprovalOption" compareValue="N">
+			<include refid="where_searchDateOrTime"/>
+		</isEqual>
+		<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+			a.data_seq = #data_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="appr_id">
+			a.appr_id = #appr_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+		<include refid="dataStatusCustom"/>
+		AND a.users_id = u.users_id
+		AND u.rst_seq = 0
+	</select>
+	
+	<!--2018.11.19 나를 대리결재자로 지정한 결재자의 미결재 문서 건수를 조회하는쿼리. #RedMine 744  참고-->
+	<select id="selectProxyApprovalListCount" resultClass="Integer">
+	 		/** selectProxyApprovalListCount */
+	 	SELECT 
+	 		count(1)
+	 	FROM
+			(
+				SELECT
+					distinct(a.data_seq)
+				FROM
+					approval a,
+					c_user_mgt u,
+					(SELECT 
+							* 
+						FROM 
+							f_private_approval
+						WHERE
+							proxy_id = #users_id#
+						<isNotEmpty prepend="AND" property="np_cd">
+							io_cd = #np_cd#
+						</isNotEmpty>
+						<isEqual property="period_yn" compareValue="Y" prepend="AND">
+							end_date &gt; now()
+						</isEqual>
+							) f,
+					<include refid="fromData"/>
+				WHERE
+					a.data_seq = d.data_seq
+				<isEqual property="period_yn" compareValue="Y" prepend="AND">
+					f.start_date &lt; a.crt_time AND f.end_date &gt; a.crt_time
+				</isEqual>
+				AND
+					f.user_id = a.appr_id
+				<isNotEmpty prepend="AND" property="del_yn">
+					a.del_yn = #del_yn#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="np_cd">
+					a.np_cd = #np_cd#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="app_yn">
+					a.app_yn = #app_yn#
+				</isNotEmpty>
+				<include refid="where_searchFieldQuery"/>
+				<include refid="where_searchDateOrTime"/>
+				<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+					a.data_seq = #data_seq#
+				</isGreaterThan>
+				<isNotEmpty prepend="AND" property="app_type">
+					app_type = #app_type#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="app_turn_yn">
+					app_turn_yn = #app_turn_yn#
+				</isNotEmpty>
+				AND d.STATUS IN ('F','SS','AW')
+				AND a.users_id = u.users_id
+				AND u.rst_seq = 0
+			)
+		as a
+	</select>
+	
+	<select id="selectApprovalHistoryList" resultClass="approvalForm">
+	/* selectApprovalHistoryList */
+		SELECT
+			a.*,
+			d.title AS title,
+			u.users_nm AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and cud_cd != 'D' and users_id = a.real_appr_id limit 1) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and cud_cd != 'D' and users_id = a.appr_id limit 1) AS appr_nm
+		FROM
+			approval a
+			INNER JOIN 
+				(SELECT users_id, users_nm, dept_seq FROM c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') u ON ( u.users_id = a.users_id ) 
+			INNER JOIN 
+				(SELECT dept_seq FROM c_dept_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq ),
+			<include refid="fromDataCustom"/>
+		WHERE
+			a.data_seq = d.data_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<include refid="networkposition_and"/>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<isEqual property="oppsiteApprovalOption" compareValue="N">
+			<include refid="where_searchDateOrTime"/>
+		</isEqual>
+		<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+			a.data_seq = #data_seq#
+		</isGreaterThan>
+		<isNotEmpty property="appr_id" prepend="AND" open="(" close=")">
+			a.appr_id = #appr_id# 
+			OR a.real_appr_id = #appr_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+		<include refid="orderby"/>
+		LIMIT $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectApprovalCount" resultClass="Integer">
+	/* selectApprovalCount */
+		SELECT
+			count(*)
+		FROM
+			approval
+		WHERE
+			app_yn = #app_yn#
+		AND
+			users_id = #users_id#
+		<isEqual prepend="AND" property="app_yn" compareValue="Y">
+			app_type <![CDATA[<>]]> 'WD'
+		</isEqual>
+	</select>
+
+	<select id="selectApprovalHistoryListCount" resultClass="Integer">
+	/* selectApprovalHistoryListCount */
+		SELECT
+			count(a.data_seq)
+		FROM
+			c_user_mgt u,
+			approval a,
+			<include refid="fromDataCustom"/>
+		WHERE
+			a.users_id = u.users_id
+		AND u.rst_seq = 0
+		AND a.data_seq = d.data_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<include refid="networkposition_and"/>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<isEqual property="oppsiteApprovalOption" compareValue="N">
+			<include refid="where_searchDateOrTime"/>
+		</isEqual>
+		<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+			a.data_seq = #data_seq#
+		</isGreaterThan>
+		<isNotEmpty property="appr_id" prepend="AND" open="(" close=")">
+			a.appr_id = #appr_id# 
+			OR a.real_appr_id = #appr_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectApprovalDeptHistoryList" resultClass="approvalForm">
+	/* selectApprovalDeptHistoryList */
+		SELECT
+			a.*,
+			d.title AS title,
+			u.users_nm AS users_nm,
+			real_appr.users_id as real_appr_id, real_appr.users_nm real_appr_nm
+		FROM
+			approval a
+			INNER JOIN 
+				(SELECT users_id, users_nm, dept_seq FROM c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') u ON ( u.users_id = a.users_id ) 
+			INNER JOIN 
+				(SELECT dept_seq FROM c_dept_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+			INNER JOIN
+   			 (SELECT  users_id, users_nm, dept_seq   FROM  c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D' AND dept_seq = #dept_seq#) real_appr 
+   			 ON (real_appr.users_id = a.real_appr_id),
+			<include refid="fromData"/>
+		WHERE
+			a.data_seq = d.data_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			a.np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDateOrTime"/>		
+		<include refid="orderby"/>
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectApprovalDeptHistoryCount" resultClass="Integer">
+	/* selectApprovalDeptHistoryCount */
+		SELECT
+			count(d.data_seq)
+		FROM
+			approval a
+			INNER JOIN 
+				(SELECT users_id, users_nm, dept_seq FROM c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') u ON ( u.users_id = a.users_id ) 
+			INNER JOIN 
+				(SELECT dept_seq FROM c_dept_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+			INNER JOIN
+   			 (SELECT  users_id, users_nm, dept_seq   FROM  c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D' AND dept_seq = #dept_seq#) real_appr 
+   			 ON (real_appr.users_id = a.real_appr_id),
+			<include refid="fromData"/>
+		WHERE
+			a.data_seq = d.data_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			a.np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDateOrTime"/>
+	</select>
+
+	<insert id="insertApproval">
+		INSERT INTO approval (
+			data_seq,
+			email_seq,
+			app_ord,
+			np_cd,
+			users_id,
+			appr_id,
+			app_yn,
+			app_turn_yn,
+			crt_time
+			<isNotEmpty prepend="," property="del_yn">
+				del_yn
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_type">
+				app_type
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="reason">
+				reason
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_time">
+				app_time
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="real_appr_id">
+				real_appr_id
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_seq">
+				request_seq
+			</isNotEmpty>
+		) VALUES (
+			#data_seq#,
+			#email_seq#,
+			#app_ord#,
+			#np_cd#,
+			#users_id#,
+			#appr_id#,
+			#app_yn#,
+			#app_turn_yn#,
+			#crt_time#
+			<isNotEmpty prepend="," property="del_yn">
+				#del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_type">
+				#app_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="reason">
+				#reason#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_time">
+				#app_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="real_appr_id">
+				#real_appr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_seq">
+				#request_seq#
+			</isNotEmpty>
+		)
+	</insert>
+
+	<update id="updateApproval">
+		UPDATE approval
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="app_yn">
+				app_yn = #app_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="del_yn">
+				del_yn = #del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_type">
+				app_type = #app_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="reason">
+				reason = #reason#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_time">
+				app_time = #app_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="real_appr_id">
+				real_appr_id = #real_appr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_turn_yn">
+				app_turn_yn = #app_turn_yn#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan compareValue="0" prepend="AND" property="approval_seq">
+				approval_seq = #approval_seq#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="np_cd">
+				np_cd = #np_cd#
+			</isNotEmpty>
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="app_ord">
+				app_ord = #app_ord#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="requestSeqList">
+			<iterate prepend="request_seq in" property="requestSeqList" open="(" close=")" conjunction=",">
+				#requestSeqList[]#
+			</iterate>
+			</isNotEmpty>
+		</dynamic> 
+	</update>
+
+	<update id="updateAllApprovalReject">
+		UPDATE
+			approval
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="app_type">
+				app_type = #app_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_time">
+				app_time = #app_time#
+			</isNotEmpty>
+		</dynamic>
+		WHERE 
+			1=1
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="app_ord">
+				app_ord > #app_ord#
+			</isGreaterThan>
+	</update>
+	
+	<select id="selectPickApproverList" resultClass="usersForm">
+	/* selectPickApproverList */
+		SELECT a.users_id as users_id,
+			b.users_nm as users_nm,
+			b.position_nm as position_nm,
+			ifnull(c.dept_seq, '') as dept_seq,
+			ifnull(c.dept_nm, '') as dept_nm
+		FROM f_pol_approval_line_user a,
+			c_user_mgt b,
+			c_dept_mgt c
+		WHERE 
+			(( a.users_id != '{ALL}' AND a.users_id = b.users_id ) OR (a.users_id='{ALL}'))
+			AND b.rst_seq = 0
+			AND app_seq =  #a_pol_seq#
+			AND EXISTS
+				(
+					SELECT 1
+					FROM f_pol_approval_mgt
+					WHERE rst_seq = 0
+						AND cud_cd != 'D'
+						AND app_seq = a.app_seq
+				)
+			AND ( b.dept_seq = c.dept_seq AND b.rst_seq = 0 AND b.use_yn = 'Y')
+			AND ( c.rst_seq = 0 AND c.use_yn = 'Y')
+			AND a.app_line_level = #appLineLevel#
+			AND a.np_cd = #np_cd#
+		GROUP BY a.users_id
+	</select>
+	
+	<!-- 승인처리시 자료보존정책 저장유무가져오기 -->
+	<select id="selectFPreservationPolicyUserInfoList" resultClass="fPreservationPolInfo">
+		/* selectFPreservationPolicyUserInfoList */
+		 SELECT f.* 
+		 FROM <include refid="fromData"/>
+		 INNER JOIN c_user_mgt u on u.users_id = d.users_id and u.rst_seq=0 
+		 INNER JOIN f_preservation_pol_file_info f on f.pol_seq = u.fp_pol_seq and f.rst_seq = 0 and io_cd =#np_cd#
+		 where d.data_seq = #data_seq#
+		 group by seq 
+		 order by seq desc limit 1;
+	</select>
+
+	<select id="selectLastApprovalInfo" resultClass="kr.co.s3i.sr1.approval.model.Approval">
+	/* selectLastApprovalInfo */
+		SELECT 
+			max_app.data_seq, max_app.np_cd, max_app.app_yn, max_app.app_turn_yn
+		FROM (
+			SELECT MAX(app_ord) maxord, data_seq, np_cd, app_yn, app_turn_yn  FROM approval
+			WHERE np_cd=#networkPosition#
+			<isNotEmpty prepend="AND" property="datas">
+			<iterate prepend="data_seq IN" property="datas" open="(" close=")" conjunction=",">
+				#datas[].data_seq#
+			</iterate>
+			</isNotEmpty>
+			GROUP BY DATA_seq
+		) AS max_app
+		INNER JOIN approval app ON app.data_seq=max_app.data_seq AND app.np_cd=max_app.np_cd AND app.app_ord=max_app.maxord
+	</select>
+
+	<select id="selectRestApprovalList" resultClass="kr.co.s3i.sr1.approval.model.Approval">
+	/* selectRestApprovalList */
+		SELECT 
+			approval_seq,
+			appr_id,
+			real_appr_id,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq=0 AND cud_cd !='D' AND users_id=appr_id limit 1) as appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq=0 AND cud_cd !='D' AND users_id=real_appr_id limit 1) as real_appr_nm,
+			app_type,
+			app_yn,
+			app_turn_yn,
+			app_time,
+			app_ord
+		FROM approval
+		WHERE
+			data_seq=#data_seq# AND 
+			np_cd=#networkPosition#
+		ORDER BY
+			app_ord ASC
+	</select>
+	
+	<select id="selectAfterApprovalLockUserList" parameterClass="AfterApprovalLockForm" resultClass="java.lang.String">
+		SELECT
+			users_id 
+		FROM
+			f_approval_lock 
+		WHERE
+			lock_section = #lock_section#
+			<isNotEmpty prepend="AND" property="np_cd">
+				np_cd = #np_cd#
+			</isNotEmpty>
+		AND
+			end_date is null
+	</select>
+	
+	<select id="selectAppControllerUserList" resultClass="usersForm">
+		/** selectAppControllerUserList */
+		select
+		 USERS_ID
+		 , A_POL_SEQ
+		 , DEPT_SEQ
+		 , USERS_NM
+		 , POSITION_NM
+		 , CUSTOM_ADD_YN
+		 , (SELECT app_nm FROM f_pol_approval_mgt WHERE rst_seq = 0 and cud_cd != 'D' and app_seq = a.a_pol_seq) AS app_nm
+	from c_user_mgt a
+	where 
+	  rst_seq = 0
+	  and use_yn = 'Y'
+	  and dept_seq = #dept_seq#
+	  order by order1
+	</select>
+
+	<select id="isAfterApprovalLockUser" resultClass="java.lang.Integer">
+		SELECT
+			count(*)
+		FROM
+			f_approval_lock 
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="np_cd">
+				np_cd = #np_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="appr_id">
+				users_id = #appr_id#
+			</isNotEmpty>
+		AND
+			end_date is null
+	</select>
+	
+	<select id="isDoNotApproval"  resultClass="java.lang.Integer">
+		/* 사후결재기능 제한 날짜동안 승인하지 않은 건 조회  */
+			SELECT ifnull(cnt, 0) as count 
+			FROM
+			(
+				SELECT
+					DATEDIFF(now(), min(crt_time)) as cnt
+				FROM
+					approval 
+				WHERE
+					app_yn= "N" 
+				AND
+					APP_TYPE ="AF"
+				AND
+					NP_CD = #np_cd#
+				AND
+					app_turn_yn = "Y"
+				AND
+					appr_id = #appr_id#
+			) AS aa
+	</select>
+	
+	<update id="updateAfterApprovalLockUsers" >
+		UPDATE
+			f_approval_lock
+		SET
+			end_date = now()
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND">
+				np_cd = #np_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="appr_id">
+				users_id = #appr_id#
+			</isNotEmpty>
+	</update>
+</sqlMap>

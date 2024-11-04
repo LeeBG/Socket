@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AdminAudit">
+	<typeAlias alias="AdminAuditForm" type="kr.co.s3i.sr1.audit.adminAudit.model.AdminAuditForm" />
+	
+	<!-- 로그 관련 객체 가져오기 -->
+	<typeAlias alias="fPolFileMgtForm" type="kr.co.s3i.sr1.policy.filePolicy.model.FPolFileMgtForm" />
+	<typeAlias alias="fPolFileInfoForm" type="kr.co.s3i.sr1.policy.filePolicy.model.FPolFileInfoForm" />
+	<typeAlias alias="fPreservationPolInfo" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolInfo" />
+	<typeAlias alias="fPreservationPolMgt" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolMgt" />
+	<typeAlias alias="fExtsMgtForm" type="kr.co.s3i.sr1.policy.extPolicy.model.FExtsMgtForm" />
+	<typeAlias alias="cPolLoginMgtForm" type="kr.co.s3i.sr1.policy.loginPolicy.model.CPolLoginMgtForm" />
+	<typeAlias alias="systemAlertPolicy" type="kr.co.s3i.sr1.policy.systemAlertPolicy.model.SystemAlertPolicy" />
+	<typeAlias alias="EnvForm" type="kr.co.s3i.sr1.systemManagement.envManagement.model.EnvForm" />
+	<typeAlias alias="dept" type="kr.co.s3i.sr1.hr.dept.model.Dept" />
+	<typeAlias alias="usersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	<typeAlias alias="StreamPolicyForm" type="kr.co.s3i.sr1.policy.streamPolicy.model.StreamPolicyForm" />
+	<typeAlias alias="outgoingSMTP" type="kr.co.s3i.sr1.sender.mail.model.OutgoingSMTP" />
+	<typeAlias alias="ApprovalPolicyForm" type="kr.co.s3i.sr1.policy.approvalPolicy.model.ApprovalPolicyForm" />
+	<typeAlias alias="IpObjectForm" type="kr.co.s3i.sr1.policy.ipObjectPolicy.model.IpObjectForm" />
+	<typeAlias alias="IpObjectGroupForm" type="kr.co.s3i.sr1.policy.ipObjectPolicy.model.IpObjectGroupForm" />
+	<typeAlias alias="DestObjectForm" type="kr.co.s3i.sr1.policy.destObjectPolicy.model.DestObjectForm" />
+	<typeAlias alias="DestObjectGroupForm" type="kr.co.s3i.sr1.policy.destObjectPolicy.model.DestObjectGroupForm" />
+	<typeAlias alias="StreamPolicyGroupForm" type="kr.co.s3i.sr1.policy.streamPolicy.model.StreamPolicyGroupForm" />
+	<!-- 로그 관련 객체 끝 -->
+
+	<sql id="where_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			AND DATE_FORMAT(crt_time,'%Y-%m-%d') <![CDATA[>=]]> #startDay#
+		</isNotEmpty>
+		<isNotEmpty property="startHour">
+			<isNotEmpty property="startMin">
+				AND DATE_FORMAT(crt_time,'%Y-%m-%d %H:%i') <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#)
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="endDay">
+			AND DATE_FORMAT(crt_time,'%Y-%m-%d') <![CDATA[<=]]> #endDay#
+		</isNotEmpty>
+		<isNotEmpty property="endHour">
+			<isNotEmpty property="endMin">
+				AND DATE_FORMAT(crt_time,'%Y-%m-%d %H:%i') <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#)
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<insert id="insertAdminAudit" parameterClass="AdminAuditForm">
+		INSERT INTO admin_audit (
+			suc_yn,
+			log_code,
+			crt_id,
+			log_text,
+			table_seq,
+			button_yn,
+			crt_date,
+			system_cd
+		) VALUES (
+			#suc_yn#,
+			#log_code#,
+			#crt_id#,
+			#log_text#,
+			#table_seq#,
+			#button_yn#,
+			now(),
+			#system_cd#
+		)
+	</insert>
+	
+	<select id="selectAdminLoginAuditList" resultClass="AdminAuditForm">
+		SELECT a.*
+		FROM(
+			SELECT
+				*, crt_date as crt_time
+			FROM
+				admin_audit
+			WHERE
+				display_yn = 'Y'
+			AND
+				system_cd = #system_cd#
+			<isNotEmpty property="logtype">
+				<isNotEmpty prepend="AND" property="logtype">
+						log_code in (SELECT cd_nm FROM code WHERE cd_cate_type = #logtype#)
+					</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="searchProgramId">
+				<isNotEmpty prepend="AND" property="searchProgramId">
+						log_code = #searchProgramId#
+					</isNotEmpty>
+			</isNotEmpty>
+		) AS a
+		WHERE 1=1
+			<include refid="where_searchDateOrTime"/>
+		ORDER BY seq DESC
+		LIMIT
+			$offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectAdminLoginAuditExcelList" resultClass="AdminAuditForm">
+		SELECT *
+		FROM
+		(
+			SELECT
+				*,
+				crt_date as crt_time
+			FROM
+				admin_audit
+			WHERE
+				display_yn = 'Y'
+			AND
+				system_cd = #system_cd#
+			<isNotEmpty property="logtype">
+				<isNotEmpty prepend="AND" property="logtype">
+						log_code in (SELECT cd_nm FROM code WHERE cd_cate_type = #logtype#)
+					</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="searchProgramId">
+				<isNotEmpty prepend="AND" property="searchProgramId">
+						log_code = #searchProgramId#
+					</isNotEmpty>
+			</isNotEmpty>
+		) AS A
+		WHERE 1=1
+			<include refid="where_searchDateOrTime"/>
+		ORDER BY seq DESC
+	</select>
+	
+	<select id="selectAdminLoginAuditListCount" resultClass="Integer">
+		SELECT
+			count(*)
+		FROM (
+			SELECT *, crt_date as crt_time
+			FROM
+				admin_audit
+			WHERE
+				display_yn = 'Y'
+			AND
+				system_cd = #system_cd#
+			<isNotEmpty property="logtype">
+				<isNotEmpty prepend="AND" property="logtype">
+						log_code in (SELECT cd_nm FROM code WHERE cd_cate_type = #logtype#)
+					</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="searchProgramId">
+				<isNotEmpty prepend="AND" property="searchProgramId">
+						log_code = #searchProgramId#
+					</isNotEmpty>
+			</isNotEmpty>
+		) AS a
+		WHERE 1=1 
+			<include refid="where_searchDateOrTime"/>
+	</select>
+	
+	<select id="selectAdminAudit" resultClass="AdminAuditForm">
+		SELECT
+			*
+		FROM
+			admin_audit
+		WHERE
+			seq = #seq#
+		AND
+			system_cd = #system_cd#
+	</select>
+	
+	<!-- 파일전송 정책 쿼리 시작 -->
+	<select id="selectFlie_PolicyAfter" resultClass="fPolFileMgtForm">
+		SELECT 
+			*
+		FROM
+			f_pol_file_mgt
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectFlie_PolicyBefore" resultClass="fPolFileMgtForm">
+		SELECT
+			*
+		FROM
+			f_pol_file_mgt
+		WHERE
+			pol_seq = #pol_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	
+	<select id="selectFlie_PolicyInfoAfter" resultClass="fPolFileInfoForm">
+		SELECT 
+			*
+		FROM
+			f_pol_file_info
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectFlie_PolicyInfoBefore" resultClass="fPolFileInfoForm">
+		SELECT
+			*
+		FROM
+			f_pol_file_info
+		WHERE
+			pol_seq = #pol_seq#
+		AND
+			io_cd = #io_cd#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 파일전송 정책 쿼리 끝 -->
+
+	<!-- 파일보존 정책 쿼리 시작 -->
+	<select id="selectFPreservationPolInfoAfter" resultClass="fPreservationPolInfo">
+		SELECT 
+			*
+		FROM
+			f_preservation_pol_file_info
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectFPreservationPolInfoBefore" resultClass="fPreservationPolInfo">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_info
+		WHERE
+			pol_seq = #pol_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		AND io_cd IN (
+            SELECT
+                io_cd 
+            FROM
+                f_preservation_pol_file_info 
+            WHERE
+                seq = #seq#
+        )
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	
+	<select id="selectFPreservationPolMgtAfter" resultClass="fPreservationPolMgt">
+		SELECT 
+			*
+		FROM
+			f_preservation_pol_file_mgt
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectFPreservationPolMgtBefore" resultClass="fPreservationPolMgt">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_mgt
+		WHERE
+			pol_seq = #pol_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 파일보존 정책 쿼리 끝 -->
+	
+	<!-- 확장명전송 정책 쿼리 시작 -->
+	<select id="selectExt_PolicyAfter" resultClass="fExtsMgtForm">
+		SELECT 
+			*
+		FROM
+			f_exts_mgt
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectExt_PolicyBefore" resultClass="fExtsMgtForm">
+		SELECT
+			*
+		FROM
+			f_exts_mgt
+		WHERE
+			exts_seq = #exts_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 확장명전송 정책 쿼리 끝 -->
+	
+	<!-- 로그인 정책 쿼리 시작 -->
+	<select id="selectLogin_PolicyAfter" resultClass="cPolLoginMgtForm">
+		SELECT 
+			*
+		FROM
+			c_pol_login_mgt
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectLogin_PolicyBefore" resultClass="cPolLoginMgtForm">
+		SELECT
+			*
+		FROM
+			c_pol_login_mgt
+		WHERE
+			login_seq = #login_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 로그인 정책 쿼리 끝 -->
+	
+	<!-- 시스템감사 정책 쿼리 시작 -->
+	<select id="selectSystem_PolicyAfter" resultClass="systemAlertPolicy">
+		SELECT 
+			*
+		FROM
+			system_alert_policy
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectSystem_PolicyBefore" resultClass="systemAlertPolicy">
+		SELECT
+			*
+		FROM
+			system_alert_policy
+		WHERE
+		<isEqual property="rst_seq" compareValue="0">
+			rst_seq <![CDATA[!=]]> #rst_seq#
+		</isEqual>
+		<isNotEqual property="rst_seq" compareValue="0">
+			rst_seq <![CDATA[=]]> (#rst_seq# -1)
+		</isNotEqual>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 시스템감사 정책 쿼리 끝 -->
+	
+	<!--환경설정 쿼리 시작 -->
+	<select id="selectEnv_MgtAfter" resultClass="EnvForm">
+		SELECT 
+			*
+		FROM
+			env
+		WHERE
+			env_seq = #env_seq#
+	</select>
+	
+	<select id="selectEnv_MgtBefore" resultClass="EnvForm">
+		SELECT
+			*
+		FROM
+			env
+		WHERE
+		<isEqual property="rst_seq" compareValue="0">
+			rst_seq <![CDATA[!=]]> #rst_seq#
+		</isEqual>
+		<isNotEqual property="rst_seq" compareValue="0">
+			rst_seq <![CDATA[=]]> (#rst_seq# -1)
+		</isNotEqual>
+		AND
+			env_seq <![CDATA[!=]]> #env_seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 환경설정 쿼리 끝 -->
+
+	<!-- 메일서버 설정 쿼리 시작 -->
+	<select id="selectSMTP_MGTAfter" resultClass="outgoingSMTP">
+		SELECT 
+			*
+		FROM
+			outgoingsmtp
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectSMTP_MGTBefore" resultClass="outgoingSMTP">
+		SELECT 
+			*
+		FROM
+			outgoingsmtp
+		WHERE
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 메일서버 설정 쿼리 끝 -->
+
+	<!--부서관리 쿼리 시작 -->
+	<select id="selectDept_MgtAfter" resultClass="dept">
+	/* selectDept_MgtAfter */
+		SELECT 
+			 D.SEQ
+	        ,D.DEPT_SEQ
+	        ,D.RST_SEQ
+	        ,D.CUD_CD
+	        ,D.DEPT_NM
+	        ,D.P_DEPT_SEQ
+	        ,D.DEPTH
+	        ,D.CHILD_YN
+	        ,D.ORDER
+	        ,D.mgt_yn
+	        ,D.NOTE
+	        ,D.CRT_DATE
+	        ,D.MOD_ID
+	        ,D.MOD_DATE
+	        ,D.USE_YN
+	        ,D.CRT_ID
+	        ,F.POL_NM F_NM
+	        ,A.APP_NM
+	        ,L.LOGIN_NM
+	        ,FP.POL_NM FP_NM
+		FROM
+			c_dept_mgt D
+		LEFT OUTER JOIN f_pol_file_mgt F ON F.POL_SEQ = D.F_POL_SEQ AND F.RST_SEQ = '0'
+		LEFT OUTER JOIN f_pol_approval_mgt A ON A.APP_SEQ = D.A_POL_SEQ AND A.RST_SEQ = '0' AND A.NP_CD = 'I'
+	    LEFT OUTER JOIN c_pol_login_mgt L ON L.LOGIN_SEQ = D.L_POL_SEQ AND L.RST_SEQ = '0'
+	    LEFT OUTER JOIN f_preservation_pol_file_mgt FP ON FP.POL_SEQ = D.FP_POL_SEQ AND FP.RST_SEQ = '0'
+		WHERE
+			D.seq = #seq#
+	</select>
+	
+	<select id="selectDept_MgtBefore" resultClass="dept">
+	/* selectDept_MgtBefore */
+		SELECT 
+			 D.SEQ
+	        ,D.DEPT_SEQ
+	        ,D.RST_SEQ
+	        ,D.CUD_CD
+	        ,D.DEPT_NM
+	        ,D.P_DEPT_SEQ
+	        ,D.DEPTH
+	        ,D.CHILD_YN
+	        ,D.ORDER
+	        ,D.mgt_yn
+	        ,D.NOTE
+	        ,D.CRT_DATE
+	        ,D.MOD_ID
+	        ,D.MOD_DATE
+	        ,D.USE_YN
+	        ,D.CRT_ID
+	        ,F.POL_NM F_NM
+	        ,A.APP_NM
+	        ,L.LOGIN_NM
+	        ,FP.POL_NM FP_NM
+		FROM
+			c_dept_mgt D
+		LEFT OUTER JOIN f_pol_file_mgt F ON F.POL_SEQ = D.F_POL_SEQ AND F.RST_SEQ = '0'
+		LEFT OUTER JOIN f_pol_approval_mgt A ON A.APP_SEQ = D.A_POL_SEQ AND A.RST_SEQ = '0' AND A.NP_CD = 'I'
+	    LEFT OUTER JOIN c_pol_login_mgt L ON L.LOGIN_SEQ = D.L_POL_SEQ AND L.RST_SEQ = '0'
+	    LEFT OUTER JOIN f_preservation_pol_file_mgt FP ON FP.POL_SEQ = D.FP_POL_SEQ AND FP.RST_SEQ = '0'
+		WHERE
+			D.dept_seq = #dept_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					D.rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					D.rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			D.seq <![CDATA[!=]]> #seq#
+		ORDER BY D.rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 부서관리 쿼리 끝 -->
+	
+	<!--망연계정책관리 쿼리 시작 -->
+	<select id="selectNet_PolicyAfter" resultClass="StreamPolicyForm">
+		SELECT 
+			*
+		FROM
+			s_pol_mgt
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectNet_PolicyBefore" resultClass="StreamPolicyForm">
+		SELECT 
+			*
+		FROM
+			s_pol_mgt
+		WHERE
+			pol_seq = #pol_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 망연계정책관리 쿼리 끝 -->
+	
+	<!--사용자관리 쿼리 시작 -->
+	<select id="selectUsers_MgtAfter" resultClass="usersForm">
+		SELECT 
+			 U.seq
+			,U.rst_seq
+			,U.users_id
+            ,U.cud_cd
+            ,U.users_nm
+            ,U.dept_seq
+            ,U.auth_cd
+            ,U.hp
+            ,U.email
+            ,U.position_nm
+            ,U.job_nm
+            ,U.inner_ip
+            ,U.outer_ip
+            ,U.use_yn
+            ,U.note
+            ,U.crt_id
+            ,U.crt_date
+			,F.POL_NM F_NM
+	        ,A.APP_NM
+	        ,L.LOGIN_NM
+	        ,FP.POL_NM FP_NM
+		FROM
+			c_user_mgt U
+		LEFT OUTER JOIN f_pol_file_mgt F ON F.POL_SEQ = U.F_POL_SEQ AND F.RST_SEQ = '0'
+		LEFT OUTER JOIN f_pol_approval_mgt A ON A.APP_SEQ = U.A_POL_SEQ AND A.RST_SEQ = '0' AND A.NP_CD = 'I'
+	    LEFT OUTER JOIN c_pol_login_mgt L ON L.LOGIN_SEQ = U.L_POL_SEQ AND L.RST_SEQ = '0'
+	    LEFT OUTER JOIN f_preservation_pol_file_mgt FP ON FP.POL_SEQ = U.FP_POL_SEQ AND FP.RST_SEQ = '0'
+		WHERE
+			U.seq = #seq#
+	</select>
+	
+	<select id="selectUsers_MgtBefore" resultClass="usersForm">
+		/** selectUsers_MgtBefore */	
+		<![CDATA[	
+			SELECT
+				 U.seq
+				,U.rst_seq  
+				,U.users_id
+	            ,U.cud_cd
+	            ,U.users_nm
+	            ,U.dept_seq
+	            ,U.auth_cd
+	            ,U.hp
+	            ,U.email
+	            ,U.position_nm
+	            ,U.job_nm
+	            ,U.inner_ip
+	            ,U.outer_ip
+	            ,U.use_yn
+	            ,U.note
+	            ,U.crt_id
+	            ,U.crt_date
+				,F.POL_NM F_NM
+		        ,A.APP_NM
+		        ,L.LOGIN_NM
+		        ,FP.POL_NM FP_NM  
+		    FROM c_user_mgt U
+		   	LEFT OUTER JOIN f_pol_file_mgt F ON F.POL_SEQ = U.F_POL_SEQ AND F.RST_SEQ = '0'
+			LEFT OUTER JOIN f_pol_approval_mgt A ON A.APP_SEQ = U.A_POL_SEQ AND A.RST_SEQ = '0' AND A.NP_CD = 'I'
+	    	LEFT OUTER JOIN c_pol_login_mgt L ON L.LOGIN_SEQ = U.L_POL_SEQ AND L.RST_SEQ = '0'
+	    	LEFT OUTER JOIN f_preservation_pol_file_mgt FP ON FP.POL_SEQ = U.FP_POL_SEQ AND FP.RST_SEQ = '0'
+		   WHERE 1 = 1
+		     AND U.users_id =  #users_id#
+		     AND U.seq <  #seq#
+		     AND U.rst_seq = ( SELECT max(rst_seq) as rst_seq   
+		                       FROM c_user_mgt
+		                       WHERE 1 = 1
+		                       AND users_id = #users_id#
+		                       AND seq <  #seq# )
+		                        ]]>	
+	</select>
+	<!-- 사용자관리 쿼리 끝 -->
+	
+	<!-- 결재 정책 쿼리 시작 -->
+	<select id="selectApproval_PolicyAfter" resultClass="ApprovalPolicyForm">
+		SELECT 
+			*
+		FROM
+			f_pol_approval_mgt
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectApproval_PolicyBefore" resultClass="ApprovalPolicyForm">
+		SELECT
+			*
+		FROM
+			f_pol_approval_mgt
+		WHERE
+			app_seq = #app_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		AND
+			np_cd = #np_cd#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 결재 정책 쿼리 끝 -->
+	
+	<!-- IP 객체 쿼리 시작 -->
+	<select id="selectIp_ObjectAfter" resultClass="IpObjectForm">
+		SELECT 
+			*
+		FROM
+			s_ip_object
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectIp_ObjectBefore" resultClass="IpObjectForm">
+		SELECT
+			*
+		FROM
+			s_ip_object
+		WHERE
+			obj_seq = #obj_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- IP 객체 쿼리 끝 -->
+	
+	<!-- IP 객체 그룹 쿼리 시작 -->
+	<select id="selectIp_ObjectGroupAfter" resultClass="IpObjectGroupForm">
+		SELECT 
+			A.*, GROUP_CONCAT(C.OBJ_NM  SEPARATOR ',') AS OBJ_SEQ_INFO
+		FROM
+			s_ip_object_group A, S_OBJECT_MAP B, S_IP_OBJECT C
+		WHERE
+				   A.seq = #seq#
+			AND A.SEQ <![CDATA[=]]> B.OBJ_GROUP_SEQ
+	  	   	AND B.OBJ_TYPE <![CDATA[=]]> 'I'
+	  	   	AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+	  GROUP BY A.SEQ
+	</select>
+	
+	<select id="selectIp_ObjectGroupBefore" resultClass="IpObjectGroupForm">
+		SELECT
+			A.*, GROUP_CONCAT(C.OBJ_NM  SEPARATOR ',') AS OBJ_SEQ_INFO
+		FROM
+			s_ip_object_group A, S_OBJECT_MAP B, S_IP_OBJECT C
+		WHERE
+				A.obj_group_seq = #obj_group_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					A.rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					A.rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+			AND A.seq <![CDATA[!=]]> #seq#
+			AND A.SEQ <![CDATA[=]]> B.OBJ_GROUP_SEQ
+		  	AND B.OBJ_TYPE <![CDATA[=]]> 'I'
+		  	AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+	  	GROUP BY A.SEQ
+		ORDER BY A.rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- IP 객체 그룹 쿼리 끝 -->
+	
+	<!-- 목적지 객체 쿼리 시작 -->
+	<select id="selectDest_ObjectAfter" resultClass="DestObjectForm">
+		SELECT 
+			c.*, (select cd_nm       
+					from code_category a, code b       
+				where a.cd_cate_type = b.cd_cate_type 
+				  and b.cd_val = c.proto_cd       
+				  and a.cd_cate = 'PROTO_CD') as proto_val
+		FROM
+			s_dest_object c
+		WHERE
+			c.seq = #seq#
+	</select>
+	
+	<select id="selectDest_ObjectBefore" resultClass="DestObjectForm">
+		SELECT
+			c.*, (select cd_nm       
+					from code_category a, code b       
+				where a.cd_cate_type = b.cd_cate_type 
+				  and b.cd_val = c.proto_cd       
+				  and a.cd_cate = 'PROTO_CD') as proto_val
+		FROM
+			s_dest_object c
+		WHERE
+			c.obj_seq = #obj_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					c.rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					c.rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			c.seq <![CDATA[!=]]> #seq#
+		ORDER BY c.rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 목적지 객체 쿼리 끝 -->
+	
+	<!-- 목적지 객체 그룹 쿼리 시작 -->
+	<select id="selectDest_ObjectGroupAfter" resultClass="DestObjectGroupForm">
+		SELECT 
+			A.*, GROUP_CONCAT(C.OBJ_NM  SEPARATOR ',') AS OBJ_SEQ_INFO
+		FROM
+			s_dest_object_group A, S_OBJECT_MAP B, S_DEST_OBJECT C
+		WHERE
+				   A.seq = #seq#
+			AND A.SEQ <![CDATA[=]]> B.OBJ_GROUP_SEQ
+	  	   	AND B.OBJ_TYPE <![CDATA[=]]> 'D'
+	  	   	AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+	  GROUP BY A.SEQ
+	</select>
+	
+	<select id="selectDest_ObjectGroupBefore" resultClass="DestObjectGroupForm">
+		SELECT
+			A.*, GROUP_CONCAT(C.OBJ_NM  SEPARATOR ',') AS OBJ_SEQ_INFO
+		FROM
+			s_dest_object_group A, S_OBJECT_MAP B, S_DEST_OBJECT C
+		WHERE
+				A.obj_group_seq = #obj_group_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					A.rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					A.rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+			AND A.seq <![CDATA[!=]]> #seq#
+			AND A.SEQ <![CDATA[=]]> B.OBJ_GROUP_SEQ
+		  	AND B.OBJ_TYPE <![CDATA[=]]> 'D'
+		  	AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+	  	GROUP BY A.SEQ
+		ORDER BY A.rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 목적지 객체 그룹 쿼리 끝 -->
+	
+	<!-- 정책 그룹 쿼리 시작 -->
+	<select id="selectStream_PolicyGroupAfter" resultClass="StreamPolicyGroupForm">
+		SELECT 
+			*
+		FROM
+			s_pol_mgt_group
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectStream_PolicyGroupBefore" resultClass="StreamPolicyGroupForm">
+		SELECT
+			*
+		FROM
+			s_pol_mgt_group
+		WHERE
+			pol_seq = #pol_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+	<!-- 정책 그룹 쿼리 끝 -->
+	
+	<!-- 정책 쿼리 시작 -->
+	<select id="selectStream_PolicyAfter" resultClass="StreamPolicyForm">
+		SELECT 
+			A.*, (SELECT 
+				    CONCAT(B.CODE_VAL2,
+				            '(',
+				            B.CODE_VAL1,
+				            '-',
+				            B.CODE_DESC,
+				            ')') AS RST_DETAIL_DESC
+							FROM
+								s_err_code B
+							WHERE
+								B.CODE_KIND = 'POLICY_ERR_CODE'
+						 AND B.CODE_ID = A.RST_DETAIL_CD) AS RST_DETAIL_REASON
+			 , (SELECT 
+				    CONCAT(C.CODE_VAL2,
+				            '(',
+				            C.CODE_VAL1,
+				            '-',
+				            C.CODE_DESC,
+				            ')') AS RST_DETAIL_DESC
+							FROM
+								s_err_code C
+							WHERE
+								C.CODE_KIND = 'POLICY_ERR_CODE'
+						 AND C.CODE_ID = A.PREV_RST_DETAIL_CD) AS PREV_RST_DETAIL_REASON
+		FROM
+			s_pol_mgt_history A
+		WHERE
+			A.seq = #seq#
+	</select>
+	<!-- 정책 쿼리 끝 -->
+	
+	<!-- 결재권자 쿼리 시작 -->
+	<select id="selectDept_ApprovalAfter" resultClass="DeptApprovalForm">
+		/* selectDept_ApprovalAfter */
+		SELECT 
+			*
+		FROM
+			dept_approval
+		WHERE
+			seq = #seq#
+	</select>
+	
+	<select id="selectDept_ApprovalBefore" resultClass="DeptApprovalForm">
+		/* selectDept_ApprovalBefore */
+		SELECT
+			*
+		FROM
+			dept_approval
+		WHERE
+			dept_seq = #dept_seq#
+		<isNotEmpty property="rst_seq">
+			<isEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[!=]]> #rst_seq#
+				</isNotEmpty>
+			</isEqual>
+			<isNotEqual property="rst_seq" compareValue="0">
+				<isNotEmpty prepend="AND" property="rst_seq">
+					rst_seq <![CDATA[=]]> (#rst_seq# -1)
+				</isNotEmpty>
+			</isNotEqual>
+		</isNotEmpty>
+		AND
+			seq <![CDATA[!=]]> #seq#
+		ORDER BY rst_seq DESC
+		LIMIT 1;
+	</select>
+</sqlMap>

@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="StreamPolicy">
+	<typeAlias alias="StreamPolicyForm" type="kr.co.s3i.sr1.policy.streamPolicy.model.StreamPolicyForm" />
+	<typeAlias alias="StreamPolicyGroupForm" type="kr.co.s3i.sr1.policy.streamPolicy.model.StreamPolicyGroupForm" />
+	<typeAlias alias="STMInfo" type="kr.co.s3i.sr1.policy.streamPolicy.model.STMinfo" />
+	
+	<sql id="where_searchFieldQuery">
+		<isNotEmpty prepend="AND" property="pol_seq">
+			POL_SEQ LIKE CONCAT('%',#pol_seq#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proto_cd">
+			<isEqual property="proto_cd" compareValue="all">
+			</isEqual>
+			<isNotEqual property="proto_cd" compareValue="all">
+				PROTO_CD LIKE CONCAT('%',#proto_cd#,'%')
+			</isNotEqual>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rey_ip">
+			REY_IP LIKE CONCAT('%',#rey_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rey_port">
+			REY_PORT LIKE CONCAT('%',#rey_port#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dst_ip">
+			DST_IP LIKE CONCAT('%',#dst_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dst_port">
+			DST_PORT LIKE CONCAT('%',#dst_port#,'%')
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="GroupByQuery">
+		<isEmpty property="group_no">
+			GROUP by pol_seq , stm_seq
+		</isEmpty>
+	</sql>
+	
+	<sql id="where_searchStreamPolicyGroupList">
+		WHERE 
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+		<isNotEmpty property="title" prepend="AND"> TITLE LIKE CONCAT('%',#title#,'%')</isNotEmpty>
+		<isNotEmpty property="note" prepend="AND"> NOTE LIKE CONCAT('%',#note#,'%')</isNotEmpty>
+		<isNotEmpty property="use_yn" prepend="AND" > use_yn <![CDATA[=]]> #use_yn#</isNotEmpty>
+		<isNotEmpty property="stm_seq" prepend="AND" > stm_seq <![CDATA[=]]> #stm_seq#</isNotEmpty>
+	</sql>	
+	
+	<select id="selectStreamPolicyGroupList" resultClass="StreamPolicyGroupForm">
+		SELECT * FROM S_POL_MGT_GROUP
+		<include refid="where_searchStreamPolicyGroupList"/>
+		ORDER BY SEQ DESC
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	<select id="selectStreamPolicyGroupListCount" resultClass="Integer">
+		SELECT COUNT(*) FROM S_POL_MGT_GROUP
+		<include refid="where_searchStreamPolicyGroupList"/>
+	</select>
+	
+	<select id="selectExistStreamPolicyList" resultClass="StreamPolicyForm">
+		<![CDATA[/*selectExistStreamPolicyList*/]]>
+		SELECT
+			*
+		FROM
+			S_POL_MGT
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+		AND
+			GROUP_SEQ = #group_seq#
+		<include refid="where_searchFieldQuery"/>
+		<include refid="GroupByQuery"/>
+		ORDER BY STM_SEQ ASC , POL_SEQ ASC
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectExistStreamPolicyListCount" resultClass="Integer">
+		<![CDATA[/*selectExistStreamPolicyListCount*/]]>
+		select count(*) from
+		(
+		SELECT
+			pol_seq
+		FROM
+			S_POL_MGT
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+		AND
+			GROUP_SEQ = #group_seq#
+		<include refid="where_searchFieldQuery"/>
+		<include refid="GroupByQuery"/>
+		) A
+	</select>
+	
+	<select id="selectExistStreamPolicy" resultClass="StreamPolicyForm">
+		SELECT
+			*
+		FROM
+			S_POL_MGT
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+		<isNotEmpty prepend="AND" property="pol_seq">
+			POL_SEQ <![CDATA[=]]> #pol_seq#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectExistMacAddr" resultClass="StreamPolicyForm">
+		SELECT
+			*
+		FROM
+			S_POL_MAC_MGT
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="pol_seq">
+			POL_SEQ = #pol_seq#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectMaxStreamPolicyNumber" resultClass="int">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(POL_SEQ, 2, length(POL_SEQ)-1)), 0) AS POL_SEQ
+		FROM
+			S_POL_MGT
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+	</select>
+
+	<insert id="insertStreamPolicyinfo">
+		INSERT INTO S_POL_MGT_ORI (
+			POL_SEQ,
+			RST_SEQ,
+			STM_SEQ,
+			STM_NAME,
+			TUNN_IDX,
+			CUD_CD,
+			IO_CD,
+			SRC_ST_IP,
+			SRC_ED_IP,
+			NET_MASK,
+			DST_IP,
+			DST_ED_IP,
+			DST_PORT,
+			DST_ED_PORT,
+			PROTO_CD,
+			MAX_CONNECTION,
+			USE_YN,
+			DEL_YN,
+			ISDEL_YN,
+			RST_CD,
+			RST_DETAIL_CD,
+			CRT_DATE,
+			CRT_ID,
+			MOD_DATE,
+			MOD_ID,
+			OBJ_CD,
+			OBJ_CD2,
+			PORT_OBJ_CD,
+			NOTE
+			<isNotEmpty prepend="," property="note">
+				NOTE
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="isdel_yn">
+				ISDEL_YN
+			</isNotEmpty>
+		) VALUES (
+			#pol_seq#,
+			#rst_seq#,
+			#stm_seq#,
+			#stm_name#,
+			#tunn_idx#,
+			#cud_cd#,
+			#io_cd#,
+			#src_st_ip#,
+			#src_ed_ip#,
+			#net_mask#,
+			#dst_ip#,
+			#dst_ed_ip#,
+			#dst_port#,
+			#dst_ed_port#,
+			#proto_cd#,
+			#max_connection#,
+			#use_yn#,
+			#del_yn#,
+			#isdel_yn#,
+			#rst_cd#,
+			#rst_detail_cd#,
+			now(),
+			#crt_id#,
+			now(),
+			#mod_id#,
+			#obj_cd#,
+			#obj_cd2#,
+			#port_obj_cd#,
+			#note#
+			<isNotEmpty prepend="," property="note">
+				#note#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="isdel_yn">
+				#isdel_yn#
+			</isNotEmpty>
+		)
+		<selectKey resultClass="Integer">
+			SELECT
+				seq
+			FROM
+				S_POL_MGT
+			WHERE
+				POL_SEQ = #pol_seq#
+			AND
+				RST_SEQ = #rst_seq#
+			limit 1
+		</selectKey>
+	</insert>
+	<!-- <insert id="insertStreamPolicyinfo">
+		INSERT INTO S_POL_MGT (
+			POL_SEQ,
+			RST_SEQ,
+			STM_SEQ,
+			CUD_CD,
+			IO_CD,
+			SRC_ST_IP,
+			SRC_ED_IP,
+			NET_MASK,
+			DST_IP,
+			DST_PORT,
+			PROTO_CD,
+			MAX_CONNECTION,
+			USE_YN,
+			RST_CD,
+			RST_DETAIL_CD,
+			CRT_DATE,
+			CRT_ID,
+			MOD_DATE,
+			MOD_ID,
+			MAC_ADDR,
+			TUNN_IDX,
+			IP_OBJECT,
+			IP_OBJECT_GROUP,
+			IP_OBJECT_DIV,
+			DEST_OBJECT,
+			DEST_OBJECT_GROUP,
+			DEST_OBJECT_DIV,
+			GROUP_SEQ
+			<isNotEmpty prepend="," property="note">
+				NOTE
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="isdel_yn">
+				ISDEL_YN
+			</isNotEmpty>
+		) VALUES (
+			#pol_seq#,
+			#rst_seq#,
+			#stm_seq#,
+			#cud_cd#,
+			#io_cd#,
+			#src_st_ip#,
+			#src_ed_ip#,
+			#net_mask#,
+			#rey_port#,
+			#rey_ip#,
+			#dst_ip#,
+			#dst_port#,
+			#proto_cd#,
+			#max_connection#,
+			#use_yn#,
+			#rst_cd#,
+			#rst_detail_cd#,
+			now(),
+			#crt_id#,
+			now(),
+			#mod_id#,
+			#mac_addr#,
+			#tunn_idx#,
+			#ip_object#,
+			#ip_object_group#,
+			#ip_object_div#,
+			#dest_object#,
+			#dest_object_group#,
+			#dest_object_div#,
+			#group_seq#
+			<isNotEmpty prepend="," property="note">
+				#note#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="isdel_yn">
+				#isdel_yn#
+			</isNotEmpty>
+		)
+		
+		<selectKey resultClass="Integer">
+			SELECT
+				seq
+			FROM
+				S_POL_MGT
+			WHERE
+				POL_SEQ = #pol_seq#
+			AND
+				RST_SEQ = #rst_seq#
+			limit 1
+		</selectKey>
+	</insert> -->
+	
+	<insert id="insertStreamPolicyinfoHist">
+		INSERT INTO s_pol_mgt_history (
+			POL_SEQ,
+			STM_SEQ,
+			TUNN_IDX,
+			CUD_CD,
+			IO_CD,
+			SRC_ST_IP,
+			SRC_ED_IP,
+			NET_MASK,
+			REY_IP,
+			REY_PORT,
+			DST_IP,
+			DST_PORT,
+			PROTO_CD,
+			MAX_CONNECTION,
+			USE_YN,
+			RST_CD,
+			RST_DETAIL_CD,
+			CRT_DATE,
+			CRT_ID,			
+			GROUP_SEQ	,
+			PREV_CUD_CD,
+			PREV_USE_YN,
+			PREV_RST_CD,
+			PREV_RST_DETAIL_CD
+		) VALUES (
+			#pol_seq#,
+			#stm_seq#,
+			#tunn_idx#,
+			#cud_cd#,
+			#io_cd#,
+			#src_st_ip#,
+			#src_ed_ip#,
+			#net_mask#,
+			#rey_ip#,
+			#rey_port#,
+			#dst_ip#,
+			#dst_port#,
+			#proto_cd#,
+			#max_connection#,
+			#use_yn#,
+			#rst_cd#,
+			#rst_detail_cd#,
+			now(),
+			#crt_id#,			
+			#group_seq#,
+			#prev_cud_cd#,
+			#prev_use_yn#,
+			#prev_rst_cd#,
+			#prev_rst_detail_cd#	
+		)
+		
+		<selectKey resultClass="Integer">
+			SELECT
+				seq
+			FROM
+				s_pol_mgt_history
+			WHERE
+				POL_SEQ = #pol_seq#
+			ORDER BY CRT_DATE DESC
+			limit 1
+		</selectKey>
+	</insert>
+	
+	<insert id="insertMacAddr">
+		INSERT INTO S_POL_MAC_MGT (
+			POL_SEQ,
+			RST_SEQ,
+			CUD_CD,
+			MAC_ADDR,
+			CRT_DATE,
+			CRT_ID,
+			MOD_DATE,
+			MOD_ID
+		) VALUES (
+			#pol_seq#,
+			#rst_seq#,
+			#cud_cd#,
+			#mac_addr#,
+			now(),
+			#crt_id#,
+			now(),
+			#mod_id#
+		)
+	</insert>
+	
+	<update id="updateStreamPolicyDelYn">
+		UPDATE 
+				S_POL_MGT  
+			SET			
+				mod_date <![CDATA[=]]> NOW(),
+				CUD_CD	<![CDATA[=]]> 'U'
+			<isNotEmpty prepend="," property="use_yn">
+				use_yn <![CDATA[=]]> #use_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="rst_cd">
+				rst_cd <![CDATA[=]]> #rst_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="rst_detail_cd">
+				rst_detail_cd <![CDATA[=]]> #rst_detail_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_id">
+				mod_id <![CDATA[=]]> #mod_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="group_seq">
+				group_seq <![CDATA[=]]> #group_seq#
+			</isNotEmpty>
+		WHERE SEQ <![CDATA[=]]> #seq#
+	</update>
+	
+	<delete id="deleteStreamPolicyDelYn">
+		DELETE FROM S_POL_MGT
+		WHERE SEQ <![CDATA[=]]> #seq#
+	</delete>
+	
+	<update id="updateStreamPolicyRSTSequence">
+		UPDATE
+			S_POL_MGT
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_POL_MGT
+						WHERE
+							<isNotEmpty prepend="AND" property="pol_seq">
+								POL_SEQ <![CDATA[=]]> #pol_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				POL_SEQ <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</update>
+	
+	<update id="updateMacAddrRSTSequence">
+		UPDATE
+			S_POL_MAC_MGT
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_POL_MAC_MGT
+						WHERE
+							<isNotEmpty prepend="AND" property="pol_seq">
+								POL_SEQ <![CDATA[=]]> #pol_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				POL_SEQ <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</update>
+	
+	<select id="selectSTMInfo" resultClass="STMInfo">
+		SELECT
+			*
+		FROM
+			S_STM_INFO
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="stm_seq">
+			STM_SEQ <![CDATA[=]]> #stm_seq#
+		</isNotEmpty>
+	</select>
+	
+	<!-- <select id="selectStreamPolicyList" resultClass="StreamPolicyForm">
+		<![CDATA[/*selectStreamPolicyList*/]]>
+		SELECT
+			A.*, (SELECT 
+				    CONCAT(B.CODE_VAL2,
+				            '(',
+				            B.CODE_VAL1,
+				            '-',
+				            B.CODE_DESC,
+				            ')') AS RST_DETAIL_DESC
+							FROM
+								s_err_code B
+							WHERE
+								B.CODE_KIND = 'POLICY_ERR_CODE'
+						 AND B.CODE_ID = A.RST_DETAIL_CD) AS RST_DETAIL_REASON
+		FROM
+			S_POL_MGT A
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+		AND
+			GROUP_SEQ = #group_seq#
+		<include refid="where_searchFieldQuery"/>
+		ORDER BY STM_SEQ ASC , POL_SEQ ASC
+		limit $offSet$, $pageListSize$
+	</select> -->
+	<!-- <select id="selectStreamPolicyList" resultClass="StreamPolicyForm">
+		<![CDATA[/*selectStreamPolicyList*/]]>
+		SELECT
+			*
+		FROM
+			S_POL_MGT
+		limit $offSet$, $pageListSize$
+	</select> -->
+	<select id="selectStreamPolicyList" resultClass="StreamPolicyForm">
+		<![CDATA[/*selectStreamPolicyList*/]]>
+		SELECT
+			*
+		FROM
+			S_POL_MGT_ORI
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectUsedStreamPolicyList" resultClass="StreamPolicyForm">
+		<![CDATA[/*selectUsedStreamPolicyList*/]]>
+		SELECT
+			A.*, B.TITLE AS GROUP_NAME
+		FROM
+			S_POL_MGT A, S_POL_MGT_GROUP B
+		WHERE
+			A.GROUP_SEQ <![CDATA[=]]> B.SEQ
+		AND
+			A.CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			A.RST_SEQ <![CDATA[=]]> 0
+		AND
+			A.DEL_YN <![CDATA[=]]> 'N'
+		AND
+			B.CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			B.RST_SEQ <![CDATA[=]]> 0
+		AND
+			B.DEL_YN <![CDATA[=]]> 'N'
+		<isNotEmpty prepend="AND" property="ip_object">
+			ip_object <![CDATA[=]]> #ip_object#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ip_object_group">
+			ip_object_group <![CDATA[=]]> #ip_object_group#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dest_object">
+			dest_object <![CDATA[=]]> #dest_object#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dest_object_group">
+			dest_object_group <![CDATA[=]]> #dest_object_group#
+		</isNotEmpty>
+		ORDER BY A.STM_SEQ ASC , A.POL_SEQ ASC
+	</select>
+	
+	<select id="selectStreamPolicyOne" resultClass="StreamPolicyForm">
+		<![CDATA[/*selectStreamPolicyOne*/]]>
+		SELECT
+			*
+		FROM
+			S_POL_MGT
+		WHERE
+			SEQ = #seq#
+	</select>
+	
+	<select id="selectStreamPolicyListCount" resultClass="Integer">
+		<![CDATA[/*selectStreamPolicyListCount*/]]>
+		select count(*) from
+		(
+		SELECT
+			pol_seq
+		FROM
+			S_POL_MGT
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			DEL_YN <![CDATA[=]]> 'N'
+		AND
+			GROUP_SEQ = #group_seq#
+		<include refid="where_searchFieldQuery"/>
+		) A
+	</select>
+	
+	<select id="selectStreamPolicyGroup" resultClass="StreamPolicyGroupForm">
+		SELECT
+			*
+		FROM
+			S_POL_MGT_GROUP
+		WHERE			
+			SEQ = #group_seq#
+	</select>
+	
+	<insert id="insertStreamPolicyGroup">
+		INSERT INTO s_pol_mgt_group
+		(
+			POL_SEQ,
+			STM_SEQ,
+			RST_SEQ,
+			CUD_CD,
+			TITLE,
+			USE_YN,
+			DEL_YN,
+			ISDEL_YN,
+			CRT_DATE,
+			CRT_ID,
+			MOD_DATE,
+			MOD_ID,
+			NOTE
+		)
+		VALUES
+		(
+			#pol_seq#,
+			#stm_seq#,
+			#rst_seq#,
+			#cud_cd#,
+			#title#,
+			#use_yn#,
+			#del_yn#,
+			#isdel_yn#,
+			NOW(),
+			#crt_id#,
+			NOW(),
+			#mod_id#,
+			#note#
+		)
+		<selectKey resultClass="Integer">
+			SELECT
+				SEQ
+			FROM
+				s_pol_mgt_group
+			WHERE
+				POL_SEQ = #pol_seq#
+			AND
+				RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+	
+	<update id="updateStreamPolicyGroupRSTSequence">
+		UPDATE
+			S_POL_MGT_GROUP
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_POL_MGT_GROUP
+						WHERE
+							<isNotEmpty prepend="AND" property="pol_seq">
+								pol_seq <![CDATA[=]]> #pol_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				pol_seq <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</update>
+	<select id="selectMaxPolSeqNumber" resultClass="Integer">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(POL_SEQ, 2, length(POL_SEQ)-1)) , 0 ) AS POL_SEQ
+		FROM
+			S_POL_MGT_ORI
+	</select>
+	<!-- <select id="selectMaxPolSeqNumber" resultClass="Integer">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(POL_SEQ, 2, length(POL_SEQ)-1)) , 0 ) AS POL_SEQ
+		FROM
+			S_POL_MGT_GROUP
+	</select> -->
+</sqlMap> 

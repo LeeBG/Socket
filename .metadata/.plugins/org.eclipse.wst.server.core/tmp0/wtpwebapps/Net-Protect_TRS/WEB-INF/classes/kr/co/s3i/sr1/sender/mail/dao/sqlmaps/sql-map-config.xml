@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<properties resource="db.properties" />
+
+	<settings useStatementNamespaces="true" />
+
+	<transactionManager type="JDBC" commitRequired="false">
+		<dataSource type="SIMPLE">
+			<property name="JDBC.Driver" value="${driver}" />
+			<property name="JDBC.ConnectionURL" value="${url}" />
+			<property name="JDBC.Username" value="${username}" />
+			<property name="JDBC.Password" value="${password}" />
+			<property name="initialSize" value="10" />
+			<property name="maxActive" value="64" />
+			<property name="maxIdle" value="16" />
+			<property name="maxWait" value="1000" />
+			<property name="validationQuery" value="select 1" />
+		</dataSource>
+	</transactionManager>
+	<sqlMap resource="kr/co/s3i/sr1/sender/mail/dao/sqlmaps/AdminAudit_MysqlSQL.xml" />
+</sqlMapConfig>

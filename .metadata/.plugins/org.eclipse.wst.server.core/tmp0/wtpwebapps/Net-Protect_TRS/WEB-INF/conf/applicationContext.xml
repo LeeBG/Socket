@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.2.xsd
+						http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						http://www.springframework.org/schema/jee
+						http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+						"
+	default-autowire="byName">
+
+	<bean id="bouncyCastleProvider" class="org.bouncycastle.jce.provider.BouncyCastleProvider"/>
+
+	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+		<property name="provider"	ref="bouncyCastleProvider" />
+		<property name="algorithm" value="PBEWITHSHA256AND128BITAES-CBC-BC" />
+		<property name="password" value="s3icokr"></property>
+	</bean>
+
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="config" ref="environmentVariablesConfiguration" />
+	</bean>
+
+	<bean id="propertyConfigurer" class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref="configurationEncryptor" />
+		<property name="locations">
+			<list>
+				<value>WEB-INF/conf/db.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	 <!-- <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		p:locations="WEB-INF/conf/db.properties" p:fileEncoding="UTF-8" />  -->
+
+	<alias name="dataSource-mysql" alias="dataSource1" />
+	<alias name="dataSource-oracle" alias="dataSource2" />
+	<alias name="dataSource-site" alias="dataSourceSite" />
+
+	<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="initialSize" value="10" />
+		<property name="maxActive" value="64" />
+		<property name="maxIdle" value="16" />
+		<property name="maxWait" value="1000" />
+		<property name="validationQuery" value="select 1" />
+
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<bean id="dataSource-oracle" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${oracledriver}" />
+		<property name="url" value="${oracleurl}" />
+		<property name="username" value="${oracleusername}" />
+		<property name="password" value="${oraclepassword}" />
+		<property name="initialSize" value="10" />
+		<property name="maxActive" value="64" />
+		<property name="maxIdle" value="16" />
+		<property name="maxWait" value="1000" />
+		<property name="validationQuery" value="select 1 from dual" />
+	</bean>
+
+	<!-- site db 종류에 따라 validationQuery 수정 필요 -->
+	<bean id="dataSource-site" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${sitedriver}" />
+		<property name="url" value="${siteurl}" />
+		<property name="username" value="${siteusername}" />
+		<property name="password" value="${sitepassword}" />
+		<property name="initialSize" value="10" />
+		<property name="maxActive" value="64" />
+		<property name="maxIdle" value="16" />
+		<property name="maxWait" value="1000" />
+		<property name="validationQuery" value="select 1 from dual" />
+	</bean>
+
+	<!-- mongoDB start -->
+	<bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+		<property name="host" value="${mongohost}" />
+		<property name="port" value="${mongoport}" />
+	</bean>
+
+ 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongo" ref="mongo" />
+		<constructor-arg name="databaseName" value="${mongodatabase}"/>
+		<constructor-arg name="userCredentials" ref="userCredentials" />
+	</bean>
+
+	<bean id="userCredentials" class="org.springframework.data.authentication.UserCredentials">
+		<constructor-arg name="username" value="${mongousername}" />
+		<constructor-arg name="password" value="${mongopassword}" />
+	</bean>
+	<!-- mongoDB end -->
+
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true" />
+
+	<!-- iBatis definess start -->
+	<!-- SqlMap와 dataSource를 연결해준다. -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>/WEB-INF/conf/sql-map-config.xml</value>
+			</list>
+		</property>
+		<property name="dataSource" ref="dataSource-mysql" />
+		<property name="lobHandler" ref="lobHandler" />
+	</bean>
+
+	
+	<bean id="sqlMapClient2" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>/WEB-INF/conf/oraclesql-map-config.xml</value>
+			</list>
+		</property>
+		<property name="dataSource" ref="dataSource-oracle" />
+		<property name="lobHandler" ref="lobHandler" />
+	</bean>
+
+	<bean id="sqlMapClientSite" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>/WEB-INF/conf/sitesql-map-config.xml</value>
+			</list>
+		</property>
+		<property name="dataSource" ref="dataSource-site" />
+		<property name="lobHandler" ref="lobHandler" />
+	</bean>
+
+	<!-- DAO 선언 -->
+	<bean id="cacheDao" class="kr.co.s3i.sr1.cacheEnv.cache.dao.CacheDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="codeDao" class="kr.co.s3i.sr1.cacheEnv.code.dao.CodeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="usersDao" class="kr.co.s3i.sr1.hr.user.dao.UsersDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="deptDao" class="kr.co.s3i.sr1.hr.dept.dao.DeptDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="loginAuditDao" class="kr.co.s3i.sr1.audit.loginAudit.dao.LoginAuditDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="deptApprovalDao" class="kr.co.s3i.sr1.approval.dao.DeptApprovalDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="approvalPolicyDao" class="kr.co.s3i.sr1.policy.approvalPolicy.dao.ApprovalPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="approvalLineDao" class="kr.co.s3i.sr1.policy.approvalPolicy.dao.ApprovalLineDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="approvalLineUserDao" class="kr.co.s3i.sr1.policy.approvalPolicy.dao.ApprovalLineUserDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="extPolicyDao" class="kr.co.s3i.sr1.policy.extPolicy.dao.ExtPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="filePolicyDao" class="kr.co.s3i.sr1.policy.filePolicy.dao.FilePolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="loginPolicy" class="kr.co.s3i.sr1.policy.loginPolicy.dao.LoginPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="authPolicyDao" class="kr.co.s3i.sr1.policy.authPolicy.dao.AuthPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="systemAlertPolicyDao" class="kr.co.s3i.sr1.policy.systemAlertPolicy.dao.SystemAlertPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="fmstDao" class="kr.co.s3i.sr1.fm.st.dao.FMSTDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="commonDao" class="kr.co.s3i.sr1.common.dao.CommonDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="approvalDao" class="kr.co.s3i.sr1.approval.dao.ApprovalDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="dataDao" class="kr.co.s3i.sr1.data.file.dao.DataDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="vaccineDao" class="kr.co.s3i.sr1.vaccine.dao.VaccineDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="syncServerDao" class="kr.co.s3i.sr1.syncServer.dao.SyncServerDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="miniMaxDao" class="kr.co.s3i.sr1.cacheEnv.minimax.dao.MiniMaxDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="groupCodeDao" class="kr.co.s3i.sr1.code.dao.GroupCodeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="CommonCodeDao" class="kr.co.s3i.sr1.code.dao.CommonCodeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="mailDao" class="kr.co.s3i.sr1.sender.mail.dao.MailDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="agentDao" class="kr.co.s3i.sr1.agent.dao.AgentDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="systemInfoDao" class="kr.co.s3i.sr1.systemInfo.dao.SystemInfoDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="testManagementDao" class="kr.co.s3i.sr1.systemManagement.testManagement.dao.TestManagementDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="envManagementDao" class="kr.co.s3i.sr1.systemManagement.envManagement.dao.EnvManagementDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="IpObjectDao" class="kr.co.s3i.sr1.policy.ipObjectPolicy.dao.IpObjectDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="DestObjectDao" class="kr.co.s3i.sr1.policy.destObjectPolicy.dao.DestObjectDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="DestObjectGroupDao" class="kr.co.s3i.sr1.policy.destObjectPolicy.dao.DestObjectGroupDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="streamPolicyDao" class="kr.co.s3i.sr1.policy.streamPolicy.dao.StreamPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="vipPolicyDao" class="kr.co.s3i.sr1.policy.streamPolicy.dao.VipPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="adminAuditDao" class="kr.co.s3i.sr1.audit.adminAudit.dao.AdminAuditDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="fmlgDao" class="kr.co.s3i.sr1.fm.lg.dao.FMLGDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="serverManagementDao" class="kr.co.s3i.sr1.systemManagement.serverManagement.dao.ServerManagementDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="fPreservationPolicyDao" class="kr.co.s3i.sr1.policy.filePreservationPolicy.dao.FPreservationPolicyDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="dashboardChartDao" class="kr.co.s3i.sr1.dashboard.dao.DashboardChartDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="LicenseDao" class="kr.co.s3i.sr1.license.dao.LicenseDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<!-- 부재중, 대리결재자 -->
+	<bean id="privateApprovalDao" class="kr.co.s3i.sr1.approval.dao.PrivateApprovalDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="hrDbDao" class="kr.co.s3i.sr1.site.hrdb.dao.HrDbDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClientSite" />
+	</bean>
+	
+	<bean id="hrDb" class="kr.co.s3i.sr1.hrdb.dao.HrDbDaoImpl2">
+		<property name="sqlMapClient" ref="sqlMapClient2" />
+	</bean>
+	
+	<!-- 인사DB동기화 셋팅 -->
+	<bean id="hrSyncSettingDao" class="kr.co.s3i.sr1.hrdb.dao.HrSyncSettingDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<!-- GPKI관련 요청 -->
+	<bean id="gpkiDao" class="kr.co.s3i.sr1.gpki.dao.GPKIDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<!-- 자가승인 권한 요청 -->
+	<bean id="AuthRequestUsersDao" class="kr.co.s3i.sr1.authRequest.users.dao.AuthRequestUsersDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="AuthRequestDeptDao" class="kr.co.s3i.sr1.authRequest.dept.dao.AuthRequestDeptDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="SelfApprovalRequestDao" class="kr.co.s3i.sr1.authRequest.auth.dao.SelfApprovalRequestDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<!-- 결재 제한 -->
+	<bean id="approvalLockDao" class="kr.co.s3i.sr1.policy.approvalLock.dao.ApprovalLockDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 커스텀 유저 -->
+	<bean id="CustomUsersDao" class="kr.co.s3i.sr1.hr.user.dao.CustomUsersDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 사용자 자료함 용량 관리 -->
+	<bean id="RepositoryVolumeDao" class="kr.co.s3i.sr1.policy.repository.dao.RepositoryVolumeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 관리자 커스텀 컬럼 등록 -->
+	<bean id="CustomEditDao" class="kr.co.s3i.sr1.hr.custom.dao.CustomEditDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="DataRestDao" class="kr.co.s3i.sr1.rest.data.file.dao.DataRestDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="AgentAlarmDao" class="kr.co.s3i.sr1.rest.alarm.dao.AgentAlarmDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="GraphDao" class="kr.co.s3i.sr1.dashboard.dao.GraphDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="TotalStatisticsDao" class="kr.co.s3i.sr1.trsMonitor.totalStatistics.dao.TotalStatisticsDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="TrsDashboardDao" class="kr.co.s3i.sr1.trsMonitor.dashboard.dao.TrsDashboardDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="TrsUserDao" class="kr.co.s3i.sr1.trsMonitor.user.dao.TrsUserDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="fmlgEmlDao" class="kr.co.s3i.sr1.fm.lg.dao.FMLGEmlDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="ClipboardDao" class="kr.co.s3i.sr1.data.clipboard.dao.ClipboardDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="AgentInfoDao" class="kr.co.s3i.sr1.systemManagement.commonManagement.dao.AgentInfoDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<!-- iBatis definess end -->
+
+	<!-- or 트랜잭션 부분 코드를 삽입한다. -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource-mysql" />
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<bean id="txManager2" name="txManager2"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource-oracle" />
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager2" />
+
+	<bean id="txManagerSite" name="txManagerSite"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource-site" />
+	</bean>
+	<tx:annotation-driven transaction-manager="txManagerSite" />
+
+	<!-- tx를 위한 @Autowired를 위한 부분 -->
+	<context:component-scan base-package="kr.co.s3i.sr1" >
+		<context:exclude-filter type="regex" expression="kr.co.s3i.sr1.monitor.hr.*" />
+		<context:exclude-filter type="annotation" expression="kr.co.s3i.sr1.monitor.util.MonitorModule" />
+	</context:component-scan>
+
+	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+		<property name="maxUploadSize"> <value>10000000</value> </property> </bean> -->
+
+	<bean id="respository" class="kr.co.s3i.sr1.common.utility.FileRepository">
+		<constructor-arg value="/s3i/Net-Protect/tmp" />
+	</bean>
+	
+</beans>

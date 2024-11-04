@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Data">
+	<typeAlias alias="attachFileForm" type="kr.co.s3i.sr1.data.file.model.AttachFileForm" />
+	<typeAlias alias="data" type="kr.co.s3i.sr1.data.file.model.Data" />
+	<typeAlias alias="dataForm" type="kr.co.s3i.sr1.data.file.model.DataForm" />
+	<typeAlias alias="gpkiData" type="kr.co.s3i.sr1.gpki.model.GpkiCopyData" />
+	<typeAlias alias="clipboard" type="kr.co.s3i.sr1.data.clipboard.model.Clipboard"/>
+
+	<sql id="fromData">
+		<isEqual property="networkPosition" compareValue="I">
+			in_data
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_data
+		</isEqual>
+	</sql>
+
+	<sql id="fromAttachFile">
+		<isEqual property="networkPosition" compareValue="I">
+			in_ath_file
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_ath_file
+		</isEqual>
+	</sql>
+	
+	<sql id="f_preservation_pol_io_cd">
+	<isNotEmpty property="tx_del_yn">
+		#networkPosition#
+	</isNotEmpty>
+	<isNotEmpty property="rx_del_yn">
+		<isEqual property="networkPosition" compareValue="O">
+			'I'
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="I">
+			'O'
+		</isEqual>
+	</isNotEmpty>
+	</sql>
+	
+	<sql id="where_gpki_status">
+		<isNotEmpty property="m_flag">
+			download_status = 'W'
+		</isNotEmpty>
+		<isEmpty property="m_flag">
+			download_status = 'D'
+		</isEmpty>
+	</sql>
+
+
+	<select id="selecExistAttachFile" resultClass="attachFileForm">
+		SELECT
+			*
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="ath_ord">
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="keep_term">
+				now() <![CDATA[>]]> date_add(crt_time, interval $keep_term$ day)
+			</isGreaterThan>
+		ORDER BY
+			ath_ord ASC
+	</select>
+
+	<select id="selectDataList" resultClass="data">
+		SELECT
+			*
+		FROM
+			<include refid="fromData"/> <!-- In인지, Out인지 옵션값에 따라 table명을 가져옴. in_data 또는 out_data -->
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="tx_del_yn">
+				tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="rx_del_yn">
+				rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+			<!-- 관리자 상태값 -->
+			<isNotEmpty prepend="AND" property="loggin_yn">
+				loggin_yn = #loggin_yn#
+			</isNotEmpty>
+			<isGreaterThan prepend="AND" compareValue="0" property="keep_term">
+				now() <![CDATA[>]]> date_add(crt_time, interval $keep_term$ day)
+			</isGreaterThan>
+		</dynamic>
+	</select>
+
+	<select id="selectAttachFileList" resultClass="attachFileForm">
+		SELECT
+			*
+		FROM
+			<include refid="fromAttachFile"/>
+		<dynamic prepend="WhERE">
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isGreaterThan prepend="AND" compareValue="0" property="keep_term">
+				crt_time between date_add(now(), interval - (30 + $keep_term$) day) and date_add(now(), interval -$keep_term$ day)
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="dataSeqList">
+				<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			data_seq, ath_ord
+	</select>
+
+	<update id="updateAttachFile">
+		UPDATE
+			<include refid="fromAttachFile"/>
+		<dynamic prepend="SET">
+			mod_time = NOW(),
+			modr_id = #modr_id#
+			<isNotEmpty property="in_del_yn">
+				,in_del_yn = #in_del_yn#
+				,in_del_time = NOW()
+			</isNotEmpty>
+			<isNotEmpty property="out_del_yn">
+				,out_del_yn = #out_del_yn#
+				,out_del_time = NOW()
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan prepend="AND" compareValue="0" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan prepend="AND" compareValue="0" property="ath_ord" >
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+		</dynamic>
+	</update>
+
+	<update id="updateAttachFileList">
+		UPDATE
+			<include refid="fromAttachFile"/>
+		<dynamic prepend="SET">
+			mod_time = NOW(),
+			modr_id = #modr_id#
+			<isNotEmpty property="in_del_yn">
+				,in_del_yn = #in_del_yn#
+				,in_del_time = NOW()
+			</isNotEmpty>
+			<isNotEmpty property="out_del_yn">
+				,out_del_yn = #out_del_yn#
+				,out_del_time = NOW()
+			</isNotEmpty>
+		</dynamic>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</update>
+
+	<update id="deleteSndRcvList">
+		UPDATE
+			<include refid="fromData"/>
+		<dynamic prepend="SET">
+			<isNotEmpty property="tx_del_yn" prepend=",">
+				tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty property="rx_del_yn" prepend=",">
+				rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+		</dynamic>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</update>
+
+	<delete id="deleteLogData">
+		DELETE
+		FROM
+			<include refid="fromData"/>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+	
+	<delete id="deleteUpdateLogData">
+		update <include refid="fromData"/> set loggin_yn = #loggin_yn#
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+
+	<delete id="deleteLogAttachFile">
+		DELETE
+		FROM
+			<include refid="fromAttachFile"/>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+
+	<delete id="deleteLogApproval">
+		DELETE
+		FROM
+			approval
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+	
+	<!-- 사용자의 FilePreservationPolicy로 보낸파일, 받은파일 정보를 삭제한다. -->
+	<update id="deleteSndRcvListWithUserFPreservationPolicy">
+		UPDATE
+			<include refid="fromData"/>
+		SET
+			<isNotEmpty property="tx_del_yn">
+			tx_del_time = now(),
+			tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty property="rx_del_yn">
+			rx_del_time = now(),
+			rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+		WHERE data_seq IN (
+			SELECT data_seq.* 
+			FROM (
+				SELECT data_history.data_seq
+				FROM 
+					<include refid="fromData"/> AS data_history
+					INNER JOIN c_user_mgt AS user_mgt
+					ON data_history.users_id = user_mgt.users_id AND user_mgt.rst_seq=0
+					INNER JOIN f_preservation_pol_file_info as prsv_pol
+					ON user_mgt.FP_POL_SEQ = prsv_pol.POL_SEQ AND prsv_pol.rst_seq=0 AND IO_CD = <include refid="f_preservation_pol_io_cd"/> AND prsv_pol.CUD_CD!='D'
+				<dynamic prepend="WHERE">
+					<isNotEmpty prepend="AND" property="tx_del_yn">
+					data_history.tx_del_yn != #tx_del_yn#
+					AND now() <![CDATA[>]]> date_add(data_history.crt_time, interval prsv_pol.snd_keep_term day)
+					</isNotEmpty>
+					
+					<isNotEmpty prepend="AND" property="rx_del_yn">
+					data_history.rx_del_yn != #rx_del_yn#
+					AND now() <![CDATA[>]]> date_add(data_history.rx_time, interval prsv_pol.rcv_keep_term day)
+					</isNotEmpty>
+				</dynamic>
+			) AS data_seq
+		)
+	</update>
+	
+	<!-- 사용자에게 FilePreservationPolicy가 지정되어있지 않고, 부서에 FilePreservationPolicy가 지정되어있는 경우 부서의 FilePreservationPolicy를 이용하여 보낸파일, 받은파일 정보를 삭제한다. -->
+	<update id="deleteSndRcvListWithDeptFPreservationPolicy">
+		UPDATE
+			<include refid="fromData"/>
+		SET
+			<isNotEmpty property="tx_del_yn">
+			tx_del_time = now(),
+			tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty property="rx_del_yn">
+			rx_del_time = now() ,
+			rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+		WHERE data_seq IN (
+			SELECT data_seq.* 
+			FROM (
+				SELECT data_history.data_seq
+				FROM 
+					<include refid="fromData"/> AS data_history
+					INNER JOIN c_user_mgt AS user_mgt
+					ON data_history.users_id = user_mgt.users_id AND user_mgt.rst_seq=0 AND user_mgt.FP_POL_SEQ IS NULL
+					INNER JOIN c_dept_mgt AS dept_mgt
+					ON user_mgt.dept_seq = dept_mgt.dept_seq AND dept_mgt.RST_SEQ=0
+					INNER JOIN f_preservation_pol_file_info as prsv_pol
+					ON dept_mgt.FP_POL_SEQ = prsv_pol.POL_SEQ AND prsv_pol.rst_seq=0 AND IO_CD = <include refid="f_preservation_pol_io_cd"/> AND prsv_pol.CUD_CD!='D'
+				<dynamic prepend="WHERE">
+					<isNotEmpty prepend="AND" property="tx_del_yn">
+					data_history.tx_del_yn != #tx_del_yn#
+					AND now() <![CDATA[>]]> date_add(data_history.crt_time, interval prsv_pol.snd_keep_term day) 
+					</isNotEmpty>
+					
+					<isNotEmpty prepend="AND" property="rx_del_yn">
+					data_history.rx_del_yn != #rx_del_yn#
+					AND now() <![CDATA[>]]> date_add(data_history.rx_time, interval prsv_pol.rcv_keep_term day)
+					</isNotEmpty>
+				</dynamic>
+			) AS data_seq
+		)
+	</update>
+	<delete id="deleteInDataNotUseDB">
+		DELETE d
+		FROM in_data d 
+		WHERE data_seq IN
+		(
+			SELECT data_seq FROM (
+				SELECT d.*,count(IF(ath.in_del_yn='Y',1,null)) AS in_del_cnt, count(IF(ath.out_del_yn='Y',1,null)) AS out_del_cnt, count(*) AS whole_cnt
+				FROM in_data as d LEFT JOIN in_ath_file AS ath ON ath.data_seq=d.data_seq
+				WHERE d.tx_del_yn='Y' AND d.rx_del_yn='Y' AND d.loggin_yn='Y' 
+				GROUP BY d.data_seq 
+				HAVING whole_cnt=0 OR (in_del_cnt=whole_cnt AND out_del_cnt = whole_cnt)
+			) AS A 
+		)
+	</delete>
+	<delete id="deleteInAthFileNotUseDB">
+		DELETE ath
+		FROM in_ath_file AS ath LEFT JOIN in_data AS d ON d.data_seq=ath.data_seq
+		WHERE d.data_seq is null OR ath.data_seq IN
+		(
+			SELECT data_seq FROM (
+				SELECT d.*,count(IF(ath.in_del_yn='Y',1,null)) AS in_del_cnt, count(IF(ath.out_del_yn='Y',1,null)) AS out_del_cnt, count(*) AS whole_cnt
+				FROM in_data as d LEFT JOIN in_ath_file AS ath ON ath.data_seq=d.data_seq
+				WHERE d.tx_del_yn='Y' AND d.rx_del_yn='Y' AND d.loggin_yn='Y' 
+				GROUP BY d.data_seq 
+				HAVING in_del_cnt=whole_cnt AND out_del_cnt = whole_cnt
+			) AS A 
+		)
+	</delete>
+	<delete id="deleteOutDataNotUseDB">
+		DELETE d
+		FROM out_data d
+		WHERE data_seq IN
+		(
+			SELECT data_seq FROM (
+				SELECT d.*,count(IF(ath.in_del_yn='Y',1,null)) AS in_del_cnt, count(IF(ath.out_del_yn='Y',1,null)) AS out_del_cnt, count(*) AS whole_cnt
+				FROM out_data as d LEFT JOIN out_ath_file AS ath ON ath.data_seq=d.data_seq
+				WHERE d.tx_del_yn='Y' AND d.rx_del_yn='Y' AND d.loggin_yn='Y' 
+				GROUP BY d.data_seq 
+				HAVING whole_cnt=0 OR (in_del_cnt=whole_cnt AND out_del_cnt = whole_cnt)
+			) AS A 
+		)
+	</delete>
+	<delete id="deleteOutAthFileNotUseDB">
+		DELETE ath
+		FROM out_ath_file ath LEFT JOIN out_data AS d ON d.data_seq=ath.data_seq
+		WHERE d.data_seq is null OR ath.data_seq IN
+		(
+			SELECT data_seq FROM (
+				SELECT d.*,count(IF(ath.in_del_yn='Y',1,null)) AS in_del_cnt, count(IF(ath.out_del_yn='Y',1,null)) AS out_del_cnt, count(*) AS whole_cnt
+				FROM out_data as d LEFT JOIN out_ath_file AS ath ON ath.data_seq=d.data_seq
+				WHERE d.tx_del_yn='Y' AND d.rx_del_yn='Y' AND d.loggin_yn='Y' 
+				GROUP BY d.data_seq 
+				HAVING in_del_cnt=whole_cnt AND out_del_cnt = whole_cnt
+			) AS A 
+		)
+	</delete>
+	
+	<delete id="removeReceiveData">
+		/* Data.removeReceiveData */
+		DELETE FROM receive_data
+		WHERE io_cd = #io_cd#
+		<iterate prepend="AND data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+	
+	<delete id="deleteReceiveDataByDeletedSndRcvList">
+		/* Data.deleteReceiveDataByDeletedSndRcvList */
+		DELETE r
+		FROM receive_data r, <include refid="fromData"/> d
+		WHERE r.IO_CD = #networkPosition#
+			AND r.DATA_SEQ = d.DATA_SEQ 
+			AND d.RX_DEL_YN = 'Y'
+	</delete>
+
+	<select id="selectGpkiFileList" resultClass="gpkiData">
+		SELECT
+			*
+		FROM
+			user_certificate
+		<dynamic prepend="WHERE">
+			1=1
+			AND
+				<include refid="where_gpki_status"/>
+			AND 
+				now() <![CDATA[>]]> date_add(crt_time, interval $keep_term$ day)
+		</dynamic>
+	</select>
+
+	<update id="updateGpkiFileList">
+		UPDATE
+			user_certificate
+		<dynamic prepend="SET">
+			download_status = 'D'
+		</dynamic>
+		<iterate prepend="WHERE seq in" property="seqList" open="(" close=")" conjunction=",">
+			#seqList[]#
+		</iterate>
+	</update>
+
+	<update id="removeEncKey">
+		UPDATE
+			<include refid="fromData"/>
+		<dynamic prepend="SET">
+			enc_key = 'REMOVE'
+		</dynamic>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</update>
+	
+	<select id="selectClipboardList" resultClass="clipboard">
+		SELECT
+			*
+		FROM
+			clipboard
+		WHERE
+			io_cd = #io_cd#
+			<isNotEmpty prepend="AND" property="loggin_yn">
+				loggin_yn = #loggin_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="tx_del_yn">
+				tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="rx_del_yn">
+				rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isGreaterThan prepend="AND" compareValue="0" property="keep_term">
+				now() <![CDATA[>]]> date_add(crt_time, interval $keep_term$ day)
+			</isGreaterThan>
+	</select>
+	
+	<update id="updateClipboardList">
+		UPDATE 
+			clipboard
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="AND" property="loggin_yn">
+				loggin_yn = #loggin_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="tx_del_yn">
+				tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="rx_del_yn">
+				rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+		</dynamic>
+		<iterate prepend="WHERE clipboard_seq in" property="clipboardSeqList" open="(" close=")" conjunction=",">
+			#clipboardSeqList[]#
+		</iterate>
+	</update>
+</sqlMap>

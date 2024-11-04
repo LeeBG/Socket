@@ -1,0 +1,319 @@
+/* 컴포넌트용 디자인 테이블 rev 20131220 */
+/* 기본스킨 */
+div,table, tbody, tfoot, thead, tr, th, td { 
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+}
+
+
+div.innorix_top { padding:0; margin:0; display:block; border:0; font-size:12px; font-family: gulim, arial, Helvetica, sans-serif;}
+div.innorix_bottom { padding:0; margin:0; display:block; border:0; font-size:12px; font-family: gulim, arial, Helvetica, sans-serif;}
+
+/* 스킨 - style1 */
+div.innorix_top table.innoTableSkin.style1 { border:0; margin:0; padding:0; width:100%; height:24px; color:#666666; background: url("./inno_table_bg_top1.png") top repeat-x; border-collapse:collapse; border-spacing:0; border-style:none; }
+div.innorix_top table.innoTableSkin.style1 td { border-bottom:0; vertical-align:middle; padding-top:5px;}
+div.innorix_top table.innoTableSkin.style1 td.tcol1 { width:auto;  border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; ; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style1 td.tcol2 { width:70px; text-align:right; padding-right:7px; border-right:1px solid #97b4cc;  }
+div.innorix_top table.innoTableSkin.style1 td.tcol3 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #97b4cc;  }
+
+div.innorix_bottom table.innoTableSkin.style1 { border:0; margin:0; padding:0; width:100%; height:24px; color:#666666; background: url("./inno_table_bg_btm1.png") top repeat-x; border-collapse:collapse; border-spacing:0; border-style:none; }
+div.innorix_bottom table.innoTableSkin.style1 td { border-bottom:1px solid #97b4cc; padding-top:5px; }
+div.innorix_bottom table.innoTableSkin.style1 td.bcol1 { width:50%; border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; text-align:left; padding-left:10px; }
+div.innorix_bottom table.innoTableSkin.style1 td.bcol2 { width:50%; text-align:right; padding-right:25px; border-right:1px solid #97b4cc; }
+
+div.innorix_top table.innoTableSkin.style1 td.tcol11 { width:auto; border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style1 td.tcol12 { width:70px; border-right:1px solid #97b4cc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style1 td.tcol13 { width:115px; text-align:right; padding-right:7px; border-right:1px solid #97b4cc; }
+div.innorix_top table.innoTableSkin.style1 td.tcol14 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #97b4cc; }
+
+div.innorix_top table.innoTableSkin.style1 td.tcol21 { width:auto; border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style1 td.tcol22 { width:70px; border-right:1px solid #97b4cc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style1 td.tcol23 { width:60px; border-right:1px solid #97b4cc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style1 td.tcol24 { width:65px; text-align:right; padding-right:7px; border-right:1px solid #97b4cc; }
+div.innorix_top table.innoTableSkin.style1 td.tcol25 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #97b4cc; }
+
+/* 스킨 - style2 */
+div.innorix_top table.innoTableSkin.style2 { border:0; margin:0; padding:0; width:100%; height:24px; color:#666666; background: url("./inno_table_bg_top2.png") top repeat-x; border-collapse:collapse; border-spacing:0; border-style:none; }
+div.innorix_top table.innoTableSkin.style2 td { border-bottom:0; vertical-align:middle; padding-top:5px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol1 { width:auto;  border-left:1px solid #cccccc; border-right:1px solid #cccccc; ; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol2 { width:70px; text-align:right; padding-right:7px; border-right:1px solid #cccccc;  }
+div.innorix_top table.innoTableSkin.style2 td.tcol3 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #cccccc;  }
+
+div.innorix_bottom table.innoTableSkin.style2 { border:0; margin:0; padding:0; width:100%; height:24px; color:#666666; background: url("./inno_table_bg_btm2.png") top repeat-x; border-collapse:collapse; border-spacing:0; border-style:none; }
+div.innorix_bottom table.innoTableSkin.style2 td { border-bottom:1px solid #cccccc; padding-top:5px; }
+div.innorix_bottom table.innoTableSkin.style2 td.bcol1 { width:50%; border-left:1px solid #cccccc; border-right:1px solid #cccccc; text-align:left; padding-left:10px; }
+div.innorix_bottom table.innoTableSkin.style2 td.bcol2 { width:50%; text-align:right; padding-right:25px; border-right:1px solid #cccccc; }
+
+div.innorix_top table.innoTableSkin.style2 td.tcol11 { width:auto; border-left:1px solid #cccccc; border-right:1px solid #cccccc; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol12 { width:70px; border-right:1px solid #cccccc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol13 { width:115px; text-align:right; padding-right:7px; border-right:1px solid #cccccc; }
+div.innorix_top table.innoTableSkin.style2 td.tcol14 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #cccccc; }
+
+div.innorix_top table.innoTableSkin.style2 td.tcol21 { width:auto; border-left:1px solid #cccccc; border-right:1px solid #cccccc; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol22 { width:70px; border-right:1px solid #cccccc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol23 { width:60px; border-right:1px solid #cccccc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style2 td.tcol24 { width:65px; text-align:right; padding-right:7px; border-right:1px solid #cccccc; }
+div.innorix_top table.innoTableSkin.style2 td.tcol25 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #cccccc; }
+
+/* 스킨 - style3 */
+div.innorix_top table.innoTableSkin.style3 { border:0; margin:0; padding:0; width:100%; height:24px; color:#666666; background: url("./inno_table_bg_top3.png") top repeat-x; border-collapse:collapse; border-spacing:0; border-style:none; }
+div.innorix_top table.innoTableSkin.style3 td { border-bottom:0; vertical-align:middle; padding-top:5px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol1 { width:auto;  border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; ; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol2 { width:70px; text-align:right; padding-right:7px; border-right:1px solid #97b4cc;  }
+div.innorix_top table.innoTableSkin.style3 td.tcol3 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #97b4cc;  }
+
+div.innorix_bottom table.innoTableSkin.style3 { border:0; margin:0; padding:0; width:100%; height:24px; color:#666666; background: url("./inno_table_bg_btm1.png") top repeat-x; border-collapse:collapse; border-spacing:0; border-style:none; }
+div.innorix_bottom table.innoTableSkin.style3 td { border-bottom:1px solid #97b4cc; padding-top:5px; }
+div.innorix_bottom table.innoTableSkin.style3 td.bcol1 { width:50%; border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; text-align:left; padding-left:10px; }
+div.innorix_bottom table.innoTableSkin.style3 td.bcol2 { width:50%; text-align:right; padding-right:25px; border-right:1px solid #97b4cc; }
+
+div.innorix_top table.innoTableSkin.style3 td.tcol11 { width:auto; border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol12 { width:70px; border-right:1px solid #97b4cc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol13 { width:115px; text-align:right; padding-right:7px; border-right:1px solid #97b4cc; }
+div.innorix_top table.innoTableSkin.style3 td.tcol14 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #97b4cc; }
+
+div.innorix_top table.innoTableSkin.style3 td.tcol21 { width:auto; border-left:1px solid #97b4cc; border-right:1px solid #97b4cc; text-align:left; padding-left:10px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol22 { width:70px; border-right:1px solid #97b4cc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol23 { width:60px; border-right:1px solid #97b4cc; text-align:right; padding-right:10px; }
+div.innorix_top table.innoTableSkin.style3 td.tcol24 { width:65px; text-align:right; padding-right:7px; border-right:1px solid #97b4cc; }
+div.innorix_top table.innoTableSkin.style3 td.tcol25 { width:18px; text-align:right; padding-right:1px; border-right:1px solid #97b4cc; }
+
+/* 웹리스트 테이블 디자인 테이블 */
+/* 기본스킨 */
+div.innoWebListClass { border-style: none; padding:0; margin:0; background:#ffffff; vertical-align:middle; font-family: gulim, arial, Helvetica, sans-serif; overflow: hidden; outline: 0px solid #bbbbbb; }
+div.innoWebListClass table.layoutframe { border-style: none; width:100%; margin: 0; clear: both; border-collapse:collapse; border-spacing:0; }
+
+div.innoWebListClass table.innoListTableInfohead { background: url("./tableWhite5.png") top repeat-x; width:100%; border-collapse:collapse; border-spacing:0; height:25px; border-bottom: 1px solid #dddddd; font-weight: normal; font-size: 12px; background-color: #f5f5f5; }
+div.innoWebListClass table.innoListTableInfohead th { background: url("./tableWhite1.png") left repeat-y; color: #333333; border:0; border-bottom: 1px solid #bbbbbb;  height:25px; line-height: 24px; font-weight: normal; font-size: 12px; padding-top:0; padding-bottom:0; }
+div.innoWebListClass table.innoListTableInfohead th.tableLeftSlice { background: url("./tableSlice.png") left center no-repeat; }
+div.innoWebListClass table.innoListTableInfohead th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass table.innoListTableInfobottom { background: url("./tableWhite4.png") top repeat-x; border-collapse:collapse; width:100%; height:24px; font-weight: normal; background-color: #f5f5f5;  border-spacing:0; font-size:12px; }
+div.innoWebListClass table.innoListTableInfobottom th { padding-top:2px; padding-bottom:0; background: url("./tableWhite1.png") left repeat-y; color: #454545; height:22px; border:0;  border-top: 1px solid #bbbbbb; font-weight: normal; vertical-align:middle; }
+div.innoWebListClass table.innoListTableInfobottom th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass table.innoListTableClass { border-collapse:collapse; width: 100%; }
+div.innoWebListClass table.innoListTableClass thead th { line-height:0; font-size:0 ; height:0; overflow:hidden; visibility: hidden; padding: 0px; border-bottom: 0px solid #c3c3c3; border-top: 0px solid #c3c3c3; font-weight: normal; font-size: 12px; cursor: pointer; * cursor: hand; }
+div.innoWebListClass table.innoListTableClass tfoot th { padding-left: 10px; font-size: 11px; color: #454545; }
+div.innoWebListClass table.innoListTableClass tr.heading2 td { border-bottom: 1px solid #c3c3c3; text-align: right; }
+div.innoWebListClass table.innoListTableClass td { height: 26px; vertical-align:middle; padding-left:10px; font-weight: normal; font-size: 12px; font-size: 12px; color: #454545; text-align: left; }
+div.innoWebListClass table.innoListTableClass td.dataTables_empty {  height: 26px; vertical-align:middle; text-align: center; }
+
+div.innoWebListClass table.innoListTableClass tr.even.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass table.innoListTableClass tr.odd.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass table.innoListTableClass .table_file_size { text-align: right; padding-right:15px; }
+div.innoWebListClass table.innoListTableClass div.tableFileSize { text-align:right; padding-right:15px;  } /*padding-right:15px;*/
+
+div.innoWebListClass table.innoListTableClass td { border-bottom: 1px solid #c3c3c3; }
+div.innoWebListClass table.innoListTableClass tr.odd { background-color: white; }
+div.innoWebListClass table.innoListTableClass tr.even { background-color: white; }
+
+div.innoWebListClass .vscrollerbar { width: 13px; background: #5EC0A7 url(scrollbar.png) -13px 0px repeat-y; }
+div.innoWebListClass .vscrollerbar { width: 13px; background: #5EC0A7 url(scrollbar.png) -13px 0px repeat-y; }
+div.innoWebListClass .vscrollerbarbeg {height: 13px !important;width: 13px;background: url(scrollbar.png) -39px 0px no-repeat;}
+div.innoWebListClass .vscrollerbarend {height: 13px;width: 13px;background: url(scrollbar.png) -39px -13px no-repeat;}
+
+div.innoWebListClass .vscrollerbase {width: 13px;background: #D4F6F2 url(scrollbar.png) 0px 0px repeat-y;}
+div.innoWebListClass .vscrollerbasebeg {width: 13px;height: 13px !important; background: url(scrollbar.png) -26px 0px no-repeat;}
+div.innoWebListClass .vscrollerbaseend {height: 13px;width: 13px;background: url(scrollbar.png)  -26px -13px no-repeat;}
+
+
+/* style1 */
+div.innoWebListClass.style1 { border-style: none; padding:0; margin:0; background:#ffffff; vertical-align:middle; font-family: gulim, arial, Helvetica, sans-serif; overflow: hidden; outline: 0px solid #bbbbbb; }
+div.innoWebListClass.style1 table.layoutframe { border-style: none; width:100%; margin: 0; clear: both; border-collapse:collapse; border-spacing:0; }
+
+div.innoWebListClass.style1 table.innoListTableInfohead { background: url("./inno_tableList_bg_top1.png") top repeat-x; width:100%; border-collapse:collapse; border-spacing:0; border-bottom: 1px solid #dddddd; font-weight: normal; font-size: 12px; background-color: #f5f5f5; }
+div.innoWebListClass.style1 table.innoListTableInfohead th { background: url("./tableWhite1.png") left repeat-y; color: #333333; border-bottom: 1px solid #bbbbbb;  height:25px; line-height: 25px; font-weight: normal; font-size: 12px; }
+div.innoWebListClass.style1 table.innoListTableInfohead th.tableLeftSlice { background: url("./tableSlice.png") left center no-repeat; }
+div.innoWebListClass.style1 table.innoListTableInfohead th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass.style1 table.innoListTableInfobottom { background: url("./inno_tableList_bg_btm1.png") top repeat-x; border-collapse:collapse; width:100%; font-weight: normal; background-color: #f5f5f5;  border-spacing:0; font-size:12px; }
+div.innoWebListClass.style1 table.innoListTableInfobottom th { padding-top:2px; background: url("./tableWhite1.png") left repeat-y; color: #454545; height:24px; border-top: 1px solid #bbbbbb; font-weight: normal; vertical-align:middle; }
+div.innoWebListClass.style1 table.innoListTableInfobottom th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass.style1 table.innoListTableClass { border-collapse:collapse; width: 100%; }
+div.innoWebListClass.style1 table.innoListTableClass thead th { line-height:0; font-size:0 ; height:0; overflow:hidden; visibility: hidden; padding: 0px; border-bottom: 0px solid #c3c3c3; font-weight: normal; font-size: 12px; cursor: pointer; * cursor: hand; }
+div.innoWebListClass.style1 table.innoListTableClass tfoot th { padding-left: 10px; font-size: 11px; color: #454545; }
+div.innoWebListClass.style1 table.innoListTableClass tr.heading2 td { border-bottom: 1px solid #c3c3c3; text-align: right; }
+div.innoWebListClass.style1 table.innoListTableClass td { height: 26px; vertical-align:middle; padding-left:10px; font-weight: normal; font-size: 12px; font-size: 12px; color: #454545; text-align: left; }
+div.innoWebListClass.style1 table.innoListTableClass td.dataTables_empty { height: 26px; vertical-align:middle; text-align: center; }
+
+div.innoWebListClass.style1 table.innoListTableClass tr.even.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass.style1 table.innoListTableClass tr.odd.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass.style1 table.innoListTableClass .table_file_size { text-align: right; padding-right:15px; }
+div.innoWebListClass.style1 table.innoListTableClass div.tableFileSize { text-align:right; padding-right:15px; }
+
+div.innoWebListClass.style1 table.innoListTableClass td { border-bottom: 1px solid #c3c3c3; }
+div.innoWebListClass.style1 table.innoListTableClass tr.odd { background-color: white; }
+div.innoWebListClass.style1 table.innoListTableClass tr.even { background-color: white; }
+
+div.innoWebListClass.style1 .vscrollerbar { width: 13px; background: #5EC0A7 url(scrollbar.png) -13px 0px repeat-y; }
+div.innoWebListClass.style1 .vscrollerbarbeg {height: 13px !important;width: 13px;background: url(scrollbar.png) -39px 0px no-repeat;}
+div.innoWebListClass.style1 .vscrollerbarend {height: 13px;width: 13px;background: url(scrollbar.png) -39px -13px no-repeat;}
+
+div.innoWebListClass.style1 .vscrollerbase {width: 13px;background: #D4F6F2 url(scrollbar.png) 0px 0px repeat-y;}
+div.innoWebListClass.style1 .vscrollerbasebeg {width: 13px;height: 13px !important; background: url(scrollbar.png) -26px 0px no-repeat;}
+div.innoWebListClass.style1 .vscrollerbaseend {height: 13px;width: 13px;background: url(scrollbar.png)  -26px -13px no-repeat;}
+
+/* style2 */
+div.innoWebListClass.style2 { border-style: none; padding:0; margin:0; background:#ffffff; vertical-align:middle; font-family: gulim, arial, Helvetica, sans-serif; overflow: hidden; outline: 0px solid #98b4cc; }
+div.innoWebListClass.style2 table.layoutframe { border-style: none; width:100%; margin: 0; clear: both; border-collapse:collapse; border-spacing:0; }
+
+div.innoWebListClass.style2 table.innoListTableInfohead { background: url("./inno_tableList_bg_top2.png") top repeat-x; width:100%; border-collapse:collapse; border-spacing:0; border-bottom: 1px solid #dddddd; font-weight: normal; font-size: 12px; background-color: #f5f5f5; }
+div.innoWebListClass.style2 table.innoListTableInfohead th { background: url("./tableWhite1.png") left repeat-y; color: #333333; border-bottom: 1px solid #98b4cc;  height:25px; line-height: 25px; font-weight: normal; font-size: 12px; }
+div.innoWebListClass.style2 table.innoListTableInfohead th.tableLeftSlice { background: url("./tableSlice.png") left center no-repeat; }
+div.innoWebListClass.style2 table.innoListTableInfohead th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass.style2 table.innoListTableInfobottom { background: url("./inno_tableList_bg_btm2.png") top repeat-x; border-collapse:collapse; width:100%; font-weight: normal; background-color: #f5f5f5;  border-spacing:0; font-size:12px; }
+div.innoWebListClass.style2 table.innoListTableInfobottom th { padding-top:2px; background: url("./tableWhite1.png") left repeat-y; color: #454545; height:24px; border-top: 1px solid #98b4cc; font-weight: normal; vertical-align:middle; }
+div.innoWebListClass.style2 table.innoListTableInfobottom th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass.style2 table.innoListTableClass { border-collapse:collapse; width: 100%; }
+div.innoWebListClass.style2 table.innoListTableClass thead th { line-height:0; font-size:0 ; height:0; overflow:hidden; visibility: hidden; padding: 0px; border-bottom: 0px solid #98b4cc; font-weight: normal; font-size: 12px; cursor: pointer; * cursor: hand; }
+div.innoWebListClass.style2 table.innoListTableClass tfoot th { padding-left: 10px; font-size: 11px; color: #454545; }
+div.innoWebListClass.style2 table.innoListTableClass tr.heading2 td { border-bottom: 1px solid #98b4cc; text-align: right; }
+div.innoWebListClass.style2 table.innoListTableClass td { height: 26px; vertical-align:middle; padding-left:10px; font-weight: normal; font-size: 12px; font-size: 12px; color: #454545; text-align: left; }
+div.innoWebListClass.style2 table.innoListTableClass td.dataTables_empty { height: 26px; vertical-align:middle; text-align: center; }
+
+div.innoWebListClass.style2 table.innoListTableClass tr.even.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass.style2 table.innoListTableClass tr.odd.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass.style2 table.innoListTableClass .table_file_size { text-align: right; padding-right:15px; }
+div.innoWebListClass.style2 table.innoListTableClass div.tableFileSize { text-align:right; padding-right:15px; }
+
+div.innoWebListClass.style2 table.innoListTableClass td { border-bottom: 1px solid #98b4cc; }
+div.innoWebListClass.style2 table.innoListTableClass tr.odd { background-color: white; }
+div.innoWebListClass.style2 table.innoListTableClass tr.even { background-color: white; }
+
+div.innoWebListClass.style2 .vscrollerbar { width: 13px; background: #5EC0A7 url(scrollbar2.png) -13px 0px repeat-y; }
+div.innoWebListClass.style2 .vscrollerbarbeg {height: 13px !important;width: 13px;background: url(scrollbar2.png) -39px 0px no-repeat;}
+div.innoWebListClass.style2 .vscrollerbarend {height: 13px;width: 13px;background: url(scrollbar2.png) -39px -13px no-repeat;}
+
+div.innoWebListClass.style2 .vscrollerbase {width: 13px;background: #D4F6F2 url(scrollbar2.png) 0px 0px repeat-y;}
+div.innoWebListClass.style2 .vscrollerbasebeg {width: 13px;height: 13px !important; background: url(scrollbar2.png) -26px 0px no-repeat;}
+div.innoWebListClass.style2 .vscrollerbaseend {height: 13px;width: 13px;background: url(scrollbar2.png)  -26px -13px no-repeat;}
+
+/* style3 */
+div.innoWebListClass.style3 { border-style: none; padding:0; margin:0; background:#ffffff; vertical-align:middle; font-family: gulim, arial, Helvetica, sans-serif; overflow: hidden; outline: 0px solid #bbbbbb; }
+div.innoWebListClass.style3 table.layoutframe { border-style: none; width:100%; margin: 0; clear: both; border-collapse:collapse; border-spacing:0; }
+
+div.innoWebListClass.style3 table.innoListTableInfohead { background: url("./inno_tableList_bg_top3.png") top repeat-x; width:100%; border-collapse:collapse; border-spacing:0; border-bottom: 1px solid #dddddd; font-weight: normal; font-size: 12px; background-color: #f5f5f5; }
+div.innoWebListClass.style3 table.innoListTableInfohead th { background: url("./tableWhite1.png") left repeat-y; color: #333333; border-bottom: 1px solid #bbbbbb;  height:25px; line-height: 25px; font-weight: normal; font-size: 12px; }
+div.innoWebListClass.style3 table.innoListTableInfohead th.tableLeftSlice { background: url("./tableSlice.png") left center no-repeat; }
+div.innoWebListClass.style3 table.innoListTableInfohead th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass.style3 table.innoListTableInfobottom { background: url("./inno_tableList_bg_btm3.png") top repeat-x; border-collapse:collapse; width:100%; font-weight: normal; background-color: #f5f5f5;  border-spacing:0; font-size:12px; }
+div.innoWebListClass.style3 table.innoListTableInfobottom th { padding-top:2px; background: url("./tableWhite1.png") left repeat-y; color: #454545; height:24px; border-top: 1px solid #bbbbbb; font-weight: normal; vertical-align:middle; }
+div.innoWebListClass.style3 table.innoListTableInfobottom th.tableEnd { background: url("./tableWhite1.png") right repeat-y; }
+
+div.innoWebListClass.style3 table.innoListTableClass { border-collapse:collapse; width: 100%; }
+div.innoWebListClass.style3 table.innoListTableClass thead th { line-height:0; font-size:0 ; height:0; overflow:hidden; visibility: hidden; padding: 0px; border-bottom: 0px solid #c3c3c3; font-weight: normal; font-size: 12px; cursor: pointer; * cursor: hand; }
+div.innoWebListClass.style3 table.innoListTableClass tfoot th { padding-left: 10px; font-size: 11px; color: #454545; }
+div.innoWebListClass.style3 table.innoListTableClass tr.heading2 td { border-bottom: 1px solid #c3c3c3; text-align: right; }
+div.innoWebListClass.style3 table.innoListTableClass td { height: 26px; vertical-align:middle; padding-left:10px; font-weight: normal; font-size: 12px; font-size: 12px; color: #454545; text-align: left; }
+div.innoWebListClass.style3 table.innoListTableClass td.dataTables_empty { height: 26px; vertical-align:middle; text-align: center; }
+
+div.innoWebListClass.style3 table.innoListTableClass tr.even.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass.style3 table.innoListTableClass tr.odd.row_selected td { background-color: #d0e9ff; }
+div.innoWebListClass.style3 table.innoListTableClass .table_file_size { text-align: right; padding-right:15px; }
+div.innoWebListClass.style3 table.innoListTableClass div.tableFileSize { text-align:right; padding-right:15px; }
+
+div.innoWebListClass.style3 table.innoListTableClass td { border-bottom: 1px solid #c3c3c3; }
+div.innoWebListClass.style3 table.innoListTableClass tr.odd { background-color: white; }
+div.innoWebListClass.style3 table.innoListTableClass tr.even { background-color: white; }
+
+div.innoWebListClass.style3 .vscrollerbar { width: 13px; background: #5EC0A7 url(scrollbar.png) -13px 0px repeat-y; }
+div.innoWebListClass.style3 .vscrollerbarbeg {height: 13px !important;width: 13px;background: url(scrollbar.png) -39px 0px no-repeat;}
+div.innoWebListClass.style3 .vscrollerbarend {height: 13px;width: 13px;background: url(scrollbar.png) -39px -13px no-repeat;}
+
+div.innoWebListClass.style3 .vscrollerbase {width: 13px;background: #D4F6F2 url(scrollbar.png) 0px 0px repeat-y;}
+div.innoWebListClass.style3 .vscrollerbasebeg {width: 13px;height: 13px !important; background: url(scrollbar.png) -26px 0px no-repeat;}
+div.innoWebListClass.style3 .vscrollerbaseend {height: 13px;width: 13px;background: url(scrollbar.png)  -26px -13px no-repeat;}
+
+/* 웹리스트 테이블 공통 */
+table.innoListTableInfoheadLine { width:100%; background: #dedede; }
+table.innoListTableClass {
+    #margin-left: 1px;
+}
+
+/* Error Table Style */
+div.InnoErrorTableLayer { width:100%; height:100%; font-size:12px; font-family: gulim, arial, Helvetica, sans-serif; }
+div.InnoErrorTableLayer table { border-collapse:collapse; width:100%; height:100%; font-size:12px; font-family: gulim, arial, Helvetica, sans-serif; border:1px solid #cccccc; }
+div.InnoErrorTableLayer table thead tr th { height:25px; line-height: 24px; background: #eeeeee; border-bottom: 1px solid #cccccc; }
+div.InnoErrorTableLayer table tbody tr td { height:22px; line-height: 21px; border-bottom: 1px solid #cccccc; }
+div.InnoErrorTableLayer h2.InnoErrorTableLayerMsg { font-size:14px; color: #006699; font-weight: bold; }
+div.InnoErrorTableLayer p.InnoErrorTableLayerMsgTxt { font-size:12px; color: #666666; }
+
+/* HTML5 datatables */
+div.innoHTML5ListClass { border-style: none; padding:0; margin:0; background:#ffffff; vertical-align:middle; font-family: gulim, arial, Helvetica, sans-serif; overflow: hidden; background-color: #f5f5f5; }
+div.innoHTML5ListClass table.layoutframe { border-style: none; width:100%; margin: 0; clear: both; border-collapse:separate; border-spacing:0; }
+
+div.innoHTML5ListClass table.innoListTableInfohead { background: url("./inno_tableList_bg_top1.png") top repeat-x; width:100%; border-collapse:separate; border-spacing:0; height:25px; font-weight: normal; font-size: 12px; }
+div.innoHTML5ListClass table.innoListTableInfohead th { color: #333333; border:0; height:25px; line-height: 24px; font-weight: normal; font-size: 12px; padding-top:0; padding-bottom:0; }
+div.innoHTML5ListClass table.innoListTableClass td.dataTables_empty { height: 26px; vertical-align:middle; text-align: center;  }
+
+div.innoHTML5ListClass tbody.innoListTableClass td { height:24px; vertical-align:middle; border-bottom: 1px solid #c3c3c3; background: white; }
+div.innoHTML5ListClass tbody.innoListTableClass td { text-align: right; padding-right: 10px; }
+div.innoHTML5ListClass tbody.innoListTableClass td.sorting_1 { text-align: left; padding-left: 10px; }
+
+div.innoHTML5ListClass div.dataTables_scrollBody { background:#ffffff; border-top: 1px solid #bbbbbb; border-bottom: 1px solid #bbbbbb;  }
+
+div.innoHTML5ListClass tbody.innoListTableClass a { text-decoration: none; color: #333333; }
+
+/* HTML 전송창 */
+
+#StyleTransferWindow { float:left; margin:0 auto; width:450px; background: #f5f5f5; color: #404040; font-size: 12px; font-family: gulim, arial, Helvetica, sans-serif; border-collapse:collapse; display:block; z-index: 999; overflow: hidden; } 
+
+#StyleTransferWindow div.transferWindowTitle { float:left; width: 430px; height: 28px; line-height: 28px; color: #ffffff; background: #333333; padding: 0 10px 0 10px; } 
+#StyleTransferWindow div.transferWindowTitle span#nowPercent { display:block; float: left; font-family: Verdana; font-size: 14px; color: #ffffff; }
+#StyleTransferWindow div.transferWindowTitle span#xClose { display:block; float: right; font-family: Verdana; font-size: 14px; color: #ffffff; }
+#StyleTransferWindow div.transferWindowTitle span#xClose a { color: #ffffff; text-decoration: none; }
+#StyleTransferWindow div.transferWindowTitle span#xClose a:hover { color: #ffffff; text-decoration: none; }
+#StyleTransferWindow div.transferWindowTitle span#transferMode { display:block; float: left; }
+#StyleTransferWindow div.transferWindowTitle span#tMode { display:block; float: left; }
+
+#StyleTransferWindow .StyleTransferWindowBody { float:left; width: 428px; border-left:1px solid #b1b1b1; border-right:1px solid #b1b1b1; border-bottom:1px solid #b1b1b1; padding: 0px 8px 0 12px;  }
+
+#StyleTransferWindow div.transferWindowText { float:left; width: 100%; height: 90px; line-height: 16px; margin-top: 10px; }
+#StyleTransferWindow div.transferWindowText .transferWindowTextLeft { width: 300px; display: block; float: left; }
+#StyleTransferWindow div.transferWindowBar { clear: both; width: 423px; height: 30px; padding:0; margin-top: 10px; background: #d3d3d3; }
+#StyleTransferWindow div.transferWindowBar span#bar { width:0px; height: 30px; display:block; background: #2e8be9; overflow: hidden; }
+#StyleTransferWindow div.DivTime { float: right; padding-right:5px; width:100px; height: 15px; display:block; text-align: right;  }
+
+#StyleTransferWindow div.transferWindowSetting { float:left; width: 100%; height: 35px; display:none; }
+#StyleTransferWindow div.transferWindowSetting span.txt { float: left; height: 25px; line-height:25px; float: left; display:block; width: 60px; overflow: hidden; }
+#StyleTransferWindow div.transferWindowSetting span#folder { height: 25px; line-height:25px; float: left; display:block; width: 150px; overflow: hidden; color: #1e74db; }
+#StyleTransferWindow div.transferWindowSetting span.btn { float: right; height: 25px; line-height:25px; float: right; display:block; width: 150px; overflow: hidden; }
+#StyleTransferWindow div.transferWindowSetting span.btn input#changeFolder { height: 23px; line-height:23px; font-size: 12px; width: 70px; border: 1px solid #cccccc; background-color: #ffffff; color: #404040; padding:0; margin:0; }
+#StyleTransferWindow div.transferWindowSetting span.btn input#startDownload { height: 23px; line-height:23px; font-size: 12px; width: 70px; border: 1px solid #1e74db; background-color: #2e8be9; color: #ffffff; padding:0; margin:0; }
+
+#StyleTransferWindow div.statusBar { float:left; width: 100%; height: 18px; line-height: 18px; font-family: 'arial'; font-size: 10px; color: #b6b6b6; border-top:1px solid #dedede; text-align: center; }
+
+#StyleTransferWindow div.transferWindowTable { float:left; width: 100%; display:block; overflow:hidden; }
+#StyleTransferWindow div.transferWindowTable table#transferWindowTable { float:left; width: 425px; }
+
+
+
+/* 컴포넌트 버튼 스타일 */
+.innoBlueBtn { height:25px; line-height: 25px; text-align:center; margin:1px; padding:0 10px 0 10px; border: 1px solid #1771ca; background: #2e8be9; color:white; }
+.innoGreenBtn { height:25px; line-height: 25px; text-align:center; margin:1px; padding:0 10px 0 10px; border: 1px solid #31b479; background: #2fce86; color:white; }
+
+
+/* Scroll Bar Master Styling Starts Here */
+/* All comments can be freely removed from the css */
+
+/*  scrollgeneric is used for corrective styling of elements, and should not be modified or removed */ 
+.scrollgeneric { line-height: 1px; font-size: 1px; position: absolute; top: 0; left: 0; }
+
+/* do not forget to give horizontal scrollbars some color properties even if you don't plan on using them */
+.hscrollerbase { height: 16px; background-color: white; display: none; } 
+.hscrollerbar { height: 16px; background-color: white; display: none; }
+
+/* paddings of these elements will decide how far the scrollbar will stop in both ends, and are not actually
+used for styling, and are set to 0 by the script, here we will set them the size of our faux arrows */
+.vscrollerbar, .hscrollerbar { padding: 13px; z-index: 2; }
+
+/* properties for scroller jog box, just in case */
+.scrollerjogbox { width: 13px; height: 16px; top: auto; left: auto; bottom: 0px; right: 0px; background: #37917A; display: none; }
+/* Scroll Bar Master Styling Ends Here */

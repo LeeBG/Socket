@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ApprovalLock">
+	<typeAlias alias="ApprovalLock" type="kr.co.s3i.sr1.policy.approvalLock.model.ApprovalLock" />
+	
+	<select id="selectApprovalLockList" resultClass="ApprovalLock">
+		SELECT
+			*
+		FROM
+			f_approval_lock l
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="users_id">
+			users_id = #users_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="lock_section">
+			lock_section = #lock_section#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			np_cd = #np_cd#
+		</isNotEmpty>
+		<isEqual prepend="AND" property="status" compareValue="LOCK">
+			end_date is null
+		</isEqual>
+		<!-- after_app_lock_period가 0이상인 데이터만 조회  -->
+		AND exists 
+		(
+			SELECT 1 
+			FROM c_user_mgt u 
+			<isEqual property="dept_policy_yn" prepend="," compareValue="N"> 
+				f_pol_approval_mgt a  
+			</isEqual>
+			WHERE u.users_id = l.users_id
+				AND u.rst_seq = 0
+				AND u.cud_cd not in ('D')
+				<isEqual property="dept_policy_yn" compareValue="N">
+					AND u.a_pol_seq = a.app_seq
+					AND a.rst_seq = 0
+					AND a.cud_cd not in ('D')
+					AND a.after_app_lock_period > 0
+				</isEqual>
+		)
+	</select>
+
+</sqlMap> 

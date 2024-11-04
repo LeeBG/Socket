@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AdminAudit">
+	<typeAlias alias="AdminAuditForm" type="kr.co.s3i.sr1.audit.adminAudit.model.AdminAuditForm" />
+
+	<update id="delAdminAudit">
+		UPDATE 
+			ADMIN_AUDIT
+		SET 
+			DISPLAY_YN = 'N'
+		WHERE
+			DISPLAY_YN = 'Y'
+		AND
+			DATE_FORMAT(crt_date,'%Y-%m-%d') <![CDATA[<=]]> #endDay#
+	</update>
+	
+</sqlMap>

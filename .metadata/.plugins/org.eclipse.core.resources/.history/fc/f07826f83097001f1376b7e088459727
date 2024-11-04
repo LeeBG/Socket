@@ -1,0 +1,92 @@
+package multiableServerClient;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class MulitableClient {
+	private final String serverAddress = "192.168.30.215";
+	private final int port = 12345;
+	private Socket clientSocket;
+	private String userInputData;
+	private InputStream input;
+	private OutputStream output;
+	private Scanner scanner;
+
+	public MulitableClient() {
+		createClientSocket();
+	}
+
+	public void createClientSocket() {
+		try {
+			System.out.println("=== 클라이언트 실행 ===");
+			System.out.println(
+					"연결 시도중... \n서버:" + serverAddress + "<===> 클라이언트:" + InetAddress.getLocalHost().getHostAddress());
+			clientSocket = new Socket(serverAddress, port);
+			try {
+				input = clientSocket.getInputStream();
+				output = clientSocket.getOutputStream();
+				scanner = new Scanner(System.in);
+
+				byte[] buffer = new byte[1024];
+				int bytesRead;
+
+				while (true) {
+					System.out.print("서버와 연결되었습니다. 메시지를 입력하세요 >> ");
+					userInputData = scanner.nextLine();
+					if (userInputData.equalsIgnoreCase("exit")) {
+						break;
+					}
+					
+					output.write(userInputData.getBytes());
+					output.flush();
+
+					bytesRead = input.read(buffer);
+					String responseData = new String(buffer, 0, bytesRead);
+					System.out.println("서버로부터 받은 응답 메시지 : " + responseData);
+				}
+			} catch (SocketException e) {
+				System.out.println("연결가능 소켓 갯수 초과 에러 : " + e.getMessage());
+			} catch (IOException e) {
+				System.err.println("스트림 처리 중 문제 발생: " + e.getMessage());
+			}
+		} catch (UnknownHostException e) {
+			System.err.println("네트워크 연결 문제입니다: " + e.getMessage());
+
+		} catch (IOException e) {
+			System.err.println("소켓 관련 문제입니다: " + e.getMessage());
+		} finally {
+			closeResources();
+		}
+	}
+
+	public static void main(String[] args) {
+		new MulitableClient();
+	}
+
+	private void closeResources() {
+		if (scanner != null) {
+			scanner.close();
+		}
+		try {
+			if (output != null) {
+				output.close();
+			}
+			if (input != null) {
+				input.close();
+			}
+			if (clientSocket != null && !clientSocket.isClosed()) {
+				clientSocket.close();
+			}
+		} catch (IOException e) {
+			System.err.println("자원 해제 중 문제 발생: " + e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("클라이언트 종료");
+	}
+}

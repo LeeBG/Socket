@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MailLinkage">
+	<typeAlias alias="EmlData" type="kr.co.s3i.sr1.emlProcess.model.EmlData" />
+	<typeAlias alias="EmlFile" type="kr.co.s3i.sr1.emlProcess.model.EmlFile" />
+	<typeAlias alias="UsersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+
+	<sql id="fromEmlData">
+		<isEqual property="io_cd" compareValue="I">
+			in_eml_data
+		</isEqual>
+		<isEqual property="io_cd" compareValue="O">
+			out_eml_data
+		</isEqual>
+	</sql>
+
+	<sql id="fromEmlFile">
+		<isEqual property="io_cd" compareValue="I">
+			in_eml_file
+		</isEqual>
+		<isEqual property="io_cd" compareValue="O">
+			out_eml_file
+		</isEqual>
+	</sql>
+
+	<insert id="insertEmlData">
+		/* MailLinkage.insertEmlData */
+		INSERT INTO 
+			<include refid="fromEmlData"/> 
+		(
+			EMAIL_SUBJECT,
+			SENDER_ID,
+			SENDER_NM,
+			SENDER_EMAIL,
+			RECEIVER_ID,
+			RECEIVER_EMAIL,
+			CC_EMAIL,
+			CC_ID,
+			BCC_EMAIL,
+			BCC_ID,
+			RESULT,
+			CRT_TIME
+		) VALUES (
+			#email_subject#,
+			#sender_id#,
+			#sender_nm#,
+			#sender_email#,
+			#receiver_id#,
+			#receiver_email#,
+			#cc_email#,
+			#cc_id#,
+			#bcc_email#,
+			#bcc_id#,
+			#result#,
+			NOW()
+		)
+		<selectKey resultClass="Integer" keyProperty="email_seq">
+				SELECT MAX(email_seq) from <include refid="fromEmlData"/>
+		</selectKey>
+	</insert>
+
+	<insert id="insertEmlFile">
+		/* MailLinkage.insertEmlFile */
+		INSERT INTO 
+			<include refid="fromEmlFile"/> 
+		(
+			EMAIL_SEQ,
+			ATH_ORD,
+			SENDER_ID,
+			FILE_NM,
+			FILE_EXT,
+			FILE_SIZE,
+			FILE_PATH,
+			VC_STATUS,
+			CRT_TIME
+		) VALUES (
+			#email_seq#,
+			#ath_ord#,
+			#sender_id#,
+			#file_nm#,
+			#file_ext#,
+			#file_size#,
+			#file_path#,
+			#vc_status#,
+			NOW()
+		)
+	</insert>
+
+	<select id="selecetEmailSeq" resultClass="Integer">
+		/* MailLinkage.selecetEmailSeq */
+		SELECT
+			email_seq
+		FROM
+			<include refid="fromEmlData"/>
+		WHERE
+			email_subject = #email_subject#
+			AND sender_id = #sender_id#
+			AND result = 0
+			AND receiver_id = #receiver_id#
+	</select>
+
+	<select id="selectEmlDataList" resultClass="EmlData">
+		/* MailLinkage.selectEmlDataList */
+		SELECT
+			*
+		FROM
+			<include refid="fromEmlData"/>
+		WHERE
+			result = 0
+			AND crt_time <![CDATA[>=]]> date_add(NOW(), INTERVAL -1 DAY)
+	</select>
+
+	<select id="selectUserEmailList" resultClass="UsersForm">
+		/* MailLinkage.selectUserEmailList */
+		SELECT
+			users_nm, email
+		FROM
+			c_user_mgt
+		WHERE
+			rst_seq=0 
+			<isNotEmpty property="usersIdList">
+				<iterate property="usersIdList" open="(" close=")" prepend="AND users_id IN" conjunction=",">
+					#usersIdList[]#
+				</iterate>
+			</isNotEmpty>
+	</select>
+
+	<select id="selectEmlFileList" resultClass="EmlFile">
+		/* MailLinkage.selectEmlFileList */
+		SELECT
+			*
+		FROM
+			<include refid="fromEmlFile"/>
+		WHERE
+			email_seq = #email_seq#
+			<isNotEmpty property="vcStatusList">
+				<iterate property="vcStatusList" open="(" close=")" prepend="AND vc_status IN" conjunction=",">
+					#vcStatusList[]#
+				</iterate>
+			</isNotEmpty>
+			AND crt_time <![CDATA[>=]]> date_add(NOW(), INTERVAL -1 DAY)
+	</select>
+
+	<update id="updateEmlData">
+		UPDATE
+			<include refid="fromEmlData"/>
+		SET
+			receiver_email = #receiver_email#,
+			<isNotEmpty property="cc_email">
+				cc_email = #cc_email#,
+			</isNotEmpty>
+			<isNotEmpty property="bcc_email">
+				bcc_email = #bcc_email#,
+			</isNotEmpty>
+			result = #result#,
+			mod_time = NOW()
+		WHERE
+			email_seq = #email_seq#
+	</update>
+
+	<select id="selectExistUser" resultClass="usersForm">
+		<![CDATA[
+			/** selectUsers */
+			select a.seq
+		 , a.USERS_ID
+		 , a.rst_seq
+		 , a.cud_cd
+		 , a.USERS_PW
+		 , a.USERS_NM
+		 , a.AUTH_CD
+		 , a.DEPT_SEQ
+		 , a.HP
+		 , a.EMAIL
+		 , a.POSITION_ID
+		 , a.POSITION_NM
+		 , a.JOB_ID
+		 , a.JOB_NM
+		 , a.NOTE
+		 , a.A_POL_SEQ
+		 , a.L_POL_SEQ
+	     , a.F_POL_SEQ
+	     , a.FP_POL_SEQ
+		 , a.CUSTOM_ADD_YN
+		 , a.INIT_PWD_YN
+		 , a.USE_YN
+		 , a.INNER_IP
+		 , a.OUTER_IP
+		 , a.INNER_MAC
+		 , a.OUTER_MAC
+		 , a.ORDER1
+		 , a.ORDER2
+		 , a.ORDER3
+		 , a.PWD_MOD_DATE
+		 , a.PKI_INFO
+		 , a.AGENT_UUID
+		 , a.CRT_DATE
+		 , a.CRT_ID
+		 , a.MOD_DATE
+		 , a.MOD_ID
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.dept_seq = b.dept_seq
+	  AND a.users_id = #users_id#	
+	  ]]>	    
+	</select>
+
+	<update id="updateEmlFile">
+		UPDATE
+			<include refid="fromEmlFile"/>
+		SET
+			<isNotEmpty property="vc_status">
+				vc_status = #vc_status#,
+			</isNotEmpty>
+			<isNotEmpty property="block_step">
+				block_step = #block_step#,
+			</isNotEmpty>
+			<isNotEmpty property="virus_name">
+				virus_name = #virus_name#,
+			</isNotEmpty>
+			<isNotEmpty property="file_block_detail_msg">
+				file_block_detail_msg = #file_block_detail_msg#,
+			</isNotEmpty>
+			mod_time = NOW()
+		WHERE
+			email_seq = #email_seq#
+		AND
+			ath_ord = #ath_ord#
+	</update>
+</sqlMap>

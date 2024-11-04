@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_kepco">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="DeptSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptSyncForm" />
+
+	<select id="selectSiteDeptList_kepco" resultClass="DeptSyncForm">
+		/* HrSync_kepco.selectSiteDeptList_kepco - HrSyncKepco_OracleSQL.xml */
+		<!-- SELECT 	 DEPTID DEPT_SEQ	
+				,DEPTNAME DEPT_NM
+		        ,UPDEPTID P_DEPT_SEQ		
+		        ,DEPTH		
+		FROM kepco.V_ACL_DEPT		
+		WHERE USEYN ='Y' -->
+		select   a.deptid as DEPT_SEQ  <!-- "부서코드" -->
+				,a.deptname as DEPT_NM  <!-- "부서명" -->
+				,b.deptid as P_DEPT_SEQ  <!-- "상위부서코드" -->
+				,a.DEPTH
+		from gw.v_acl_dept a
+		left outer join gw.v_acl_dept b
+		on b.treeid = a.uptreeid
+		and b.locale = 'ko'
+		and b.useyn = 'Y'
+		where 1=1
+		and a.locale='ko' <!-- 국문 -->
+		and a.useyn='Y'  <!-- 사용중 -->
+		order by a.treeid
+	</select>
+
+</sqlMap>

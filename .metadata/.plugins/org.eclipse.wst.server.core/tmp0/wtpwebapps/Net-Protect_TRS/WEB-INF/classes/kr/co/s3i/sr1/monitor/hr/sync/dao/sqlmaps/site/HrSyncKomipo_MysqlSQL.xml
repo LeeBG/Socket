@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_komipo">
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectSiteDeptApprovalUser_komipo" resultClass="DeptApprovalUserSyncForm">
+		/* HrSync_komipo.selectDeptApprovalUser_komipo */
+		SELECT *
+		FROM c_user_mgt a,
+			c_dept_mgt b
+		WHERE 
+			a.rst_seq = 0
+			AND a.cud_cd != 'D'
+			AND a.use_yn = 'Y'
+			AND b.rst_seq = 0
+			AND b.cud_cd != 'D'
+			AND b.use_yn = 'Y'
+			AND a.dept_seq = b.dept_seq
+			AND auth_cd = 5
+			<!--직급이 1,2,3직급인 사용자는 결재권자-->
+			AND (
+				a.position_nm LIKE '%1직급%'	
+				OR a.position_nm LIKE '%2직급%'
+				OR a.position_nm LIKE '%3직급%'
+			<!-- 직급코드는 DB에서 1,2,3직급에 해당 코드를 조회해서 직접 삽입도 가능 -->
+			<!-- OR a.position_id IN ('10001','10002','10003','10004')-->
+			)
+	</select>
+
+</sqlMap>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DashboardChart">
+	<typeAlias alias="dashboardChart" type="kr.co.s3i.sr1.dashboard.model.DashboardChart" />
+	<typeAlias alias="dashboardChartForm" type="kr.co.s3i.sr1.dashboard.model.DashboardChartForm" />
+
+	<select id="selectDashboardChart" resultClass="String">
+		SELECT 
+			seq
+		FROM
+			system_info
+		WHERE 
+			hostIp = #hostIp#
+			ORDER BY crt_time DESC
+			LIMIT 1
+	</select> 
+
+	<delete id="deleteDashboardChart">
+		DELETE FROM 
+			system_info
+		WHERE
+			hostIp = #hostIp#
+	</delete>
+
+	<update id="updateDashboardChart">
+		UPDATE system_info SET
+			hostMemory = #hostMemory#,
+			hostCpu = #hostCpu#,
+			crt_time = now(),
+			hostIp = #hostIp#,
+			diskName = #diskName#,
+			diskSize = #diskSize#
+		WHERE
+			hostIp = #hostIp#
+			order by seq DESC limit 1
+	</update>
+
+	<insert id="insertDashboardChart">
+		INSERT INTO system_info (
+			hostMemory,
+			hostCpu,
+			crt_time,
+			hostIp,
+			diskName,
+			diskSize
+		) VALUES (
+			#hostMemory#,
+			#hostCpu#,
+			now(),
+			#hostIp#,
+			#diskName#,
+			#diskSize#
+		)
+	</insert>
+</sqlMap>

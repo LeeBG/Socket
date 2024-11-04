@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_gsbd">
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectSiteDeptApprovalUser_gsbd" resultClass="DeptApprovalUserSyncForm">
+		/* HrSync_gsbd.selectDeptApprovalUser_gsbd */
+		SELECT *
+		FROM c_user_mgt a,
+			c_dept_mgt b
+		WHERE 
+			a.rst_seq = 0
+			AND a.cud_cd != 'D'
+			AND a.use_yn = 'Y'
+			AND b.rst_seq = 0
+			AND b.cud_cd != 'D'
+			AND b.use_yn = 'Y'
+			AND a.dept_seq = b.dept_seq
+			AND auth_cd = 5
+			<!-- 직급이 팀장이상 -->
+			AND (
+				a.job_id IN ('968')	
+				OR a.position_nm LIKE '%사무관%'	
+				OR a.position_nm LIKE '%서기관%'
+			)
+	</select>
+
+</sqlMap>

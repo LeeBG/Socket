@@ -1,0 +1,48 @@
+package singleServerClient;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class SingleClient { // 단일 클라이언트
+    private static final String SERVER_IP = "127.0.0.1"; // 서버 IP
+    private static final int SERVER_PORT = 12345; // 서버 포트 번호
+
+    public static void main(String[] args) {
+        try (Socket socket = new Socket(SERVER_IP, SERVER_PORT)) { // 서버에 연결
+            System.out.println("서버에 연결되었습니다: " + SERVER_IP + ":" + SERVER_PORT);
+            InputStream input = socket.getInputStream(); // 입력 스트림
+            OutputStream output = socket.getOutputStream(); // 출력 스트림
+            Scanner scanner = new Scanner(System.in);
+            String message;
+
+            // 메시지를 서버로 전송하고 응답을 받는 루프
+            while (true) {
+                System.out.print("서버에 보낼 메시지 (종료하려면 'exit' 입력): ");
+                message = scanner.nextLine();
+                if ("exit".equalsIgnoreCase(message)) {
+                    System.out.println("클라이언트를 종료합니다.");
+                    break; // 종료 조건
+                }
+
+                output.write(message.getBytes()); // 메시지 전송
+                output.flush();
+
+                // 서버로부터 응답 받기
+                byte[] buffer = new byte[1024];
+                int bytesRead = input.read(buffer); // 데이터 수신
+                if (bytesRead != -1) {
+                    String response = new String(buffer, 0, bytesRead);
+                    System.out.println("서버로부터 수신된 메시지: " + response);
+                }
+            }
+        } catch (UnknownHostException e) {
+            System.err.println("서버 호스트를 찾을 수 없습니다: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("서버와의 연결 중 오류 발생: " + e.getMessage());
+        }
+    }
+}

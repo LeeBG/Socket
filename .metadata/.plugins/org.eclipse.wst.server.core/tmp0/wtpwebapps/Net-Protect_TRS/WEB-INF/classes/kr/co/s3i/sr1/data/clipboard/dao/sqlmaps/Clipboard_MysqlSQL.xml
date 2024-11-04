@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Clipboard">
+	<typeAlias alias="clipboard" type="kr.co.s3i.sr1.data.clipboard.model.Clipboard"/>
+	
+	<sql id="where_searchDate">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchFieldQuery">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="users_id">
+			<isNotEmpty property="searchValue">
+				u.users_id LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				d.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="title">
+			<isNotEmpty property="searchValue">
+				title LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+	
+	<sql id="where_selectClipboardList">
+		<isNotEmpty prepend="AND" property="users_id">
+			users_id = #users_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="tx_del_yn">
+			tx_del_yn = #tx_del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rx_del_yn">
+			rx_del_yn = #rx_del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="loggin_yn">
+			loggin_yn = #loggin_yn#
+		</isNotEmpty>
+	</sql>
+	
+	<select id="selectClipboardList" resultClass="clipboard">
+		/* Clipboard.selectClipboardList */
+		SELECT
+			*,
+			u.users_nm,
+			d.dept_nm
+		FROM
+			clipboard c, 
+			c_user_mgt u,
+			c_dept_mgt d
+		WHERE
+			c.users_id = u.users_id
+		AND u.dept_seq = d.dept_seq
+		AND u.rst_seq = 0
+		AND u.cud_cd != 'D'
+		AND d.rst_seq = 0
+		AND d.cud_cd != 'D'
+			<include refid="where_selectClipboardList"/>
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_searchDate"/>
+		ORDER BY crt_time DESC
+		<isGreaterThan compareValue="0" property="currentPage">
+		LIMIT $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+	
+	<select id="selectClipboardListCount" resultClass="Integer">
+		/* Clipboard.selectClipboardListCount */
+		SELECT
+			count(*)
+		FROM
+			clipboard c, 
+			c_user_mgt u,
+			c_dept_mgt d
+		WHERE
+			c.users_id = u.users_id
+		AND u.dept_seq = d.dept_seq
+		AND u.rst_seq = 0
+		AND u.cud_cd != 'D'
+		AND d.rst_seq = 0
+		AND d.cud_cd != 'D'
+			<include refid="where_selectClipboardList"/>
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_searchDate"/>
+	</select>
+	
+	<select id="selectClipboard" resultClass="clipboard">
+		/* Clipboard.selectClipboard */
+		SELECT
+			*,
+			u.users_nm,
+			d.dept_nm
+		FROM
+			clipboard c,
+			c_user_mgt u,
+			c_dept_mgt d
+		WHERE
+			c.users_id = u.users_id
+		AND u.dept_seq = d.dept_seq
+		AND u.rst_seq = 0
+		AND u.cud_cd != 'D'
+		AND d.rst_seq = 0
+		AND d.cud_cd != 'D'
+		<isGreaterThan compareValue="0" prepend="AND" property="clipboard_seq">
+			clipboard_seq = #clipboard_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="io_cd">
+			io_cd = #io_cd#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectDeleteClipboardList" resultClass="clipboard">
+		/* Clipboard.selectDeleteClipboardList */
+		SELECT
+			*
+		FROM
+			clipboard c
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="clipboardSeqList">
+				<iterate prepend="clipboard_seq in" property="clipboardSeqList" open="(" close=")" conjunction=",">
+					#clipboardSeqList[]#
+				</iterate>
+			</isNotEmpty>
+	</select>
+	
+	<select id="getRestClipboardList" resultClass="clipboard">
+		/* Clipboard.getRestClipboardList */
+		SELECT
+			*
+		FROM
+			clipboard
+		WHERE
+			io_cd = #io_cd#
+			<isNotEmpty prepend="AND" property="rx_del_yn">
+				status = 'SS'
+			</isNotEmpty>
+			<include refid="where_selectClipboardList"/>
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_searchDate"/>
+		ORDER BY crt_time DESC
+		<isGreaterThan compareValue="0" property="currentPage">
+		LIMIT $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+	
+	<select id="getRestClipboardListCount" resultClass="Integer">
+		/* Clipboard.getRestClipboardListCount */
+		SELECT
+			count(*)
+		FROM
+			clipboard
+		WHERE
+			io_cd = #io_cd#
+			<isNotEmpty prepend="AND" property="rx_del_yn">
+				status = 'SS'
+			</isNotEmpty>
+			<include refid="where_selectClipboardList"/>
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_searchDate"/>
+	</select>
+	
+	<insert id="insertClipboard">
+		/* Clipboard.insertClipboard */
+		INSERT INTO clipboard (
+			users_id,
+			io_cd,
+			file_nm,
+			file_ext,
+			file_size,
+			file_path,
+			title,
+			status,
+			connect_ip,
+			crt_time
+		) VALUES (
+			#users_id#,
+			#io_cd#,
+			#file_nm#,
+			#file_ext#,
+			#file_size#,
+			#file_path#,
+			#title#,
+			#status#,
+			#connect_ip#,
+			#crt_time#
+		)
+		
+		<selectKey resultClass="Integer" keyProperty="clipboard_seq">
+				SELECT MAX(clipboard_seq) from clipboard
+		</selectKey>
+	</insert>
+	
+	<update id="updateClipboard">
+		/* Clipboard.updateClipboard */
+		UPDATE 
+			clipboard
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="enc_key">
+				enc_key = #enc_key#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="status">
+				status = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_time">
+				mod_time = NOW()
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="modr_id">
+				modr_id = #modr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="tx_del_yn">
+				tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="rx_del_yn">
+				rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan prepend="AND" property="clipboard_seq" compareValue="0">
+				clipboard_seq = #clipboard_seq#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="clipboardSeqList">
+				<iterate prepend="clipboard_seq in" property="clipboardSeqList" open="(" close=")" conjunction=",">
+					#clipboardSeqList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+		</dynamic>
+	</update>
+	
+</sqlMap>

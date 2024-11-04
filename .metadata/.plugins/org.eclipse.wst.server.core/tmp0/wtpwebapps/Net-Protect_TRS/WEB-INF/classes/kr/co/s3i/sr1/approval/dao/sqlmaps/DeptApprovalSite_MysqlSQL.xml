@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DeptApprovalSite">
+
+	<sql id="from_where_user_dept">
+		FROM c_user_mgt u, c_dept_mgt d
+		WHERE u.rst_seq = 0
+			AND u.cud_cd != 'D'
+			AND u.use_yn = 'Y' 
+			AND d.rst_seq = 0
+			AND d.cud_cd != 'D'
+			AND d.use_yn = 'Y'
+			AND u.dept_seq = d.dept_seq
+	</sql>
+	
+	<sql id="exist_dept_approval">
+		EXISTS (
+			SELECT 1
+			FROM dept_approval
+			WHERE cud_cd != 'D'
+				AND rst_seq = 0
+				AND dept_seq = d.dept_seq
+				AND CONCAT(',', appr_id,',') LIKE CONCAT('%,', u.users_id, ',%')
+		)
+	</sql>
+	
+	<select id="getDefaultApproverSite_sejong_nl" resultClass="java.lang.String">
+		/** DeptApprovalSite.getDefaultApproverSite_sejong_nl */
+		SELECT u.users_id
+			<include refid="from_where_user_dept"/>
+			AND u.JOB_NM = '승인권자'
+ 		<isNotEmpty prepend="AND" property="dept_seq">
+			u.DEPT_SEQ = #dept_seq#
+		</isNotEmpty>
+			AND <include refid="exist_dept_approval"/>
+		ORDER BY users_nm
+	</select>
+	
+	<select id="getDefaultApproverSite_airport" resultClass="java.lang.String">
+		/** DeptApprovalSite.getDefaultApproverSite_airport */
+		SELECT u.users_id
+			<include refid="from_where_user_dept"/>
+			AND u.POSITION_NM = '팀장'
+ 		<isNotEmpty prepend="AND" property="dept_seq">
+			u.DEPT_SEQ = #dept_seq#
+		</isNotEmpty>
+			AND <include refid="exist_dept_approval"/>
+		ORDER BY users_nm
+	</select>
+	
+	<select id="getDefaultApproverSite_kbcard" resultClass="java.lang.String">
+		/** DeptApprovalSite.getDefaultApproverSite_kbcard */
+		SELECT u.users_id
+			<include refid="from_where_user_dept"/>
+			AND <include refid="exist_dept_approval"/>
+			<isNotEmpty property="deptSeqList">
+		 		<iterate prepend="AND d.dept_seq IN" property="deptSeqList" open="(" close=")" conjunction=",">
+					#deptSeqList[]#
+				</iterate>
+			</isNotEmpty>
+		ORDER BY users_nm
+	</select>
+</sqlMap>

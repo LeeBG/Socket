@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_518">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="DeptSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptSyncForm" />
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectSiteDeptList_518" resultClass="DeptSyncForm">
+		SELECT 
+			ORG_ID AS DEPT_SEQ,
+			ORG_NAME AS DEPT_NM,
+			PARENT_ORG_ID AS P_DEPT_SEQ,
+			ORG_ORDER AS `ORDER`
+		FROM 
+			DEPT_INFO
+		WHERE
+			IS_DELETED != 1
+	</select>
+
+	<select id="selectSiteUserList_518" resultClass="UserSyncForm">
+		SELECT 
+			USERID AS USERS_ID,
+			USERNAME AS USERS_NM,
+			DEPTID AS DEPT_SEQ,
+			GRADE AS POSITION_ID,
+			GRADENAME AS POSITION_NM
+		FROM 
+			USER_ORG_INFO
+		WHERE
+			ISDELETED != 1
+	</select>
+
+	<select id="selectSiteDeptApprovalUser_518" resultClass="DeptApprovalUserSyncForm">
+		SELECT 
+			U.USERID AS USERS_ID,
+			U.USERNAME AS USERS_NM,
+			D.ORG_ID AS DEPT_SEQ
+		FROM
+			DEPT_INFO D,
+			USER_ORG_INFO U
+		WHERE
+			D.ORG_ID = U.DEPTID
+		AND
+			D.CHIEF_ID = U.USERID
+		AND
+			U.ISDELETED != '1'
+		AND
+			D.IS_DELETED != '1'
+		AND
+			D.CHIEF_ID IS NOT NULL
+		AND
+			D.CHIEF_ID != '';
+	</select>
+
+</sqlMap>

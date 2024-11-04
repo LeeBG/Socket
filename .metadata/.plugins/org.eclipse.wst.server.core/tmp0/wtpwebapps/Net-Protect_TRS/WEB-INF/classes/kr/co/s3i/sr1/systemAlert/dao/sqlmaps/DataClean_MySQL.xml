@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DataClean">
+	<typeAlias alias="DataForm" type="kr.co.s3i.sr1.data.file.model.DataForm" />
+	<typeAlias alias="AttachFileForm" type="kr.co.s3i.sr1.data.file.model.AttachFileForm" />
+	
+	<sql id="fromData">
+		<isEqual property="networkPosition" compareValue="I">
+			IN_DATA d
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			OUT_DATA d
+		</isEqual>
+	</sql>
+	<sql id="fromData2">
+		<isEqual property="networkPosition" compareValue="I">
+			IN_DATA
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			OUT_DATA
+		</isEqual>
+	</sql>
+	<sql id="fromAttach">
+		<isEqual property="networkPosition" compareValue="I">
+			IN_ATH_FILE d
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			OUT_ATH_FILE d
+		</isEqual>
+	</sql>
+	<sql id="fromAttach2">
+		<isEqual property="networkPosition" compareValue="I">
+			IN_ATH_FILE
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			OUT_ATH_FILE
+		</isEqual>
+	</sql>
+	<sql id="fromTxRx">
+		<isNotEmpty property="tx_del_yn">
+			d.TX_DEL_YN = 'N'
+		</isNotEmpty>
+		<isNotEmpty property="rx_del_yn">
+			d.RX_DEL_YN = 'N'
+		</isNotEmpty>
+	</sql>
+	<sql id="updateTxRx">
+		<isNotEmpty property="tx_del_yn">
+			d.TX_DEL_YN = 'Y'
+		</isNotEmpty>
+		<isNotEmpty property="rx_del_yn">
+			d.RX_DEL_YN = 'Y'
+		</isNotEmpty>
+	</sql>
+	
+	<select id="selectOldData" resultClass="DataForm">
+		SELECT
+			*
+		FROM
+		<include refid="fromData"/>
+		WHERE
+		<include refid="fromTxRx"/>
+		ORDER BY d.CRT_TIME ASC
+		LIMIT $pageListSize$
+	</select>
+
+	<select id="selectAttachFile" resultClass="AttachFileForm">
+			select * from
+			<include refid="fromAttach"/>
+			<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+				#dataSeqList[]#
+			</iterate>
+	</select>
+	
+	<update id="updateRxTxY">
+		UPDATE
+		<include refid="fromData"/>
+		SET
+		<include refid="updateTxRx"/>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</update>
+	
+	<delete id="deleteCommonLog">
+		<isNotEmpty property="pageListSize">
+		DELETE FROM c_log_mgt ORDER BY SEQ ASC LIMIT $pageListSize$
+		</isNotEmpty>
+	</delete>
+
+	<delete id="deleteVcLog">
+		<isNotEmpty property="pageListSize">
+		DELETE FROM
+			OUT_ATH_FILE
+		WHERE
+			vc_status = 3
+			ORDER BY crt_time ASC
+			LIMIT $pageListSize$
+		</isNotEmpty> 
+	</delete>
+	
+	<delete id="deleteIOData">
+		DELETE FROM 
+		<include refid="fromData2"/>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+	
+	<delete id="deleteIOAttach">
+		DELETE FROM 
+		<include refid="fromAttach2"/>
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+	
+	<delete id="deleteUserLog">
+		<isNotEmpty property="pageListSize">
+		DELETE FROM C_USER_LOG ORDER BY SEQ ASC LIMIT $pageListSize$
+		</isNotEmpty>
+	</delete>
+</sqlMap>

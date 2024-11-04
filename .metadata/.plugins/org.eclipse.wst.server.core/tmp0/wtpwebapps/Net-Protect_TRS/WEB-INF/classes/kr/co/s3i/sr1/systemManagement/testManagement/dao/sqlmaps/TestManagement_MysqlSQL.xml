@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="TestManagement">
+	<typeAlias alias="TestCategory" type="kr.co.s3i.sr1.systemManagement.testManagement.model.TestCategory" />
+	<typeAlias alias="TestResultForm" type="kr.co.s3i.sr1.systemManagement.testManagement.model.TestResultForm" />
+
+	<select id="selectExsitTestCategory" resultClass="TestCategory">
+		SELECT
+			*
+		FROM
+			test_category
+		WHERE
+			cate_seq = #cate_seq#
+	</select>
+
+	<select id="selectTestCategoryList" resultClass="TestCategory">
+		SELECT
+			*
+		FROM
+			test_category
+		WHERE
+			1=1
+		<isNotEmpty prepend="AND" property="inner_trans_use_yn">
+			inner_trans_use_yn = #inner_trans_use_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="outer_trans_use_yn">
+			outer_trans_use_yn = #outer_trans_use_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="inner_stream_use_yn">
+			inner_stream_use_yn = #inner_stream_use_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="outer_stream_use_yn">
+			outer_stream_use_yn = #outer_stream_use_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="test_mode_cd">
+			test_mode_cd = #test_mode_cd#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectExsitTestResult" resultClass="TestResultForm">
+		SELECT
+			*
+		FROM
+			test_result
+		WHERE
+			seq = #seq#
+	</select>
+
+	<select id="selectTestResultList" resultClass="TestResultForm">
+		SELECT
+			*
+		FROM
+			test_result
+		WHERE
+			1=1
+		<isGreaterThan compareValue="0" prepend="AND" property="cate_seq">
+			cate_seq = #cate_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="group_seq">
+			group_seq = #group_seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="test_start_cd">
+			test_start_cd = #test_start_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proc_cd">
+			proc_cd = #proc_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="system_cd">
+			system_cd = #system_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rst_cd">
+			rst_cd = #rst_cd#
+		</isNotEmpty>
+		ORDER BY seq DESC
+	</select>
+
+	<select id="selectTestResultListCount" resultClass="Integer">
+		SELECT
+			count(*)
+		FROM
+			test_result
+		WHERE
+			1=1
+		<isGreaterThan compareValue="0" prepend="AND" property="cate_seq">
+			cate_seq = #cate_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="group_seq">
+			group_seq = #group_seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="test_start_cd">
+			test_start_cd = #test_start_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proc_cd">
+			proc_cd = #proc_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="system_cd">
+			system_cd = #system_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rst_cd">
+			rst_cd = #rst_cd#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectTestResultGroupList" resultClass="TestResultForm">
+		SELECT
+			group_seq,
+			test_start_cd,
+			proc_cd,
+			np_cd,
+			system_cd,
+			SUM(IF(rst_Cd = 'NM', 1 , 0)) AS normal_count,
+			SUM(IF(rst_Cd <![CDATA[<>]]> 'NM', 1 , 0)) AS abnormal_count,
+			crt_time,
+			end_time,
+			(select test_mode_cd from test_category where test_category.cate_seq = test_result.cate_seq)as test_mode_cd
+		FROM
+			test_result
+		WHERE
+			1=1
+		<isNotEmpty prepend="AND" property="test_start_cd">
+			test_start_cd = #test_start_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proc_cd">
+			proc_cd = #proc_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="system_cd">
+			system_cd = #system_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rst_cd">
+			rst_cd = #rst_cd#
+		</isNotEmpty>
+		GROUP BY 
+			group_seq
+		ORDER BY
+			seq DESC
+		limit $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectTestResultGroupListCount" resultClass="Integer">
+		SELECT
+			count(distinct(group_seq))
+		FROM
+			test_result
+		WHERE
+			1=1
+		<isNotEmpty prepend="AND" property="test_start_cd">
+			test_start_cd = #test_start_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proc_cd">
+			proc_cd = #proc_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			np_cd = #np_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="system_cd">
+			system_cd = #system_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rst_cd">
+			rst_cd = #rst_cd#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectMaxTestResultSeq" resultClass="Integer">
+		SELECT
+			IFNULL(MAX(seq), 0)
+		FROM
+			test_result;
+	</select>
+
+	<insert id="insertTestResult">
+		INSERT INTO test_result (
+			cate_seq,
+			group_seq,
+			test_start_cd,
+			proc_cd,
+			np_cd,
+			system_cd,
+			rst_cd,
+			test_result,
+			crt_id
+		) VALUES (
+			#cate_seq#,
+			#group_seq#,
+			#test_start_cd#,
+			#proc_cd#,
+			#np_cd#,
+			#system_cd#,
+			#rst_cd#,
+			#test_result#,
+			#crt_id#
+		)
+		<selectKey resultClass="Integer" keyProperty="seq">
+			SELECT MAX(seq) as seq from test_result
+		</selectKey>
+	</insert>
+
+	<update id="updateTestCategory">
+		UPDATE
+			test_category
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="inner_trans_expected_result">
+				inner_trans_expected_result = #inner_trans_expected_result#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="outer_trans_expected_result">
+				outer_trans_expected_result = #outer_trans_expected_result#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="inner_stream_expected_result">
+				inner_stream_expected_result = #inner_stream_expected_result#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="outer_stream_expected_result">
+				outer_stream_expected_result = #outer_stream_expected_result#
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			cate_seq = #cate_seq#
+	</update>
+
+	<update id="updateTestResult">
+		UPDATE
+			test_result
+		SET
+			end_time = now()
+		<isNotEmpty prepend="," property="proc_cd">
+			proc_cd = #proc_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="rst_cd">
+			rst_cd = #rst_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="test_result">
+			test_result = #test_result#
+		</isNotEmpty>
+		WHERE
+			seq = #seq#
+	</update>
+</sqlMap>

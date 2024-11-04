@@ -1,0 +1,14 @@
+button.theme{background-color:#c1272d; border:1px solid #b3161d; color:#fff;}
+.hoverColor{background-color:#faf1f2;}
+.conWrap h3, .popWrap h3{
+  background-color:#eee;
+  color:#777;
+  max-width: 100%;
+  text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.conWrap h3{ padding:8px 0 12px 10px; box-sizing: border-box; height: 35px;}
+.conBox{padding:5px 0;}
+.dashboard_bottom .conBox{padding: 0;}
+.dashboradBox{width:100%;}

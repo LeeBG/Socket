@@ -1,0 +1,71 @@
+package chatServer;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import echoServerClient.SocketServer;
+
+public class ChatServer {
+	private static final int PORT = 8991;
+	private SocketServer serverSocket;
+	
+	public static void main(String[] args) {
+		System.out.println("채팅 서버 시작 ");
+		try(ServerSocket serverSocket = new ServerSocket(PORT)){	// 서버 소켓 바인딩
+			while(true) {
+				new ClientHandler(serverSocket.accept()).start();	// 클라이언트 핸들러 start();
+			}
+		}catch(IOException e) {
+			System.err.println("main serverSocket Exception) " + e.getMessage());
+		}
+	}
+}
+// 클라이언트처리를 위한 스레드 클래스
+class ClientHandler extends Thread {
+	private Socket socket;
+	private InputStream input;
+	private OutputStream output;
+	
+	public ClientHandler(Socket socket) {
+		this.socket = socket;
+	}
+	
+	@Override
+	public void run() {
+		try {
+			input = socket.getInputStream();
+			output = socket.getOutputStream();
+			
+			// 서버에서 메시지 읽기;
+			readMessage(input);
+			
+			// 클라이언트들에게 브로드 캐스팅;
+			sendAllMessage(output);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	 private void sendAllMessage(OutputStream output2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	// 클라이언트로부터 들어온 메시지 읽기
+    private String readMessage(InputStream input) {
+        byte[] buffer = new byte[1024]; // 버퍼
+        int bytesRead;
+        try {
+            bytesRead = input.read(buffer);  
+            if (bytesRead == -1) return null; // 클라이언트가 연결 종료
+            return new String(buffer, 0, bytesRead);
+        } catch (IOException e) {
+            System.err.println("데이터 수신 문제가 발생했습니다. : " + e.getMessage());
+            return null;
+        }
+    }
+}

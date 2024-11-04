@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="IpObject">
+	<typeAlias alias="IpObjectGroupForm" type="kr.co.s3i.sr1.policy.ipObjectPolicy.model.IpObjectGroupForm" />
+	<typeAlias alias="IpObjectForm" type="kr.co.s3i.sr1.policy.ipObjectPolicy.model.IpObjectForm" />
+	
+	<sql id="where_searchFieldQueryIpObject">
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="obj_nm">
+			obj_nm LIKE CONCAT('%',#obj_nm#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="obj_cd">
+			obj_cd = #obj_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="del_yn">
+			del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="src_st_ip">
+			src_st_ip LIKE CONCAT('%',#src_st_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="src_ed_ip">
+			src_ed_ip LIKE CONCAT('%',#src_ed_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="net_mask">
+			net_mask LIKE CONCAT('%',#net_mask#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="notSeqList">
+			<iterate prepend="seq not in" property="notSeqList" open="(" close=")" conjunction=",">
+				#notSeqList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="startDay">
+			<isNotEmpty prepend="AND" property="endDay">
+				CRT_DATE BETWEEN #startDay# AND #endDay#
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchFieldQueryIpObjectGroup">		
+		<isNotEmpty prepend="AND" property="seq">
+			A.seq = #seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="obj_group_seq">
+			A.obj_group_seq = #obj_group_seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="cud_cd">
+			A.cud_cd = #cud_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="obj_group_nm">
+			A.obj_group_nm LIKE CONCAT('%',#obj_group_nm#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="note">
+			A.note LIKE CONCAT('%',#note#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="del_yn">
+			A.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="isdel_yn">
+			A.isdel_yn = #isdel_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="objSeqList">
+			<iterate prepend="A.seq in" property="objSeqList" open="(" close=")" conjunction=",">
+				#objSeqList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="notSeqList">
+			<iterate prepend="A.seq not in" property="notSeqList" open="(" close=")" conjunction=",">
+				#notSeqList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="startDay">
+			<isNotEmpty prepend="AND" property="endDay">
+				A.CRT_DATE BETWEEN #startDay# AND #endDay#
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<!--  -->
+	<!--  -->
+	<!--  -->
+	<!--  -->
+	<!--  -->
+	
+	<insert id="insertIpObject">
+		INSERT INTO S_IP_OBJECT
+		(
+			OBJ_SEQ, CUD_CD, RST_SEQ, OBJ_NM, SRC_ST_IP, SRC_ED_IP, NET_MASK, MAX_CONNECTION,
+			OBJ_CD, NOTE, DEL_YN, ISDEL_YN,
+			CRT_ID, MOD_ID
+		)
+		VALUES
+		(
+			#obj_seq#, #cud_cd#, #rst_seq#, #obj_nm#, #src_st_ip#, #src_ed_ip#, #net_mask#, #max_connection#,
+			#obj_cd#, #note#, #del_yn#, #isdel_yn#,
+			#crt_id#, #mod_id#
+		)
+		<selectKey resultClass="Integer">
+			SELECT
+				SEQ
+			FROM
+				S_IP_OBJECT
+			WHERE
+				OBJ_SEQ = #obj_seq#
+			AND
+				RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+	
+	<update id="updateIpObjectRSTSequence">
+		UPDATE
+			S_IP_OBJECT
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_IP_OBJECT
+						WHERE
+							<isNotEmpty prepend="AND" property="obj_seq">
+								OBJ_SEQ <![CDATA[=]]> #obj_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="obj_seq">
+				OBJ_SEQ <![CDATA[=]]> #obj_seq#
+			</isNotEmpty>
+	</update>
+	
+	<select id="selectIpObjectGroupList" resultClass="IpObjectGroupForm">
+		SELECT A.*, GROUP_CONCAT(C.OBJ_NM  SEPARATOR ',') AS OBJ_SEQ_INFO
+		FROM
+			S_IP_OBJECT_GROUP A, S_OBJECT_MAP B, S_IP_OBJECT C
+		WHERE A.CUD_CD <![CDATA[!=]]> 'D'
+		   AND A.RST_SEQ <![CDATA[=]]> 0
+		   AND A.SEQ <![CDATA[=]]> B.OBJ_GROUP_SEQ
+	  	   AND B.OBJ_TYPE <![CDATA[=]]> 'I'
+	  	   AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+		<include refid="where_searchFieldQueryIpObjectGroup"/>		
+		GROUP BY A.SEQ
+		ORDER BY A.SEQ DESC
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectIpObjectGroupListCount" resultClass="Integer">
+		SELECT COUNT(A.SEQ) 
+			FROM
+		(SELECT A.*
+			FROM
+				S_IP_OBJECT_GROUP	 A, S_OBJECT_MAP B, S_IP_OBJECT C
+			WHERE A.CUD_CD <![CDATA[!=]]> 'D'
+			   AND A.RST_SEQ <![CDATA[=]]> 0
+			   AND A.SEQ <![CDATA[=]]> B.OBJ_GROUP_SEQ
+		  	   AND B.OBJ_TYPE <![CDATA[=]]> 'I'
+		  	   AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+			<include refid="where_searchFieldQueryIpObjectGroup"/>
+		  GROUP BY A.SEQ) A
+	</select>
+	
+	<select id="selectIpObjectGroup" resultClass="IpObjectGroupForm">
+		SELECT * FROM S_IP_OBJECT_GROUP WHERE SEQ = #seq#
+	</select>
+	
+	<insert id="insertIpObjectGroup">
+		INSERT INTO S_IP_OBJECT_GROUP
+		(
+			OBJ_GROUP_SEQ, CUD_CD, RST_SEQ, OBJ_GROUP_NM,
+			OBJ_SEQ, NOTE, DEL_YN, ISDEL_YN, CRT_DATE, 
+			CRT_ID, MOD_DATE, MOD_ID
+		)
+		VALUES
+		(
+			#obj_group_seq#, #cud_cd#, #rst_seq#, #obj_group_nm#,
+			#obj_seq#, #note#, #del_yn#, #isdel_yn#, NOW(),
+			#crt_id#, NOW(), #mod_id#
+		)
+		<selectKey resultClass="Integer">
+			SELECT
+				SEQ
+			FROM
+				S_IP_OBJECT_GROUP
+			WHERE
+				OBJ_GROUP_SEQ = #obj_group_seq#
+			AND
+				RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteObjMapping">
+		DELETE FROM s_object_map
+		WHERE obj_group_seq <![CDATA[=]]> #obj_group_seq#
+		AND obj_type <![CDATA[=]]> #obj_type#
+	</delete>
+	
+	<insert id="insertObjMapping">
+		INSERT INTO s_object_map(obj_group_seq, obj_seq, obj_type)
+			 VALUES (#obj_group_seq#, #obj_seq#, #obj_type#)
+	</insert>
+	
+	<update id="updateIpObjectGroupRSTSequence">
+		UPDATE
+			S_IP_OBJECT_GROUP
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_IP_OBJECT_GROUP
+						WHERE
+							<isNotEmpty prepend="AND" property="obj_group_seq">
+								OBJ_GROUP_SEQ <![CDATA[=]]> #obj_group_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="obj_group_seq">
+				OBJ_GROUP_SEQ <![CDATA[=]]> #obj_group_seq#
+			</isNotEmpty>
+	</update>
+	
+	<select id="selectIpObjectFormList" resultClass="IpObjectForm">
+		SELECT * FROM S_IP_OBJECT
+		<include refid="where_searchFieldQueryIpObject"/>
+		ORDER BY ISDEL_YN ASC, SEQ DESC
+		LIMIT $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectIpObjectSeqList" resultClass="IpObjectForm">
+		<isNotEmpty property="seqList">
+			SELECT * FROM S_IP_OBJECT
+			<iterate prepend="WHERE seq in" property="seqList" open="(" close=")" conjunction=",">
+				#seqList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectIpObjectUsedList" resultClass="IpObjectForm">
+		SELECT C.* , A.OBJ_GROUP_NM
+			FROM S_IP_OBJECT_GROUP A, S_OBJECT_MAP B, S_IP_OBJECT C
+			WHERE A.SEQ = B.OBJ_GROUP_SEQ
+			  AND B.OBJ_TYPE <![CDATA[=]]> 'I'
+			  AND A.RST_SEQ <![CDATA[=]]> 0
+			  AND A.CUD_CD <![CDATA[!=]]> 'D'
+			  AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+			  AND B.OBJ_SEQ <![CDATA[=]]> #obj_seq#
+	</select>
+
+	<select id="selectIpObjectFormListCount" resultClass="Integer">
+		<![CDATA[/*@selectIpObjectFormListCount@*/]]>
+		SELECT COUNT(*) FROM S_IP_OBJECT
+		<include refid="where_searchFieldQueryIpObject"/>
+	</select>
+	
+	<select id="selectIpObject" resultClass="IpObjectForm">
+		SELECT * FROM S_IP_OBJECT WHERE SEQ = #seq#
+	</select>
+	
+	<select id="selectMaxObjSeqNumber" resultClass="Integer">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(OBJ_SEQ, 2, length(OBJ_SEQ)-1)), 0) AS OBJ_SEQ
+		FROM
+			S_IP_OBJECT
+	</select>
+	
+	<select id="selectMaxObjGroupSeqNumber" resultClass="Integer">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(OBJ_GROUP_SEQ, 2, length(OBJ_GROUP_SEQ)-1)), 0) AS OBJ_GROUP_SEQ
+		FROM
+			S_IP_OBJECT_GROUP
+	</select>
+	
+	<select id="selectIpObjectGroupSeqList" resultClass="IpObjectGroupForm">
+		<isNotEmpty property="objSeqList">
+			SELECT * FROM S_IP_OBJECT_GROUP
+			<iterate prepend="WHERE seq in" property="objSeqList" open="(" close=")" conjunction=",">
+				#objSeqList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+	
+</sqlMap> 

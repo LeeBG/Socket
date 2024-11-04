@@ -1,0 +1,36 @@
+button.theme{background-color:#555555; border:1px solid #302e2e; color:#fff;}
+button.btn_logout{min-width:45px; height:100%; background:#555555 url('../Images/icon/userInfoBox_icon_logout.png') no-repeat 50% 50% !important;}
+.hoverColor{background-color:#f7f6f6;}
+.conWrap h3, .popWrap h3{background-color:#555555;}
+nav ul.list01>li>a, .button[class*='gpki_'] {
+    border: 1px solid #444444 !important;
+    background: #555555 !important;
+    background: -webkit-linear-gradient(#828080, #424141) !important;
+    background: -moz-linear-gradient(#828080, #424141) !important;
+    background: -o-linear-gradient(#828080, #424141) !important;
+    background: -ms-linear-gradient(#828080, #424141) !important;
+    background: linear-gradient(#828080, #424141) !important;
+    box-shadow: inset 0 1px 0 rgba(#a7e552, 255, 255, 0.15) !important;
+}
+
+.prgmCntSpan {
+	color: #3080B2 !important;
+}
+
+#login_wrap{
+	background-image : url('../Images/new_login/login_area_bg_grey.png');
+}
+button.btn_login{
+	background-image : url(../Images/new_login/btn_login_grey.png);
+}
+.network_text{
+	color:#3080B2;
+}
+.period_btn.active{
+	background-color:#828080;
+	color: white;
+	border: 1px solid #000000;
+}
+.manualdate_btn.active{
+	color: #828080;
+}

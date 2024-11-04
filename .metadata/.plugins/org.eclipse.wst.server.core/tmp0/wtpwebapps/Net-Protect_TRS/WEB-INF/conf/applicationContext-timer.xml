@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="codeManagerTimer" class="kr.co.s3i.sr1.common.timer.CodeManagerTimer" />
+	<!-- <bean id="commonCodeManagerTimer" class="kr.co.s3i.sr1.common.timer.CommonCodeManagerTimer" /> -->
+	<bean id="cacheManagerTimer" class="kr.co.s3i.sr1.common.timer.CacheManagerTimer" />
+	<bean id="authorityManagerTimer" class="kr.co.s3i.sr1.common.timer.AuthorityManagerTimer" />
+	<bean id="applicationManagerTimer" class="kr.co.s3i.sr1.common.timer.ApplicationManagerTimer" />
+	<bean id="policyManagerTimer" class="kr.co.s3i.sr1.common.timer.PolicyManagerTimer" />
+	<bean id="termManagerTimer" class="kr.co.s3i.sr1.common.timer.TermManagerTimer" />
+	<bean id="fileReceiverManagerTimer" class="kr.co.s3i.sr1.common.timer.FileReceiverManagerTimer" />
+	<bean id="agentServerManagerTimer" class="kr.co.s3i.sr1.common.timer.AgentServerManagerTimer" />
+	<bean id="vcManagerTimer" class="kr.co.s3i.sr1.common.timer.VcManagerTimer" />
+	<bean id="vcScanListenerTimer" class="kr.co.s3i.sr1.common.timer.VcScanListenerTimer" />
+	<!-- <bean id="vcUpdateManagerTimer" class="kr.co.s3i.sr1.common.timer.VcUpdateManagerTimer" /> -->
+	<bean id="smtpManagerTimer" class="kr.co.s3i.sr1.common.timer.SmtpManagerTimer" />
+	<bean id="syncServerManagerTimer" class="kr.co.s3i.sr1.common.timer.SyncServerManagerTimer" />
+	<bean id="envManagerTimer" class="kr.co.s3i.sr1.common.timer.EnvManagerTimer" />
+
+	<!-- minimax 추가 -->
+	<bean id="miniMaxManagerTimer" class="kr.co.s3i.sr1.common.timer.MiniMaxManagerTimer" />
+
+	<bean id="codeManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>1000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="codeManagerTimer" />
+		</property>
+	</bean>
+	
+<!-- 	<bean id="commonCodeManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		//wait 3 seconds before starting repeated execution
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		//only 1 time = -1
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="commonCodeManagerTimer" />
+		</property>
+	</bean> -->
+
+	<bean id="cacheManagerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="cacheManagerTimer" />
+		</property>
+	</bean>
+
+		<bean id="vcManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>10000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="vcManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="miniMaxManagerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="miniMaxManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="authorityManagerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="authorityManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="applicationManagerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="applicationManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="policyManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="policyManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="termManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="termManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="fileReceiverManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>10000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="fileReceiverManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="agentServerManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>10000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="agentServerManagerTimer" />
+		</property>
+	</bean>
+
+	<!-- <bean id="vcUpdateManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<property name="delay">
+			<value>10000</value>
+		</property>
+		<property name="period">
+			<value>60000</value>
+		</property>
+		<property name="timerTask">
+			<ref local="vcUpdateManagerTimer" />
+		</property>
+	</bean> -->
+
+	<bean id="smtpManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="smtpManagerTimer" />
+		</property>
+	</bean>
+	
+	<bean id="envManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>3000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>3600000</value><!-- 1시간 간격으로 refresh하도록 설정함. -->
+		</property>
+		<property name="timerTask">
+			<ref local="envManagerTimer" />
+		</property>
+	</bean>
+
+	<bean id="vcScanListenerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>10000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="vcScanListenerTimer" />
+		</property>
+	</bean>
+
+	<bean id="syncServerManagerTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- //wait 3 seconds before starting repeated execution -->
+		<property name="delay">
+			<value>10000</value>
+		</property>
+		<!-- //only 1 time = -1 -->
+		<property name="period">
+			<value>-1</value>
+		</property>
+		<property name="timerTask">
+			<ref local="syncServerManagerTimer" />
+		</property>
+	</bean>
+
+	<!-- ===================== Timer Scheduler Setting ======================== -->
+	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+		<property name="scheduledTimerTasks">
+			<list>
+				<!-- <ref local="codeManagerTimerTask" /> -->
+				<ref local="cacheManagerTask" />
+				<ref local="authorityManagerTask" />
+				<!-- <ref local="commonCodeManagerTimerTask" /> -->
+				<ref local="policyManagerTimerTask" />
+				<ref local="applicationManagerTask" />
+				<ref local="termManagerTimerTask" />
+				<ref local="fileReceiverManagerTimerTask" />
+				<ref local="agentServerManagerTimerTask" />
+				<ref local="vcManagerTimerTask" />
+				<ref local="vcScanListenerTimerTask" />
+				<!-- <ref local="vcUpdateManagerTimerTask" /> -->
+				<ref local="miniMaxManagerTask" />
+				<ref local="smtpManagerTimerTask" />
+				<ref local="envManagerTimerTask" />
+				<!-- <ref local="syncServerManagerTimerTask" /> -->
+			</list>
+		</property>
+	</bean>
+</beans>

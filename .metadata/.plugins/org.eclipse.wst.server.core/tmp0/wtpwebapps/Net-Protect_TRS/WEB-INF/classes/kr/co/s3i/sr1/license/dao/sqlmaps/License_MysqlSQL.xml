@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="License">
+	<select id="selectLicenseListCount" resultClass="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			license_info
+	</select>
+
+	<select id="selectLicenseList" resultClass="LicenseInfoForm">
+		SELECT
+			*
+		FROM
+			license_info
+		LIMIT
+			$offSet$, $pageListSize$
+	</select>
+
+	<insert id="insertLicense">
+		INSERT INTO license_info (
+			site_id,
+			start_date,
+			end_date,
+			user_count,
+			hostname,
+			ip,
+			crt_time,
+			register
+		) VALUES (
+			#site_id#,
+			#start_date#,
+			#end_date#,
+			#user_count#,
+			#hostname#,
+			#ip#,
+			NOW(),
+			#register#
+		)
+	</insert>
+
+	<select id="selectLiUserCount" resultClass="LicenseInfoForm">
+		SELECT
+			IFNULL(SUM(user_count), 0)
+		AS
+			user_count
+		FROM
+			license_info
+	</select>
+</sqlMap>

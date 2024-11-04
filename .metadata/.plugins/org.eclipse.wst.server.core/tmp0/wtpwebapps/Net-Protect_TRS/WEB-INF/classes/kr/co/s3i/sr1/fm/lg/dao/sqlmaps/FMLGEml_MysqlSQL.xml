@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FMLGEml">
+	<typeAlias alias="emlData" type="kr.co.s3i.sr1.emlProcess.model.EmlData" />
+	<typeAlias alias="emlFile" type="kr.co.s3i.sr1.emlProcess.model.EmlFile" />
+
+	<sql id="fromEmlData">
+		<isEqual property="networkPosition" compareValue="I">
+			in_eml_data
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_eml_data
+		</isEqual>
+	</sql>
+
+	<sql id="fromEmlFile">
+		<isEqual property="networkPosition" compareValue="I">
+			in_eml_file
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_eml_file
+		</isEqual>
+	</sql>
+
+	<sql id="where_vcStatusList">
+		<isNotEmpty property="vcStatusList">
+			<iterate property="vcStatusList" open="(" close=")" prepend="AND vc_status IN" conjunction=",">
+				#vcStatusList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="searchVcStatus">
+			<isNotEqual property="searchVcStatus" compareValue="all" prepend="AND">
+				<isNotEqual property="searchVcStatus" compareValue="3">
+					vc_status = #searchVcStatus#
+				</isNotEqual>
+				<isEqual property="searchVcStatus" compareValue="3">
+					vc_status IN (3,4)
+				</isEqual>
+			</isNotEqual>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchDateOrTime_i_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND i.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND i.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND i.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND i.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND i.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND i.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchDateOrTime_o_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND o.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND o.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND o.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND o.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND o.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND o.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchFieldQuery_custom">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="sender_email">
+			<isNotEmpty property="searchValue">
+				d.sender_email LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="receiver_email">
+			<isNotEmpty property="searchValue">
+				d.receiver_email LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="email_subject">
+			<isNotEmpty property="searchValue">
+				d.email_subject LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<sql id="where_searchDateOrTime_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND d.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND d.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND d.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND d.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND d.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND d.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="include_adminManagement">
+		<isEqual prepend="AND" property="isAdminManageUse" compareValue="true">
+			EXISTS(SELECT 1 FROM vw_manage_user_list_d a, (SELECT @users_id:=#admin_id#) b WHERE a.users_id = u.users_id)
+		</isEqual>
+	</sql>
+
+	<sql id="include_adminManagement_as_rq">
+		<isEqual prepend="AND" property="isAdminManageUse" compareValue="true">
+			EXISTS(SELECT 1 FROM vw_manage_user_list_d a, (SELECT @users_id:=#admin_id#) b WHERE a.users_id = rq_u.users_id)
+		</isEqual>
+	</sql>
+
+	<sql id="where_searchField_UsersQuery">
+		<isEqual property="searchField" compareValue="dept_nm">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				b.DEPT_NM LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="users">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				(
+					u.USERS_ID LIKE CONCAT('%',#filterSearchValue#,'%')
+					OR u.USERS_NM LIKE CONCAT('%',#filterSearchValue#,'%')
+				)
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<sql id="where_searchField_DateHour">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND d.crt_time <![CDATA[>=]]> DATE_FORMAT(#startDay#,'%Y-%m-%d')
+			</isEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="startHour">
+			<isNotEmpty property="startMin">
+				AND d.crt_time <![CDATA[>=]]> DATE_FORMAT(concat(#startDay#,' ',#startHour#,':',#startMin#),'%Y-%m-%d %H:%i')
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND d.crt_time <![CDATA[<=]]> DATE_FORMAT(#endDay#,'%Y-%m-%d')
+			</isEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="endHour">
+			<isNotEmpty property="endMin">
+				AND d.crt_time <![CDATA[<=]]> DATE_FORMAT(concat(#endDay#,' ',#endHour#,':',#endMin#),'%Y-%m-%d %H:%i')
+			</isNotEmpty>
+		</isNotEmpty>
+
+	</sql>
+
+	<select id="selectEmlDataTotalList" resultClass="emlData">
+		/* selectEmlDataTotalList */
+		SELECT 
+			d.*
+        FROM ( 
+			(SELECT
+				'I' as networkPosition,
+				i.*,
+				SUM(i_ath.file_size) as file_total_size,
+            	COUNT(i_ath.email_seq) as file_total_count
+			FROM
+				in_eml_data as i left join 
+				in_eml_file as i_ath
+				on i.email_seq = i_ath.email_seq
+			WHERE
+				1=1
+				<include refid="where_searchDateOrTime_i_custom"/>
+			GROUP BY email_seq
+			)
+			UNION ALL
+			( SELECT
+				'O' as networkPosition,
+				o.*,
+				SUM(o_ath.file_size) as file_total_size,
+            	COUNT(o_ath.email_seq) as file_total_count
+			FROM
+				out_eml_data as o left join 
+				out_eml_file as o_ath
+				on o.email_seq = o_ath.email_seq
+			WHERE
+				1=1
+				<include refid="where_searchDateOrTime_o_custom"/>
+			GROUP BY email_seq
+			)
+		) as d
+		WHERE 1=1
+			<include refid="where_searchFieldQuery_custom"/>
+		ORDER BY d.crt_time DESC
+		limit #offSet#, $pageListSize$
+	</select>
+
+	<select id="selectEmlDataTotalListCount" resultClass="Integer">
+		SELECT 
+			COUNT(*)
+		FROM
+		(
+			(SELECT
+				*
+			FROM
+				in_eml_data d
+			WHERE
+				1=1
+				<include refid="where_searchFieldQuery_custom"/>
+				<include refid="where_searchDateOrTime_custom"/>)
+		UNION ALL
+			(SELECT
+				*
+			FROM
+				out_eml_data d
+			WHERE
+				1=1
+				<include refid="where_searchFieldQuery_custom"/>
+				<include refid="where_searchDateOrTime_custom"/>
+			)
+		)AS io
+	</select>
+
+	<select id="selectEmlDataList" resultClass="emlData">
+		/* selectEmlDataList */
+		SELECT d.*
+		FROM	
+			(SELECT
+				file_data.*,
+				SUM(file_ath_data.file_size) as file_total_size,
+	            COUNT(file_ath_data.email_seq) as file_total_count
+			FROM
+				<include refid="fromEmlData"/> as file_data left join 
+				<include refid="fromEmlFile"/> as file_ath_data
+				on file_data.email_seq = file_ath_data.email_seq
+			GROUP BY email_seq
+			)AS d
+		WHERE
+			1=1
+			<include refid="where_searchFieldQuery_custom"/>
+			<include refid="where_searchDateOrTime_custom"/>
+		GROUP BY d.email_seq
+		ORDER BY
+		d.crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectEmlDataListCount" resultClass="Integer">
+		/* selectEmlDataListCount */
+		SELECT
+			COUNT(d.email_seq)
+		FROM
+			<include refid="fromEmlData"/> as d
+		WHERE
+			1=1
+			<include refid="where_searchFieldQuery_custom"/>
+			<include refid="where_searchDateOrTime_custom"/>
+	</select>
+
+	<select id="selectExistEmlData" resultClass="emlData">
+		SELECT
+			*
+		FROM
+			<include refid="fromEmlData"/>
+		WHERE
+			1=1
+		<isNotEmpty property="email_seq">
+			<isGreaterThan prepend="AND" compareValue="0" property="email_seq">
+				email_seq = #email_seq#
+			</isGreaterThan>
+		</isNotEmpty>
+	</select>
+
+	<select id="selectEmlFileList" resultClass="emlFile">
+		SELECT
+			*
+		FROM
+			<include refid="fromEmlFile"/>
+		WHERE
+			1=1
+			<isNotEmpty property="email_seq">
+				<isGreaterThan prepend="AND" compareValue="0" property="email_seq">
+					email_seq = #email_seq#
+				</isGreaterThan>
+			</isNotEmpty>
+			<include refid="where_vcStatusList"/>
+		ORDER BY
+			ath_ord ASC
+	</select>
+
+	<select id="selectVcEmlFileTotalList" resultClass="emlFile">
+		SELECT c.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT d.*, 'I' as np_cd, b.sender_email
+				FROM 
+					in_eml_file d left join 
+					in_eml_data b on d.email_seq = b.email_seq
+				WHERE  
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY d.crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT d.*, 'O' as np_cd, b.sender_email
+				FROM 
+					out_eml_file d left join 
+					out_eml_data b on d.email_seq = b.email_seq
+				WHERE 
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY d.crt_time DESC
+			)
+		) c, c_user_mgt u, c_dept_mgt d
+		WHERE c.sender_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isNotEmpty prepend="AND" property="filterSearchValue">
+					c.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+				</isNotEmpty>
+			</isNotEmpty>
+		ORDER BY c.crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectVcEmlFileListTotalCount" resultClass="Integer">
+		SELECT COUNT(c.email_seq)
+		FROM  ( 
+			SELECT c.*
+			FROM (
+				(
+					SELECT d.*, b.sender_email
+					FROM 
+						in_eml_file d left join 
+						in_eml_data b on d.email_seq = b.email_seq
+					WHERE  
+						1=1
+						<include refid="where_vcStatusList"/>
+						<include refid="where_searchDateOrTime_custom"/>
+				) 
+				UNION ALL
+				(
+					SELECT d.*, b.sender_email
+					FROM 
+						out_eml_file d left join 
+						out_eml_data b on d.email_seq = b.email_seq
+					WHERE 
+						1=1
+						<include refid="where_vcStatusList"/>
+						<include refid="where_searchDateOrTime_custom"/>
+				)
+			) c
+			WHERE 1=1
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isNotEmpty prepend="AND" property="filterSearchValue">
+					c.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+				</isNotEmpty>
+			</isNotEmpty>
+		) AS c
+	</select>
+
+	<select id="selectEmlAthFileCnt" resultClass="Integer">
+		/* selectEmlAthFileCnt */
+		SELECT count(email_seq)
+		FROM  <isEqual property="networkPosition" compareValue="I">
+				in_eml_file
+			  </isEqual>
+			  <isEqual property="networkPosition" compareValue="O">
+			    out_eml_file
+			  </isEqual>
+		WHERE 1=1
+		AND email_seq = #email_seq#
+	</select>
+
+	<select id="selectEmlDataTotalExcelList" resultClass="emlData">
+		SELECT 
+			d.*
+        FROM ( 
+			(SELECT
+				'I' as networkPosition,
+				i.*,
+				SUM(i_ath.file_size) as file_total_size,
+            	COUNT(i_ath.email_seq) as file_total_count
+			FROM
+				in_eml_data as i left join 
+				in_eml_file as i_ath
+				on i.email_seq = i_ath.email_seq
+			WHERE
+				1=1
+				<include refid="where_searchDateOrTime_i_custom"/>
+			GROUP BY email_seq
+			)
+			UNION ALL
+			( SELECT
+				'O' as networkPosition,
+				o.*,
+				SUM(o_ath.file_size) as file_total_size,
+            	COUNT(o_ath.email_seq) as file_total_count
+			FROM
+				out_eml_data as o left join 
+				out_eml_file as o_ath
+				on o.email_seq = o_ath.email_seq
+			WHERE
+				1=1
+				<include refid="where_searchDateOrTime_o_custom"/>
+			GROUP BY email_seq
+			)
+		) as d
+		WHERE 1=1
+			<include refid="where_searchFieldQuery_custom"/>
+		ORDER BY d.crt_time DESC
+	</select>
+	
+	<select id="selectEmlDataExcelList" resultClass="emlData">
+		SELECT d.* , #networkPosition# as networkPosition
+		FROM	
+			(SELECT
+				file_data.*,
+				SUM(file_ath_data.file_size) as file_total_size,
+	            COUNT(file_ath_data.email_seq) as file_total_count
+			FROM
+				<include refid="fromEmlData"/> as file_data left join 
+				<include refid="fromEmlFile"/> as file_ath_data
+				on file_data.email_seq = file_ath_data.email_seq
+			GROUP BY email_seq
+			)AS d
+		WHERE
+			1=1
+			<include refid="where_searchFieldQuery_custom"/>
+			<include refid="where_searchDateOrTime_custom"/>
+		GROUP BY d.email_seq
+		ORDER BY
+		d.crt_time DESC
+	</select>
+
+	<select id="selectVcEmlFileTotalExcelList" resultClass="emlFile">
+		SELECT c.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT d.*, 'I' as np_cd, b.sender_email
+				FROM 
+					in_eml_file d left join 
+					in_eml_data b on d.email_seq = b.email_seq
+				WHERE  
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY d.crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT d.*, 'O' as np_cd, b.sender_email
+				FROM 
+					out_eml_file d left join 
+					out_eml_data b on d.email_seq = b.email_seq
+				WHERE 
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY d.crt_time DESC
+			)
+		) c, c_user_mgt u, c_dept_mgt d
+		WHERE c.sender_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isNotEmpty prepend="AND" property="filterSearchValue">
+					c.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+				</isNotEmpty>
+			</isNotEmpty>
+		ORDER BY c.crt_time DESC
+	</select>
+</sqlMap>

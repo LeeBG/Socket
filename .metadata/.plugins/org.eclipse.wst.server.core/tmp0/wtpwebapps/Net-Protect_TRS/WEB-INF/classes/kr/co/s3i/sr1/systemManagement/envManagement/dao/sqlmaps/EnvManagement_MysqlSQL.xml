@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EnvManagement">
+	<typeAlias alias="EnvForm" type="kr.co.s3i.sr1.systemManagement.envManagement.model.EnvForm" />
+	<typeAlias alias="CommentForm" type="kr.co.s3i.sr1.systemManagement.envManagement.model.CommentForm" />
+	<select id="selectEnv" resultClass="EnvForm">
+		SELECT
+			*
+		FROM
+			env
+		WHERE
+			env_seq = (select max(env_seq) from env)
+		and rst_seq = 0
+	</select>
+	
+	<update id="updateEnvRstSeq">
+		UPDATE env SET
+			rst_seq = (select a.rst_seq from (select (MAX(rst_seq) + 1) as rst_seq from env) as a),
+			mod_date = NOW()
+		where
+			rst_seq = 0    
+	</update>
+	
+	<insert id="insertEnvMap" parameterClass="java.util.HashMap">
+		INSERT INTO env
+			(
+				RST_SEQ,
+				ADMIN_TITLE,
+				USER_IN_TITLE,
+				USER_OUT_TITLE,
+				LOG_FPATH,
+				LOG_FNAME,
+				REMOTE_URL,
+				COPYRIGHT,
+				ADMIN_THEME_DIV,
+				USER_IN_THEME_DIV,
+				USER_OUT_THEME_DIV,
+				CRT_ID,
+				CRT_DATE,
+				MOD_ID,
+				MOD_DATE,
+				CUD_CODE,
+				LOGIN_LOG_FPATH,
+				LOGIN_LOG_FNAME,
+				USER_IN_SEND_NOTICE,
+				USER_OUT_SEND_NOTICE,
+				USER_IN_BF_LOGIN_NOTICE,
+				USER_OUT_BF_LOGIN_NOTICE,
+				USER_IN_AF_LOGIN_NOTICE,
+				USER_OUT_AF_LOGIN_NOTICE,
+				COOKIE_CONSIST_DAY,
+				GPKI_FILE_SIZE,
+				GPKI_COMMENT
+			)
+			VALUES
+			(
+				0,
+				#admin_title#,
+				#user_in_title#,
+				#user_out_title#,
+				#log_fpath#,
+				#log_fname#,
+				#remote_url#,
+				#copyright#,
+				#admin_theme_div#,
+				#user_in_theme_div#,
+				#user_out_theme_div#,
+				#crt_id#,
+				NOW(),
+				#mod_id#,
+				NOW(),
+				'U',
+				#login_log_fpath#,
+				#login_log_fname#,
+				#user_in_send_notice#,
+				#user_out_send_notice#,
+				#user_in_bf_login_notice#,
+				#user_out_bf_login_notice#,
+				#user_in_af_login_notice#,
+				#user_out_af_login_notice#,
+				#cookie_consist_day#,
+				cast(#gpki_file_size# as unsigned),
+				#gpki_comment#
+			)
+		<selectKey resultClass="int">
+			SELECT env_seq FROM env ORDER BY env_seq DESC limit 1
+		</selectKey>
+	</insert>
+
+	<select id="selectComment" resultClass="CommentForm">
+		SELECT
+			*
+		FROM
+			c_comment_code
+	</select>
+	
+	<insert id="insertComment" parameterClass="CommentForm">
+		INSERT INTO c_comment_code(COMMENT)
+		VALUES(#comment#)
+		
+		<selectKey resultClass="int">
+			SELECT seq FROM c_comment_code ORDER BY seq DESC limit 1
+		</selectKey>
+	</insert>
+	
+	<update id="updateComment">
+		UPDATE c_comment_code SET comment = #comment# WHERE seq = #seq#
+	</update>
+	
+	<delete id="deleteComment">
+		DELETE FROM c_comment_code WHERE seq = #seq#
+	</delete>
+
+</sqlMap>

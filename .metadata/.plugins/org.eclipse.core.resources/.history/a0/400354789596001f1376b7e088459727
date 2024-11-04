@@ -1,0 +1,96 @@
+package multiableServerClient;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class MulitableClient {
+    private final String serverAddress = "192.168.30.215"; // 서버 주소
+    private final int port = 12345; // 포트 번호
+    private Socket clientSocket; // 클라이언트 소켓
+    private String userInputData; // 사용자 입력 데이터
+    private InputStream input; // 입력 스트림
+    private OutputStream output; // 출력 스트림
+    private Scanner scanner; // 스캐너 객체
+
+    public MulitableClient() {
+        createClientSocket();
+    }
+
+    // 클라이언트 소켓을 생성하고 서버에 연결하는 메서드
+    public void createClientSocket() {
+        try {
+            System.out.println("=== 클라이언트 실행 ===");
+            System.out.println("연결 시도중... \n서버:" + serverAddress + "<===> 클라이언트:" + InetAddress.getLocalHost().getHostAddress());
+            clientSocket = new Socket(serverAddress, port); // 서버에 연결 시도
+
+            try {
+                input = clientSocket.getInputStream(); // 서버에서 데이터를 수신하기 위한 입력 스트림
+                output = clientSocket.getOutputStream(); // 서버로 데이터를 전송하기 위한 출력 스트림
+                scanner = new Scanner(System.in); // 사용자 입력을 받기 위한 스캐너
+                byte[] buffer = new byte[1024]; // 데이터 버퍼
+                int bytesRead;
+
+                while (true) {
+                    System.out.print("서버와 연결되었습니다. 메시지를 입력하세요 >> ");
+                    userInputData = scanner.nextLine();
+                    if (userInputData.equalsIgnoreCase("exit")) {
+                        break; // 'exit' 입력 시 연결 종료
+                    }
+
+                    // 사용자 입력을 바이트 배열로 변환하여 서버로 전송
+                    output.write(userInputData.getBytes());
+                    output.flush();
+
+                    // 서버로부터 응답 받기
+                    bytesRead = input.read(buffer);
+                    String responseData = new String(buffer, 0, bytesRead);
+                    System.out.println("서버로부터 받은 응답 : " + responseData);
+                }
+
+            } catch (SocketException e) {
+                System.out.println("연결 가능한 소켓 갯수 초과 에러 : " + e.getMessage());
+            } catch (IOException e) {
+                System.err.println("스트림 처리 중 문제 발생: " + e.getMessage());
+            }
+
+        } catch (UnknownHostException e) {
+            System.err.println("네트워크 연결 문제입니다: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("소켓 관련 문제입니다: " + e.getMessage());
+        } finally {
+            closeResources(); // 자원 해제 메서드 호출
+        }
+    }
+
+    // 자원 해제 메서드
+    private void closeResources() {
+        if (scanner != null) {
+            scanner.close();
+        }
+        try {
+            if (output != null) {
+                output.close();
+            }
+            if (input != null) {
+                input.close();
+            }
+            if (clientSocket != null && !clientSocket.isClosed()) {
+                clientSocket.close();
+            }
+        } catch (IOException e) {
+            System.err.println("자원 해제 중 문제 발생: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("클라이언트 종료");
+    }
+
+    public static void main(String[] args) {
+        new MulitableClient(); // 클라이언트 객체 생성 및 실행
+    }
+}

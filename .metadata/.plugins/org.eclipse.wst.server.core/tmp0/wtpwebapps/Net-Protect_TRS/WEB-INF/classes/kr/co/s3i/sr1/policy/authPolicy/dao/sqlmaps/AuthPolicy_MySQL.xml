@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AuthPolicy">
+	<typeAlias alias="fAuthInfo" type="kr.co.s3i.sr1.policy.authPolicy.model.FAuthInfo" />
+	<typeAlias alias="fAuthInfoForm" type="kr.co.s3i.sr1.policy.authPolicy.model.FAuthInfoForm" />
+	<typeAlias alias="fPolAuthMgtForm" type="kr.co.s3i.sr1.policy.authPolicy.model.FPolAuthMgtForm" />
+	<typeAlias alias="cClassMgt" type="kr.co.s3i.sr1.policy.authPolicy.model.CClassMgtForm" />
+	<typeAlias alias="cMenuMgt" type="kr.co.s3i.sr1.policy.authPolicy.model.CMenuMgtForm" />
+	<typeAlias alias="cPrgmMgt" type="kr.co.s3i.sr1.policy.authPolicy.model.CPrgmMgt" />
+	<typeAlias alias="cPrgmMgtForm" type="kr.co.s3i.sr1.policy.authPolicy.model.CPrgmMgtForm" />
+
+	<select id="selectExistFAuthInfo" resultClass="fAuthInfo">		
+		/** selectExistFAuthInfo */
+		SELECT *
+		  FROM f_auth_info
+		 WHERE 1 = 1 
+		   AND cud_cd != 'D'
+		   AND	rst_seq = 0
+		<isNotEmpty prepend="AND" property="auth_cd">
+			auth_cd = #auth_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="auth_cd_nm">
+			auth_cd_nm = #auth_cd_nm#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectMaxRstSeqFAuthInfo" resultClass="int">
+		/** selectMaxRstSeqFAuthInfo */
+		SELECT MAX(rst_seq)
+		  FROM f_auth_info
+		 WHERE 1 = 1
+		   AND auth_cd = #auth_cd#
+	</select>
+
+	<select id="selectFAuthInfoList" resultClass="fAuthInfoForm">
+		/** selectFAuthInfoList */
+		select *
+		  from  f_auth_info
+		 where 1 = 1 
+		   and cud_cd <![CDATA[!=]]> 'D'
+		   and rst_seq <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="auth_cd">
+		   auth_cd = #auth_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="auth_cd_list">
+			<iterate prepend="auth_cd in" property="auth_cd_list" open="(" close=")" conjunction=",">
+				#auth_cd_list[]#
+			</iterate>
+		</isNotEmpty>
+		 order by seq, auth_cd_nm
+	</select>
+
+	<select id="selectMaxFAuthInfoAuthCd" resultClass="int">
+		/** selectMaxFAuthInfoAuthCd */
+		SELECT
+			MAX(auth_cd + 0) as auth_cd
+		FROM
+			f_auth_info
+	</select>
+
+	<select id="selectCClassMgt" resultClass="CClassMgt">
+		/** selectCClassMgt */
+		SELECT
+			*
+		FROM
+			c_class_mgt
+		<dynamic prepend="WHERE">
+			<isGreaterThan compareValue="0" prepend="," property="seq">
+				seq = #seq#
+			</isGreaterThan>
+			<isNotEmpty prepend="," property="class_id">
+				class_id = #class_id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="selectCClassMgtList" resultClass="CClassMgt">
+		/** selectCClassMgtList */
+		SELECT
+			*
+		FROM
+			c_class_mgt
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="," property="system_type">
+				system_type = #system_type#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="selectCMenuMgtList" resultClass="cMenuMgt">
+		/** selectCMenuMgtList */
+		SELECT
+			*
+		FROM
+			c_menu_mgt
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="," property="class_id">
+				class_id = #class_id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="selectCPrgmMgtPrgnIdList" resultClass="cPrgmMgt">
+		/** selectCPrgmMgtPrgnIdList */
+		SELECT
+			*
+		FROM
+			c_prgm_mgt
+			<isNotEmpty property="prgm_ids" prepend="WHERE">
+				<iterate prepend="prgm_id in" open="(" close=")" conjunction="," property="prgm_ids">
+					#prgm_ids[]#
+				</iterate>
+			</isNotEmpty>
+		order by menu_id, prgm_id
+	</select>
+	
+	<select id="selectCPrgmMgtList" resultClass="cPrgmMgt">
+		/** selectCPrgmMgtList */
+		SELECT
+			*
+		FROM
+			c_prgm_mgt
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="," property="menu_id">
+				<isNotEqual property="menu_id" compareValue="A">
+					menu_id = #menu_id#
+				</isNotEqual>
+			</isNotEmpty>
+		</dynamic>
+		order by menu_id, prgm_id
+	</select>
+
+	<select id="selectMenuAndProgramList" resultClass="cPrgmMgtForm">
+		/** selectMenuAndProgramList */
+		SELECT
+			p.menu_id,
+			m.menu_nm,
+			group_concat(prgm_id) as prgm_id,
+			group_concat(prgm_nm) as prgm_nm
+		FROM
+			c_prgm_mgt p, c_menu_mgt m
+		WHERE
+			p.menu_id = m.menu_id
+			<isNotEmpty prepend="AND" property="type">
+				type = #type#
+			</isNotEmpty>
+		GROUP BY
+			menu_id
+	</select>
+
+	<select id="selectFpolAuthMgtList" resultClass="fPolAuthMgtForm">
+		/** selectFpolAuthMgtList */
+		SELECT
+			*
+		FROM
+			f_pol_auth_mgt
+		WHERE
+			rst_seq = 0	
+		AND
+			cud_cd != 'D'
+		<isNotEmpty prepend="AND" property="auth_cd">
+			auth_cd = #auth_cd#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectFpolAuthMgt" resultClass="fPolAuthMgtForm">
+		/** selectFpolAuthMgt */
+		SELECT
+			*
+		FROM
+			f_pol_auth_mgt
+		WHERE
+			auth_cd = #auth_cd#
+		AND
+			prgm_id = #prgm_id#
+		AND
+			rst_seq = 0
+		<isNotEmpty property="cud_cd">
+		<isEqual prepend="AND" compareValue="D" property="cud_cd">
+			cud_cd != 'D'
+		</isEqual>
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertFAuthInfo">
+		/** insertFAuthInfo */
+		INSERT INTO f_auth_info (
+			rst_seq,
+			auth_cd,
+			auth_cd_nm,
+			cud_cd,
+			crt_id,
+			mod_id
+			<isNotEmpty prepend="," property="crt_date">
+				crt_date
+			</isNotEmpty>
+		) VALUES (
+			#rst_seq#,
+			#auth_cd#,
+			#auth_cd_nm#,
+			#cud_cd#,
+			#crt_id#,
+			#mod_id#
+			<isNotEmpty prepend="," property="crt_date">
+				#crt_date#
+			</isNotEmpty>
+		)
+	</insert>
+
+	<insert id="insertFPolAuthMgt">
+		/** insertFPolAuthMgt */
+		INSERT INTO f_pol_auth_mgt (
+			rst_seq,
+			auth_cd,
+			cud_cd,
+			prgm_id,
+			crt_id,
+			mod_id
+		) VALUES (
+			#rst_seq#,
+			#auth_cd#,
+			#cud_cd#,
+			#prgm_id#,
+			#crt_id#,
+			#mod_id#
+		)
+	</insert>
+
+	<update id="updateFPolAuthMgtRstSeq">
+		/** updateFPolAuthMgtRstSeq */
+		UPDATE
+			f_pol_auth_mgt
+		SET
+			rst_seq =
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(rst_seq) + 1
+						FROM
+							f_pol_auth_mgt
+						WHERE
+							prgm_id = #prgm_id#
+						AND
+							auth_cd = #auth_cd#
+					)
+				AS RST_SEQ),
+			mod_id = #mod_id#
+		WHERE
+			rst_seq = 0
+		AND
+			prgm_id = #prgm_id#
+		AND
+			auth_cd = #auth_cd#
+	</update>
+
+	<update id="updateFAuthInfo">
+		/** updateFAuthInfo */
+		UPDATE
+			f_auth_info
+		SET
+			<isNotEmpty prepend="," property="rst_seq">
+				rst_seq = #rst_seq#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_id">
+				mod_id = #mod_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_date">
+				mod_date = #mod_date#
+			</isNotEmpty>
+		WHERE
+			seq = #seq#
+	</update>
+</sqlMap>

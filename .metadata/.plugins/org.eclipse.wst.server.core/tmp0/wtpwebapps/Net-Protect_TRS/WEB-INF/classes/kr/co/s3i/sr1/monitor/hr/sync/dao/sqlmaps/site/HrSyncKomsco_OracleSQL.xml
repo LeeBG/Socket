@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_komsco">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="DeptSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptSyncForm" />
+
+	<select id="selectSiteDeptList_komsco" resultClass="DeptSyncForm">
+		/*  selectSiteDeptList_komsco - HrSyncKomsco_OracleSQL.xml */
+
+		SELECT	
+			DEPT_ID AS dept_id,
+			DEPT_ID AS dept_seq,
+			DEPT_NM AS dept_nm,
+			(DEPT_DEPTH-1) AS depth,
+			UPPER_DEPT AS p_dept_seq,
+			'Y' as child_yn
+		FROM	
+			intraware.v_dept_simple
+			
+	</select>
+	
+	<select id="selectSiteUserList_komsco" resultClass="UserSyncForm">
+	/*  selectSiteUserList_komsco - HrSyncKomsco_OracleSQL.xml */
+	
+		SELECT	
+			EMP_CODE AS users_id,
+			NAME AS users_nm,
+			((EMP_CODE ||'@koin2.komsco.com')) AS email,
+			DEPT_ID AS dept_seq,
+			POS_NAME AS position_nm,
+			IPADDRESS as inner_allow_ip
+		FROM	
+			intraware.v_user_simple
+			
+	</select>
+	
+	<select id="selectSiteDeptApprovalUser_komsco" resultClass="DeptApprovalUserSyncForm">
+		/* selectSiteDeptApprovalUser_komsco - HrSyncKomsco_OracleSQL.xml*/
+		/*
+		
+			 노동조합원 직급 명단 : 위원장, 부위원장, 지부장, 사무국장
+			일반 결재자 직급 명단 : 처장, 부장, 부장직대, 본부장, 원장, 팀장, 팀장직대, 실장, 센터장, 사장, 이사, 감사, 조직국장, 교선국장
+			
+		*/
+		SELECT 
+			* 
+		FROM 
+			c_user_mgt u,
+			c_dept_mgt d
+		WHERE
+			u.dept_seq = d.dept_seq
+		AND
+			u.rst_seq = 0 
+		AND 
+			d.rst_seq = 0
+		AND
+			u.use_yn = 'Y'
+		AND
+			d.use_yn = 'Y'
+		AND
+			u.cud_cd != 'D'
+		AND
+			d.cud_cd != 'D'
+		AND
+			u.position_nm IN ('처장','부장','부장직대','본부장','원장','팀장','팀장직대','실장','센터장','위원장','부위원장','지부장','사장','이사','감사','사무국장','조직국장','교선국장')
+	</select>
+
+</sqlMap>

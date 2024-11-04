@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_kbcard">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="DeptSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptSyncForm" />
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectSiteDeptList_kbcard" resultClass="DeptSyncForm">
+	SELECT 
+		B.지역본부인사부점구분코드 AS DEPT_SEQ,
+		A.지역본부한글인사부점명 AS DEPT_NM,
+		'001' AS P_DEPT_SEQ,
+		'1' AS DEPTH
+	FROM INSTC.VWWDBBR02 A INNER JOIN
+		(
+		SELECT DISTINCT 지역본부인사부점구분코드
+		FROM INSTC.VWWDBBR02
+		)B ON (A.지역본부인사부점구분코드 = B.지역본부인사부점구분코드)
+	WHERE 
+		A.지역본부인사부점구분코드 IS NOT NULL 
+		AND A.지역본부한글인사부점명 IS NOT NULL
+	UNION
+	SELECT 
+		B.인사부점구분코드 AS DEPT_SEQ,
+		A.한글부점명 AS DEPT_NM,
+		A.지역본부인사부점구분코드 AS P_DEPT_SEQ,
+		'2' AS DEPTH
+	FROM INSTC.VWWDBBR02 A INNER JOIN
+		(
+		SELECT DISTINCT 인사부점구분코드
+		FROM INSTC.VWWDBBR02
+		)B ON (A.인사부점구분코드 = B.인사부점구분코드)
+	WHERE A.인사부점구분코드 != A.지역본부인사부점구분코드
+		AND A.한글부점명 IS NOT NULL
+	UNION
+	SELECT 
+		B.인사팀구분코드 AS DEPT_SEQ,
+		A.인사팀구분명 AS DEPT_NM,
+		A.인사부점구분코드 AS P_DEPT_SEQ,
+		'3' AS DEPTH
+	FROM INSTC.VWWDBHR02 A INNER JOIN
+		(
+		SELECT DISTINCT 인사팀구분코드
+		FROM INSTC.VWWDBHR02
+		)B ON (A.인사팀구분코드 = B.인사팀구분코드)
+	WHERE A.인사팀구분명 IS NOT NULL
+	</select>
+
+	<select id="selectSiteUserList_kbcard" resultClass="UserSyncForm">
+		SELECT 
+			A.직원번호 AS USERS_ID,
+			A.한글직원명 AS USERS_NM,
+			A.인사직위구분코드 AS POSITION_ID,
+			A.한글인사직위구분명 AS POSITION_NM,
+			A.직군구분코드 AS JOB_ID,
+			A.직급구분명 AS JOB_NM,
+		CASE
+			WHEN A.인사팀구분코드 IS NULL THEN A.인사부점구분코드
+			ELSE A.인사팀구분코드
+		END AS DEPT_SEQ
+		FROM 
+			INSTC.VWWDBHR02 A 
+		WHERE A.직원번호 IS NOT NULL
+			AND A.한글직원명 IS NOT NULL
+			AND A.직원재직여부 = '1'
+			AND SUBSTR(A.직원번호,0,2) NOT IN ('M0','MA','MD','MW','MZ','MC','MR')
+	</select>
+	
+	<select id="selectSiteDeptApprovalUser_kbcard" resultClass="DeptApprovalUserSyncForm">
+	SELECT *
+		FROM c_user_mgt a,
+			c_dept_mgt b
+		WHERE 
+			a.rst_seq = 0
+			AND (a.job_nm like '%팀장%' OR a.position_nm like '%팀장%')
+			AND a.cud_cd != 'D'
+			AND a.use_yn = 'Y'
+			AND b.rst_seq = 0
+			AND b.cud_cd != 'D'
+			AND b.use_yn = 'Y'
+			AND a.dept_seq = b.dept_seq
+			AND auth_cd = 5
+	</select>
+</sqlMap>

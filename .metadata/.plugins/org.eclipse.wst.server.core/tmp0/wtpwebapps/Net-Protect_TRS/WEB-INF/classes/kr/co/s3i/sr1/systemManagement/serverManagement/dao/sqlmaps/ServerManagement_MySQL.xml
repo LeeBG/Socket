@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ServerManagement">
+	<typeAlias alias="STMinfoForm" type="kr.co.s3i.sr1.systemManagement.serverManagement.model.STMinfoForm" />
+	
+	<sql id="where_searchFieldQuery">
+		<isNotEmpty prepend="AND" property="stm_seq">
+			STM_SEQ LIKE CONCAT('%',#stm_seq#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="stm_port">
+			STM_PORT LIKE CONCAT('%',#stm_port#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="i_server_ip">
+			I_SERVER_IP LIKE CONCAT('%',#i_server_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="o_server_ip">
+			O_SERVER_IP LIKE CONCAT('%',#o_server_ip#,'%')
+		</isNotEmpty>
+	</sql>
+	
+	<select id="selectSTMInfoList" resultClass="STMinfoForm">
+		SELECT
+			*
+		FROM
+			S_STM_INFO
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<include refid="where_searchFieldQuery"/>
+		ORDER BY SEQ ASC
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectSTMInfoCount" resultClass="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			S_STM_INFO
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<include refid="where_searchFieldQuery"/>
+	</select>
+	
+	<select id="selectMaxSTMInfoNumber" resultClass="Integer">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(STM_SEQ, 4, length(STM_SEQ))), 0) AS STM_SEQ
+		FROM
+			S_STM_INFO
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+	</select>
+	
+	<select id="selectSTMInfo" resultClass="STMinfoForm">
+		SELECT
+			*
+		FROM
+			S_STM_INFO
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		AND
+			STM_SEQ = #stm_seq#
+	</select>
+	
+	<insert id="insertSTMInfo">
+		INSERT INTO S_STM_INFO (
+			STM_SEQ,
+			RST_SEQ,
+			CUD_CD,
+			I_SERVER_IP,
+			O_SERVER_IP,
+			STM_PORT,
+			I_VIP_PORT,
+			O_VIP_PORT,
+			IN_ETH_NM,
+			OUT_ETH_NM,
+			DEL_YN,
+			CRT_DATE,
+			CRT_ID,
+			MOD_DATE,
+			MOD_ID
+		) VALUES (
+			#stm_seq#,
+			#rst_seq#,
+			#cud_cd#,
+			#i_server_ip#,
+			#o_server_ip#,
+			#stm_port#,
+			#i_vip_port#,
+			#o_vip_port#,
+			#in_eth_nm#,
+			#out_eth_nm#,
+			#del_yn#,
+			now(),
+			#crt_id#,
+			now(),
+			#mod_id#
+		)
+		
+		<selectKey resultClass="Integer">
+			SELECT
+				seq
+			FROM
+				S_STM_INFO
+			WHERE
+				STM_SEQ = #stm_seq#
+			AND
+				RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+	
+	<update id="updateSTMInfoRSTSequence">
+		UPDATE
+			S_STM_INFO
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_STM_INFO
+						WHERE
+							<isNotEmpty prepend="AND" property="stm_seq">
+								STM_SEQ <![CDATA[=]]> #stm_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="stm_seq">
+				STM_SEQ <![CDATA[=]]> #stm_seq#
+			</isNotEmpty>
+	</update>
+	
+</sqlMap> 

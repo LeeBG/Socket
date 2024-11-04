@@ -1,0 +1,108 @@
+.approvalStatus_box{margin-bottom:15px; }
+.view_area_type02{background:#fff;display:table;width:100%;padding:5px 25px 25px 25px;}
+.view_area_type02 h4{font-size:0;line-height:0;display:table-cell;text-indent:-9999px;overflow:hidden;}
+.data_detail_box {margin-left: 15px; margin-right: 15px;}
+.data_detail_box dl{padding:5px 0 7px 0; width:100%; position:relative;}
+.data_detail_box dt{float:left; padding:0 7px 0 18px; font-weight:bold; background:url("../Images/icon/icon_check.gif") no-repeat 5px 50% ;}
+.data_detail_box dd{text-overflow:ellipsis; overflow:hidden; padding:1px 0;}
+.data_detail_box dt.last_item{text-align:right; background:url(../Images/contents/popup_dt_bg.gif) no-repeat 100% 0; width:110px; height:30px; line-height:2.2em; position:absolute; right:0; top:-13px; padding-right:20px;} 
+/* .data_detail_box dd.last_item{margin-top:12px;} */
+.data_detail_box dd .scrollBox{font-size:0.89em;height:250px;margin-bottom:0px; overflow-y:auto;overflow-x:hidden;}
+.data_detail_box dd .scrollBox table{width:100%;}
+.data_detail_box dd .scrollBox table td.first-item{padding:8px 0; text-align:center;}
+.data_detail_box dd .scrollBox table td a{cursor:pointer;}
+.data_detail_box dd .scrollBox table td a:hover{color:#00a7a4;}
+.data_detail_box dd .scrollBox table td.flie_volume{max-width:100px; text-align:right !important; background:#2c324a !important;}
+.data_detail_box dd .thBox{width:100%; background-color:#f5f5f5; overflow:hidden;  }
+.data_detail_box dd .thBox span{display:block; font-weight:bold; padding:5px 0;}
+.data_detail_box .border_l{border-left:1px solid #ddd;}
+.data_detail_box dd .thBox .fileDown{text-align:right;}
+/* 첨부파일자세히보기 2014 06 04 추가 */
+.approvalStatus_box table{width:95%;border-collapse:collapse; margin:18px auto 0;}
+.approvalStatus_box th{height:22px; background-color:#3c4262;border:1px solid #646679;}
+.approvalStatus_box td{padding:7px 2px 7px 4px;text-align:center; border:1px solid #646679; background:#2c324a;}
+.approvalStatus_box td.title{background-color:#3c4262; color:#fff; font-weight:bold; font-size:1.1em; }
+/* 파일상태 td.class */
+.vc_scanStatus{padding-left:15px; background:url('../Images/icon/icon_vc_scanState.gif') no-repeat;}
+.vc_scanStatus.n0, .vc_scanStatus.n5{background-position:0 1px;}
+.vc_scanStatus.n3{background-position:0 -50px;}
+.vc_scanStatus.n4{background-position:0 -101px;}
+.vc_scanStatus.n10{background-position:0 -154px;}
+.vc_scanStatus.n11{background-position:0 -207px;}
+.vc_scanStatus.n12{background-position:0 -258px;}
+/* 파일상태문구 flie_volume 위치에 대신들어감 */
+.vc_scanStatusText{ max-width:100px;padding-left:6px; }
+.vc_scanStatusText.n0, .vc_scanStatusText.n5{color:#e05050; }
+.vc_scanStatusText.n3{color:#e05050; }
+.vc_scanStatusText.n4{color:#e05050; }
+.vc_scanStatusText.n10{color:#e05050;}
+.vc_scanStatusText.n11{color:#e05050; }
+.vc_scanStatusText.n12{color:#e05050; }
+/* 파일상태표시 도움말 */
+.vc_scan_status_info_box{padding:7px 0; background-color:#f5f5f5; text-align:center; }
+.vc_scan_status_info{margin:3px 0; margin-right:8px; font-size: 0.95em; /* line-height:1.2em; */}
+.vc_scan_status_info.n0{display:inline-block; padding-left:15px; }
+.vc_scan_status_info.n3{background-position:0px -52px; display:inline-block;  }
+.vc_scan_status_info.n4{background-position:0px -104px; display:inline-block;  }
+.vc_scan_status_info.n10{background-position:0px -156px; display:inline-block;  }
+.vc_scan_status_info.n11{background-position:0px -208px; display:inline-block;  }/* 위변조 파일 */
+.vc_scan_status_info.n12{margin-right:0; background-position:0px -259px; display:inline-block; }/* 차단 파일 */
+
+.layout_fixed{table-layout:fixed;}
+.c_check{width:6%; padding:8px 0 !important; text-align:center;}
+.c_name_title{ padding:8px 7px !important; text-align:left;background-color:#3c4262;border:1px solid #646679;}
+.c_name{ padding:8px 7px !important; text-align:left;border:1px solid #646679;}
+.c_time{/*width:auto;*/padding:8px 7px !important; text-align:right;}
+.c_size_title{ padding:8px 7px !important; text-align:right;background-color:#3c4262;border:1px solid #646679;}
+.c_size{ padding:8px 7px !important; text-align:right;border:1px solid #646679;}
+.c_name.name_ellipsis {display:table-cell !important; overflow:hidden;}
+.c_download{width:18%; padding:0px 7px; text-align:right;}
+#fmlg0010 .c_download{ width: 22% !important; padding: 5px 7px !important;}
+.gradient-btn{background: linear-gradient(white,#e8e8e8); color: #5b5b5b; border: 1px solid #a2a2a2; border-radius: 2px; padding: 2px 4px; line-height: unset;font-size:11px;}
+.block_step{ font-size:0.89em;}
+
+/* 상세보기 메일발송 css */
+.mail_send h3{background-color: #2893d9; color:#fff; font-weight:bold; font-size:0.9em; padding: 15px 0 15px 10px;}
+.mail_send {width: 94%; margin: 25px auto; backgroung-color: #fff; border: 1px solid #bbb; padding-botton:2px;}
+.mail_send .table_area_style02 table{width:100%;border-collapse:collapse;table-layout:fixed;_margin-top:20px;}
+.mail_send .table_area_style02 table th{height:16px;text-align:left;border:1px solid #ddd; border-top: none;}
+.mail_send .table_area_style02 table td{padding:0 0px; padding-left: 1px; height:29px; overflow: hidden; word-break: break-all; text-overflow: ellipsis; white-space: nowrap;}
+.mail_send .table_area_style02 table td.relative{position:relative;}
+.mail_send .table_area_style02 input{border:1px solid #ddd; _width:100%; _height:21px; _padding:2px 0; padding-left:5px;}
+
+.mail_send .th_header_left {padding-left:12px; text-align:left; border-left: 1px solid #ddd;}
+.mail_send .th_header_right {padding-left:12px; text-align:right; border-left: 1px solid #ddd;}
+
+.mail_send .wrap_textarea {width: 98.7%; height: 200px; padding-left: 6px; padding-top:10px; resize: none;}
+
+.mail_send .layout_fixed{table-layout:fixed;}
+.mail_send .receiver_cc_area{float: left; width: 100%;}
+.mail_send .title_area{float: left; width: 100%;}
+.mail_send .f_name{display:table-cell !important; overflow:hidden; width: 463px; text-align: left;}
+.mail_send .f_size{display:table-cell !important; overflow:hidden; width: 100%; text-align: right;}
+.mail_send .mail_span{padding-left:4px; padding-right:4px; width: 100%;}
+.mail_send .table_area_style02 .mail_scrollBox{float: left; width: 100%; height:120px; overflow-y:auto; overflow-x:hidden; }
+
+.mail_send .btn_div{clear:both; text-align:center; padding-bottom: 25px;}
+.mail_send .btn_div button{background-color:#2893d9; border: 1px soliod #177dc0; padding: 5px 27px; color:#fff}
+
+.mail_send .th_area{width : 72px;}
+.mail_send .td_area{width : 100%;}
+
+/* 테이블 스크롤관련 공통*/
+.address_view_box,.thirdRecipient_box{position:relative; background:#f1f1f1; }
+.tb_box{overflow-y:auto; overflow-x:hidden;}
+.fixed_top { display:inline-table; position:absolute; left:0; top:-1px; width: 100%; background-color:#3c4262;}
+.scrollcalc{width: -webkit-calc(100% - 18px) !important;width: -moz-calc(100% - 18px) !important; width: calc(100% - 18px) !important;}
+
+/* 3자수신자 목록 */
+.thirdRecipient_box{padding-top:22px; border-right:1px solid #3c4262; width:95%; margin: 10px auto;}
+.thirdRecipient_box .tb_box{max-height:100px !important; border-bottom:1px solid #3c4262;}
+.thirdRecipient_box table{margin:0px !important; width: 100%; border-left:1px solid #3c4262;}
+.thirdRecipient_box .cell1{width:50%;}
+.thirdRecipient_box .cell2{width:50%;}
+
+/* 승인, 대기, 반려 */
+span.approvalStatus_ok{background:url(../Images/icon/bg_ok.gif) no-repeat 0 50%; padding-left:11px;} 
+span.approvalStatus_no{background:url(../Images/icon/bg_no.gif) no-repeat 0 50%; padding-left:11px;} 
+span.approvalStatus_wait{background:url(../Images/icon/bg_wait.gif) no-repeat 0 50%; padding-left:11px;} 

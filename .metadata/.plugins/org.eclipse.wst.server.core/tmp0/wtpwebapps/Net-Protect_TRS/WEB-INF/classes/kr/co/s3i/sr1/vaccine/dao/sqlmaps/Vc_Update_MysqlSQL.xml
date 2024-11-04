@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="VcUpdateThread">
+	<typeAlias alias="vcData" type="kr.co.s3i.sr1.vaccine.model.VCUpdateData" />
+	<typeAlias alias="Cache" type="kr.co.s3i.sr1.cacheEnv.cache.model.Cache" />
+
+	<select id="selectVCUpdateData2" resultClass="vcData">
+		SELECT
+			*
+		FROM
+			vaccine_info
+		WHERE vcupdate_status = 'Y'
+		ORDER BY VC_INFO_SEQ DESC
+		LIMIT 1
+	</select>
+
+	<insert id="insertVCUpdateData2">
+		INSERT INTO vaccine_info (
+			CRT_TIME
+		) VALUES (
+			now()
+		)
+	</insert>
+
+	<update id="updateVCUpdateData2">
+		UPDATE 
+			vaccine_info
+		<dynamic prepend="SET">
+			vcupdate_status = 'Y',
+			mod_time = now(),
+			vc_category = #vc_category#
+			<isNotEmpty property="vc_version">
+				, vc_version = #vc_version#
+			</isNotEmpty>
+			,server_ip=#server_ip#
+		</dynamic>
+		WHERE
+			VC_INFO_SEQ = (SELECT
+								VC_INFO_SEQ
+							FROM
+								(SELECT
+									MAX(VC_INFO_SEQ) as VC_INFO_SEQ
+								FROM
+									vaccine_info
+								) as temp
+							)
+	</update>
+	<select id="selectCache" resultClass="String">
+		SELECT
+			value
+		FROM
+			cache
+		WHERE
+			name = #key#
+	</select>
+
+	<select id="selectCacheList" resultClass="Cache">
+		SELECT
+			name,
+			value
+		FROM
+			cache
+	</select>
+</sqlMap>

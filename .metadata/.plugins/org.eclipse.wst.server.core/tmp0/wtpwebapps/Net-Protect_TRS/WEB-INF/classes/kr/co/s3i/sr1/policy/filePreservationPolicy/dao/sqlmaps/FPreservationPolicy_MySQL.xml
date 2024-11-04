@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FPreservationPolicy">
+	<typeAlias alias="fPreservationPolMgtForm" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolMgtForm" />
+	<typeAlias alias="fPreservationPolInfo" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolInfo" />
+
+	<sql id="where_basicCondition">
+		WHERE
+			cud_cd <![CDATA[!=]]> 'D'
+		AND
+			rst_seq <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="pol_seq">
+			pol_seq <![CDATA[=]]> #pol_seq#
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_notUsed">
+		AND POL_SEQ != 'N'
+	</sql>
+
+	<sql id="where_searchFieldQuery">
+		<isEqual property="searchField" compareValue="pol_seq">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				pol_seq LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="pol_nm">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				pol_nm LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="note">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				note LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+ 
+	<select id="selectFPreservationPolicyMgt" resultClass="fPreservationPolMgtForm">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_mgt
+		<include refid="where_basicCondition"/>
+		<isNotEmpty prepend="AND" property="isdel_yn">
+			isdel_yn <![CDATA[=]]> #isdel_yn#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectFPreservationPolicyMgtList" resultClass="fPreservationPolMgtForm">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_mgt
+		<include refid="where_basicCondition"/>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_notUsed"/>
+		ORDER BY
+			isdel_yn, seq
+		<isGreaterThan compareValue="0" property="pageListSize">
+			limit $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+
+	<select id="selectFPreservationPolicyMgtListCount" resultClass="Integer">
+		SELECT
+			COUNT(pol_seq)
+		FROM
+			f_preservation_pol_file_mgt
+		<include refid="where_basicCondition"/>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_notUsed"/>
+	</select>
+
+	<select id="selectFPreservationPolicyMgtMaxNumber" resultClass="Integer">
+		SELECT 
+			MAX(SUBSTRING(pol_seq, 2, length(pol_seq)-1)) AS pol_seq
+		FROM
+			f_preservation_pol_file_mgt
+		WHERE
+			rst_seq <![CDATA[=]]> 0
+	</select>
+
+	<select id="selectFPreservationPolicyInfoList" resultClass="fPreservationPolInfo">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_info
+		WHERE
+				cud_cd != 'D'
+			AND
+				rst_seq = 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				pol_seq = #pol_seq#
+			</isNotEmpty>
+	</select>
+
+	<select id="selectMaxPreservationMgtSeq" resultClass="Integer">
+		SELECT
+			max(seq)
+		FROM
+			f_preservation_pol_file_mgt
+	</select>
+
+	<select id="selectMaxPreservationInfoSeq" resultClass="Integer">
+		SELECT
+			max(seq)
+		FROM
+			f_preservation_pol_file_info
+	</select>
+
+	<insert id="insertFPolFilePreservationMgt">
+		INSERT INTO f_preservation_pol_file_mgt (
+			pol_seq,
+			rst_seq,
+			cud_cd,
+			pol_nm,
+			use_yn,
+			isdel_yn,
+			note,
+			crt_id,
+			crt_date,
+			mod_id,
+			mod_date
+		) VALUES (
+			#pol_seq#,
+			#rst_seq#,
+			#cud_cd#,
+			#pol_nm#,
+			'Y',
+			#isdel_yn#,
+			#note#,
+			#crt_id#,
+			NOW(),
+			#mod_id#,
+			NOW()
+		)
+	</insert>
+
+	<insert id="insertFPolFilePreservationInfo">
+		INSERT INTO f_preservation_pol_file_info (
+			pol_seq,
+			io_cd,
+			rst_seq,
+			cud_cd,
+			crt_id,
+			crt_date,
+			mod_id,
+			mod_date,
+			rcv_keep_term,
+			snd_keep_term,
+			list_keep_term,
+			login_list_keep_term,
+			org_save_yn,
+			org_save_term,
+			download_max_cnt,
+			admin_audit_list_keep_term
+		) VALUES (
+			#pol_seq#,
+			#io_cd#,
+			#rst_seq#,
+			#cud_cd#,
+			#crt_id#,
+			NOW(),
+			#mod_id#,
+			NOW(),
+			#rcv_keep_term#,
+			#snd_keep_term#,
+			#list_keep_term#,
+			#login_list_keep_term#,
+			#org_save_yn#,
+			#org_save_term#,
+			#download_max_cnt#,
+			#admin_audit_list_keep_term#
+		)
+		<selectKey resultClass="int">
+			SELECT max(seq) AS seq FROM f_preservation_pol_file_info
+		</selectKey>
+	</insert>
+
+	<update id="updateFPreservationPolicyMgtRSTSequence">
+		UPDATE
+			f_preservation_pol_file_mgt
+		<dynamic prepend="SET">
+			rst_seq <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(rst_seq)+1
+						FROM
+							f_preservation_pol_file_mgt
+						WHERE
+							pol_seq = #pol_seq#
+					)
+				AS rst_seq),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			rst_seq = 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				pol_seq <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</update>
+
+	<update id="updateFPreservationPolicyInfoRSTSequence">
+		UPDATE
+			f_preservation_pol_file_info
+		<dynamic prepend="SET">
+			rst_seq <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(rst_seq)+1
+						FROM
+							f_preservation_pol_file_info
+						WHERE
+							pol_seq = #pol_seq#
+					)
+				AS rst_seq),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			rst_seq = 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				pol_seq <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</update>
+	
+	<select id="selectFPreservationPolicyUseCount" resultClass="Integer">
+		<isNotEmpty property="seqs">
+			SELECT SUM(a) FROM
+			(
+				SELECT COUNT(*) as a FROM C_USER_MGT U , f_preservation_pol_file_mgt F WHERE F.pol_seq = U.FP_POL_SEQ AND U.RST_SEQ = 0 AND U.CUD_CD != 'D' AND U.USE_YN = 'Y' AND F.RST_SEQ = 0 AND F.CUD_CD != 'D' 
+				<iterate prepend="AND FP_POL_SEQ in" property="seqs" open="(" close=")" conjunction=",">#seqs[]#</iterate>
+				
+				UNION ALL
+				
+				SELECT COUNT(*) as a FROM C_DEPT_MGT D , f_preservation_pol_file_mgt F WHERE F.pol_seq = D.FP_POL_SEQ AND D.RST_SEQ = 0 AND D.CUD_CD != 'D' AND D.USE_YN = 'Y' AND F.RST_SEQ = 0 AND F.CUD_CD != 'D'
+				<iterate prepend="AND FP_POL_SEQ in" property="seqs" open="(" close=")" conjunction=",">#seqs[]#</iterate>
+			) a
+		</isNotEmpty>
+	</select>
+	
+	<select id="getDownloadMaxCount" resultClass="Integer">
+		SELECT download_max_cnt 
+		FROM f_preservation_pol_file_info
+		WHERE pol_seq = #pol_seq# AND io_cd = #io_cd# and rst_seq = 0
+	</select>
+</sqlMap>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE daoConfig PUBLIC "-//ibatis.apache.org//DTD DAO Configuration 2//EN" "http://ibatis.apache.org/dtd/dao-2.dtd">
+
+<daoConfig>
+	<context id="sqlMap">
+		<transactionManager type="SQLMAP">
+			<property name="SqlMapConfigResource" value="kr/co/s3i/sr1/monitor/dao/sqlmaps/sql-map-config.xml" />
+		</transactionManager>
+
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MonitorDao" implementation="kr.co.s3i.sr1.monitor.dao.MonitorDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MDataDao" implementation="kr.co.s3i.sr1.monitor.dao.MDataDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MCacheDao" implementation="kr.co.s3i.sr1.monitor.dao.MCacheDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MFilePolicyDao" implementation="kr.co.s3i.sr1.monitor.dao.MFilePolicyDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MFPreservationPolicyDao" implementation="kr.co.s3i.sr1.monitor.dao.MFPreservationPolicyDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MDashboardChartDao" implementation="kr.co.s3i.sr1.monitor.dao.MDashboardChartDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MSystemAlertDao" implementation="kr.co.s3i.sr1.monitor.dao.MSystemAlertDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.UsersDao" implementation="kr.co.s3i.sr1.monitor.dao.UsersDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.DepartmentDao" implementation="kr.co.s3i.sr1.monitor.dao.DepartmentDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.DeptApprovalDao" implementation="kr.co.s3i.sr1.monitor.dao.DeptApprovalDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.AfterApprovalLockDao" implementation="kr.co.s3i.sr1.monitor.dao.AfterApprovalLockDaoImpl" /> 
+	<dao interface="kr.co.s3i.sr1.monitor.dao.CustomUsersDao" implementation="kr.co.s3i.sr1.monitor.dao.CustomUsersDaoImpl" /> 
+	<dao interface="kr.co.s3i.sr1.monitor.dao.PrivateApprovalDao" implementation="kr.co.s3i.sr1.monitor.dao.PrivateApprovalDaoImpl" /> 
+	<dao interface="kr.co.s3i.sr1.monitor.hr.sync.dao.UserSyncDao" implementation="kr.co.s3i.sr1.monitor.hr.sync.dao.UserSyncDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.sync.dao.DeptSyncDao" implementation="kr.co.s3i.sr1.monitor.hr.sync.dao.DeptSyncDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.sync.dao.DeptApprovalSyncDao" implementation="kr.co.s3i.sr1.monitor.hr.sync.dao.DeptApprovalSyncDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.sync.dao.HrSyncSettingDao" implementation="kr.co.s3i.sr1.monitor.hr.sync.dao.HrSyncSettingDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.sync.dao.ApprovalConditionDao" implementation="kr.co.s3i.sr1.monitor.hr.sync.dao.ApprovalConditionDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.sync.dao.DeptApprovalSiteDao" implementation="kr.co.s3i.sr1.monitor.hr.sync.dao.DeptApprovalSiteDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.repository.dao.MRepositoryVolumeDao" implementation="kr.co.s3i.sr1.monitor.hr.repository.dao.MRepositoryVolumeDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.hr.custom.dao.MCustomEditDao" implementation="kr.co.s3i.sr1.monitor.hr.custom.dao.MCustomEditDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MAdminAuditDao" implementation="kr.co.s3i.sr1.monitor.dao.MAdminAuditDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MLoginAuditDao" implementation="kr.co.s3i.sr1.monitor.dao.MLoginAuditDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.MonitorStaticsDao" implementation="kr.co.s3i.sr1.monitor.dao.MonitorStaticsDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.systemAlert.dao.SystemAlertDao" implementation="kr.co.s3i.sr1.systemAlert.dao.SystemAlertDaoImpl" />
+	<dao interface="kr.co.s3i.sr1.monitor.dao.ManageAdminGroupDao" implementation="kr.co.s3i.sr1.monitor.dao.ManageAdminGroupDaoImpl" />
+	</context>
+</daoConfig>

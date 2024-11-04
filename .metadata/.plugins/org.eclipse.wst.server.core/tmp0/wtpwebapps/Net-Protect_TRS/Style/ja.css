@@ -1,0 +1,21 @@
+* {
+	font-family: "MS UI Gothic", "sans-serif";
+}
+
+textarea {
+	font-size: 12px;
+}
+
+.date_ipt {
+	width: 66px;
+}
+
+.chart_box .menu {
+	left: 764px;
+	width: 210px;
+}
+
+.chart_box .menu2 {
+	left: 838px;
+	width: 210px;
+}

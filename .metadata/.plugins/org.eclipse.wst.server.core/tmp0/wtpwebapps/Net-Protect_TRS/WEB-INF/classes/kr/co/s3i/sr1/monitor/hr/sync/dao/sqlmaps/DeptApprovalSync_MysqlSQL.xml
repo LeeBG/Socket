@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DeptApprovalSync">
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectDeptApprovalList" resultClass="DeptApprovalUserSyncForm">
+		SELECT
+			*
+		FROM
+			dept_approval
+		WHERE
+				CUD_CD != 'D'
+			AND
+				RST_SEQ = 0
+			<isNotEmpty prepend="AND" property="dept_seq">
+				DEPT_SEQ = #dept_seq#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="status">
+				STATUS = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="deptSeqList">
+			<iterate prepend="AND dept_seq in" property="deptSeqList" open="(" close=")" conjunction=",">
+				#deptSeqList[]#
+			</iterate>
+			</isNotEmpty>
+	</select>
+
+	<select id="selectRecentDeptApprovalList" resultClass="DeptApprovalUserSyncForm">
+		SELECT
+			*
+		FROM
+			dept_approval
+		WHERE
+				CUD_CD != 'D'
+			AND
+				RST_SEQ = (select max(rst_seq) from dept_approval where dept_seq = #dept_seq#)
+			<isNotEmpty prepend="AND" property="dept_seq">
+				DEPT_SEQ = #dept_seq#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="status">
+				STATUS = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="deptSeqList">
+			<iterate prepend="AND dept_seq in" property="deptSeqList" open="(" close=")" conjunction=",">
+				#deptSeqList[]#
+			</iterate>
+			</isNotEmpty>
+	</select>
+	
+	<update id="updateDeptApproval">
+		/* DeptApprovalSync.updateDeptApproval */
+		UPDATE dept_approval
+		SET CUD_CD = 'U',
+			APPR_ID = #appr_id#,
+			APPR_NM = #appr_nm#,
+			MOD_ID = 'MONITOR',
+			MOD_DATE = NOW()
+		WHERE rst_seq = 0
+			AND dept_seq = #dept_seq#
+	</update>
+
+</sqlMap>

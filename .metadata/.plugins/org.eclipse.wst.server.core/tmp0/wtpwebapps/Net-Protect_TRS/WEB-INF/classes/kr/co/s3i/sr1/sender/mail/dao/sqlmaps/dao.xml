@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE daoConfig PUBLIC "-//ibatis.apache.org//DTD DAO Configuration 2//EN" "http://ibatis.apache.org/dtd/dao-2.dtd">
+
+<daoConfig>
+	<context id="sqlMap">
+		<transactionManager type="SQLMAP">
+			<property name="SqlMapConfigResource" value="kr/co/s3i/sr1/sender/mail/dao/sqlmaps/sql-map-config.xml" />
+		</transactionManager>
+
+		<dao interface="kr.co.s3i.sr1.sender.mail.dao.MailCCDao" implementation="kr.co.s3i.sr1.sender.mail.dao.MailCCDaoImpl" />
+	</context>
+</daoConfig>

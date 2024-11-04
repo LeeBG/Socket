@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="TrsDashboard">
+	<typeAlias alias="trsDashboardStatistics" type="kr.co.s3i.sr1.trsMonitor.dashboard.model.TrsDashboardStatistics" />
+		
+	<sql id="where_searchDateOrTime_custom">
+		<isNotEmpty property="startDate">
+			AND CRT_TIME <![CDATA[>=]]> #startDate#				
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDate">
+			AND CRT_TIME <![CDATA[<=]]> #endDate#				
+		</isNotEmpty>
+	</sql>
+		
+	<sql id="where_vcStatusList">
+		<isNotEmpty property="vcStatusList">
+			<iterate property="vcStatusList" open="(" close=")" prepend="AND vc_status IN" conjunction=",">
+				#vcStatusList[]#
+			</iterate>
+		</isNotEmpty>
+	</sql>
+	
+	<select id="selectTransChartDashboard" resultClass="trsDashboardStatistics">
+		select
+			write_time,
+			sum(send_count_i) as send_count_i,
+        	sum(send_count_o) as send_count_o
+		from
+			(
+			SELECT
+				substr(write_time, 9, 2) as write_time,
+				IF(io_cd = 'I', send_success_count, 0) AS send_count_i,
+				IF(io_cd = 'O', send_success_count, 0) AS send_count_o
+			FROM
+				m_statics_hour
+			where
+				<isNotEmpty prepend="" property="startDate">
+					<isNotEmpty prepend="" property="endDate">
+					write_time between #startDate# and #endDate#
+					</isNotEmpty>
+				</isNotEmpty>
+			union all
+				select
+					sample_data as write_time ,
+					'0' as send_count_i,
+           			'0' as send_count_o
+				from
+					m_statics_dummy
+				where
+					seq <![CDATA[<]]> 24
+			) a
+		group by write_time
+		order by write_time
+	</select>
+	
+	<select id="selectSuccessLoginCnt" resultClass="trsDashboardStatistics">
+		SELECT 
+		    SUM(i_user_login) AS user_login_cnt_i,
+		    SUM(o_user_login) AS user_login_cnt_o,
+		    SUM(i_admin_login) AS admin_login_cnt_i,
+		    SUM(o_admin_login) AS admin_login_cnt_o
+		FROM
+		    (SELECT 
+		        IF(a.np_cd = 'I' AND b.auth_cd <![CDATA[=]]> 5, 1, 0) AS i_user_login,
+		            IF(a.np_cd = 'O' AND b.auth_cd <![CDATA[=]]> 5, 1, 0) AS o_user_login,
+		            IF(a.np_cd = 'I' AND b.auth_cd <![CDATA[<]]> 5, 1, 0) AS i_admin_login,
+		            IF(a.np_cd = 'O' AND b.auth_cd <![CDATA[<]]> 5, 1, 0) AS o_admin_login
+		    FROM
+		        login_audit a, c_user_mgt b
+		    WHERE
+		        <isNotEmpty prepend="" property="startDate">
+					<isNotEmpty prepend="" property="endDate">
+					 a.crt_date between #startDate# and #endDate#
+					</isNotEmpty>
+				</isNotEmpty>
+		            AND a.login_yn = 'Y'
+		            AND a.users_id = b.users_id
+		            AND b.rst_seq = 0) a
+	</select>
+	
+	<select id="selectFailLoginCnt" resultClass="trsDashboardStatistics">
+		SELECT 
+		    SUM(i_login_fail) AS login_fail_cnt_i,
+		    SUM(o_login_fail) AS login_fail_cnt_o
+		FROM
+		    (SELECT 
+		        IF(np_cd = 'I', 1, 0) AS i_login_fail,
+		            IF(np_cd = 'O', 1, 0) AS o_login_fail
+		    FROM
+		        login_audit
+		    WHERE 
+		        <isNotEmpty prepend="" property="startDate">
+					<isNotEmpty prepend="" property="endDate">
+					 crt_date between #startDate# and #endDate#
+					</isNotEmpty>
+				</isNotEmpty>
+		            AND login_yn = 'N') a
+	</select>
+	
+	<select id="selectTransInfoCnt" resultClass="trsDashboardStatistics">
+		SELECT 
+		    SUM(send_success_count_i) AS send_success_count_i,
+		    SUM(send_success_count_o) AS send_success_count_o,
+		    SUM(send_fail_count_i) AS send_fail_count_i,
+		    SUM(send_fail_count_o) AS send_fail_count_o,
+		    SUM(block_count_i) AS block_count_i,
+		    SUM(block_count_o) AS block_count_o
+		FROM
+		    (SELECT 
+		        IF(io_cd = 'I', send_success_count, 0) AS send_success_count_i,
+		            IF(io_cd = 'O', send_success_count, 0) AS send_success_count_o,
+		            IF(io_cd = 'I', send_fail_count, 0) AS send_fail_count_i,
+		            IF(io_cd = 'O', send_fail_count, 0) AS send_fail_count_o,
+		            0 AS block_count_i,
+		            0 AS block_count_o
+		    FROM
+		        m_statics_hour
+		    WHERE
+		         <isNotEmpty prepend="" property="startDate">
+					<isNotEmpty prepend="" property="endDate">
+						 write_time between #startDate# and #endDate#
+					</isNotEmpty>
+				</isNotEmpty>
+			union all
+			select 0 as send_success_count_i, 0 as send_success_count_o, 0 as send_fail_count_i, 0 as send_fail_count_o,
+             count(data_seq) as block_count_i, 0 AS block_count_o from in_ath_file
+             where
+             	<isNotEmpty prepend="" property="startDate_custom">
+					<isNotEmpty prepend="" property="endDate_custom">
+						crt_time between #startDate_custom# and #endDate_custom#
+					</isNotEmpty>
+				</isNotEmpty>
+             	<include refid="where_vcStatusList"/>
+             union all
+			select 0 as send_success_count_i, 0 as send_success_count_o, 0 as send_fail_count_i, 0 as send_fail_count_o,
+             0 AS block_count_i, count(data_seq) as block_count_o from out_ath_file
+             where
+             	<isNotEmpty prepend="" property="startDate_custom">
+					<isNotEmpty prepend="" property="endDate_custom">
+						crt_time between #startDate_custom# and #endDate_custom#
+					</isNotEmpty>
+				</isNotEmpty>
+             	<include refid="where_vcStatusList"/>
+             ) a
+	</select>
+	
+	<select id="selectFilesystemMountOn" resultClass="java.lang.String">		
+		SELECT 
+		    f.MOUNTED_ON
+		FROM
+		    system_alert_policy sa,
+		    disk_status f
+		WHERE
+		    sa.RST_SEQ = 0 AND sa.USE_YN = 'Y'
+		    <isEqual property="np_cd" compareValue="O" prepend=" AND">
+				sa.OUTER_DISK_FILESYSTEM = f.FILESYSTEM
+			</isEqual>
+			<isNotEqual property="np_cd" compareValue="O" prepend=" AND">
+				sa.INNER_DISK_FILESYSTEM = f.FILESYSTEM
+			</isNotEqual>
+		        AND f.NETWORK_POSITION = #np_cd#
+		LIMIT 1
+	  </select>
+	  
+	  <select id="selectAbnormalDataList" resultClass="trsDashboardStatistics">		
+		/* TrsDashboard.selectAbnormalDataList */
+		SELECT
+	        b.*
+	    FROM
+	        (    
+	        	(
+	        	SELECT
+		            a.*,
+		            'I' as io_cd     
+		        FROM
+		            in_ath_file a     
+		        WHERE
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>               
+				)     
+		    UNION ALL    
+	    		(
+		        SELECT
+		            a.*,
+		            'O' as io_cd   
+		        FROM
+		            out_ath_file a     
+		        WHERE
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>            
+				)   
+			) b             
+		ORDER BY $sidx$ $sord$
+			LIMIT $start$, $rows$
+	
+	  </select>
+	  
+	  <select id="selectAbnormalDataCount" resultClass="Integer">
+		/* TrsDashboard.selectAbnormalDataCount */
+	  	SELECT
+	        COUNT(*)
+	    FROM
+	        (    
+	        	(
+	        	SELECT
+		            *     
+		        FROM
+		            in_ath_file a     
+		        WHERE
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>               
+				)     
+		    UNION ALL    
+	    		(
+		        SELECT
+		            * 
+		        FROM
+		            out_ath_file a     
+		        WHERE
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>            
+				)   
+			) b             
+	  </select>
+	
+</sqlMap> 

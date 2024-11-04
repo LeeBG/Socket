@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Code">
+	<typeAlias alias="CodeCategory" type="kr.co.s3i.sr1.cacheEnv.code.model.CodeCategory" />
+	<typeAlias alias="Code" type="kr.co.s3i.sr1.cacheEnv.code.model.Code" />
+
+	<select id="selectCodeCategory" resultClass="CodeCategory">
+		SELECT
+			*
+		FROM
+			code_category
+		WHERE
+			use_yn = 'Y'
+		<isGreaterThan compareValue="0" prepend="AND" property="cd_cate_type">
+			cd_cate_type = #cd_cate_type#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="cd_cate_nm">
+			cd_cate_nm = #cd_cate_nm#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectCodeCategoryList" resultClass="CodeCategory">
+		SELECT
+			*
+		FROM
+			code_category
+		WHERE
+			use_yn = 'Y'
+	</select>
+
+	<select id="selectCode" resultClass="Code">
+		SELECT
+			*
+		FROM
+			code
+		WHERE
+			use_yn = 'Y'
+		<isGreaterThan compareValue="0" prepend="AND" property="cd_seq">
+			cd_seq = #cd_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="cd">
+			cd_nm = #cd_nm#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectCodeList" resultClass="Code">
+		SELECT
+			*
+		FROM
+			code
+		WHERE
+			use_yn = 'Y'
+		<isGreaterThan compareValue="0" prepend="AND" property="cd_cate_type">
+			cd_cate_type = #cd_cate_type#
+		</isGreaterThan>
+	</select>
+
+	<select id="getCodeList" resultClass="Code">
+		/* Code.getCodeList */
+		SELECT
+			*
+		FROM
+			code AS a,
+			(SELECT cd_cate_type AS cd_cate_seq FROM code_category WHERE use_yn = 'Y' AND cd_cate = #cd_cate_type#) AS b
+		WHERE
+			a.use_yn = 'Y'
+			AND a.CD_CATE_TYPE = b.CD_CATE_SEQ;
+	</select>
+</sqlMap>

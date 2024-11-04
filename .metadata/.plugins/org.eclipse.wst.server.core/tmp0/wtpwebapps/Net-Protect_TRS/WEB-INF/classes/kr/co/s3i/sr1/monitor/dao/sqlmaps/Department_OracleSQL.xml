@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DepartmentSync">
+	<typeAlias alias="Department" type="kr.co.s3i.sr1.hr.dept.model.Dept" />
+
+	<select id="selectDepartmentList" resultClass="Department">
+		/* selectDepartmentList - Department_OracleSQL.xml */
+		<!-- SELECT 	 DEPTID DEPT_SEQ	
+				,DEPTNAME DEPT_NM
+		        ,UPDEPTID P_DEPT_SEQ		
+		        ,DEPTH		
+		FROM kepco.V_ACL_DEPT		
+		WHERE USEYN ='Y' -->
+		select   a.deptid as DEPT_SEQ  <!-- "부서코드" -->
+				,a.deptname as DEPT_NM  <!-- "부서명" -->
+				,b.deptid as P_DEPT_SEQ  <!-- "상위부서코드" -->
+				,a.DEPTH
+		from gw.v_acl_dept a
+		left outer join gw.v_acl_dept b
+		on b.treeid = a.uptreeid
+		and b.locale = 'ko'
+		and b.useyn = 'Y'
+		where 1=1
+		and a.locale='ko' <!-- 국문 -->
+		and a.useyn='Y'  <!-- 사용중 -->
+		order by a.treeid
+	</select>
+
+	<select id="selectExsitDepartment" resultClass="Department">
+		SELECT
+			dept_seq,
+			dept_seq AS dept_id,
+			dept_nm,
+			p_dept_seq,
+			'1' AS depth,
+			use_yn
+		FROM
+			dept
+		WHERE
+			use_yn = 'Y'
+		<isNotEmpty prepend="AND" property="dept_id">
+			dept_id = #dept_id#
+		</isNotEmpty>
+		<isGreaterThan compareValue="0" prepend="AND" property="dept_seq">
+			dept_seq = #dept_seq#
+		</isGreaterThan>
+	</select>
+
+	<select id="selectMolegDeptList" resultClass="Department">
+		/*  selectMolegDeptList - Department_OracleSQL */
+		SELECT	 DEPT_CD as DEPT_SEQ
+				,DEPT_NM as DEPT_NM
+				,DEPT_CD_P as P_DEPT_SEQ
+				,(LVL -1) as DEPTH
+				,ORD_SEQ as "ORDER"
+		FROM SI_DEPT
+		WHERE STATS_YN ='Y'
+	</select>
+
+	<select id="selectMolegDeleteDeptList" resultClass="Department">
+		/*  selectMolegDeleteDeptList - Department_OracleSQL */
+		SELECT	 DEPT_CD as DEPT_SEQ
+				,DEPT_NM as DEPT_NM
+				,DEPT_CD_P as P_DEPT_SEQ
+				,(LVL -1) as DEPTH
+				,ORD_SEQ as "ORDER"
+		FROM SI_DEPT
+		WHERE STATS_YN ='N'
+	</select>
+
+</sqlMap>

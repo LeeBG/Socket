@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SelfApprovalRequest">
+	<typeAlias alias="authRequestForm" type="kr.co.s3i.sr1.authRequest.auth.model.AuthRequestForm" />
+	<typeAlias alias="approvalForm" type="kr.co.s3i.sr1.approval.model.ApprovalForm" />
+
+	<sql id="orderby">
+		<isNotEmpty property="searchDateType">
+			ORDER BY a.$searchDateType$ DESC
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchFieldQuery">
+		<isNotEmpty property="searchApprovalField">
+			<isEqual property="searchApprovalField" compareValue="Y">
+				<isNotEmpty prepend="AND" property="searchApprovalField">
+					a.app_type = #searchApprovalField#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchApprovalField" compareValue="R">
+				<isNotEmpty prepend="AND" property="searchApprovalField">
+					a.app_type = #searchApprovalField#
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+
+		<isNotEmpty property="searchField">
+			<isEqual property="searchField" compareValue="request_comment">
+				<isNotEmpty prepend="AND" property="searchValue">
+					r.request_comment LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchField" compareValue="request_user_id">
+				<isNotEmpty prepend="AND" property="searchValue">
+					r.request_user_id IN (SELECT users_id FROM c_user_mgt WHERE rst_seq = 0 and users_nm LIKE CONCAT('%',#searchValue#,'%'))
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchDate">
+		<isEqual property="searchDateType" compareValue="appTime">
+			AND a.app_time BETWEEN #startDate# AND #endDate#
+		</isEqual>
+		<isEqual property="searchDateType" compareValue="crt_time">
+			AND a.crt_time BETWEEN #startDate# AND #endDate#
+		</isEqual>
+	</sql>
+	
+	<sql id="where_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			AND DATE_FORMAT(crt_time,'%Y-%m-%d') <![CDATA[>=]]> #startDay#
+		</isNotEmpty>
+		<isNotEmpty property="startHour">
+			<isNotEmpty property="startMin">
+				AND DATE_FORMAT(crt_time,'%Y-%m-%d %H:%i') <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#)
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="endDay">
+			AND DATE_FORMAT(crt_time,'%Y-%m-%d') <![CDATA[<=]]> #endDay#
+		</isNotEmpty>
+		<isNotEmpty property="endHour">
+			<isNotEmpty property="endMin">
+				AND DATE_FORMAT(crt_time,'%Y-%m-%d %H:%i') <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#)
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<insert id="insertSelfApproval" parameterClass = "authRequestForm">
+		INSERT INTO
+			f_approval_request_mgt (REQUEST_SEQ,REQUEST_USER_ID,`REQUEST_COMMENT`,REQUEST_STATUS,REQUEST_STARTDATE,REQUEST_ENDDATE,CRT_DATE,POL_KINDS,POL_SEQ,POST_POL_SEQ) 
+		VALUES
+			((select max(request_seq) + 1 from (select 0 as request_seq union SELECT max(request_seq) FROM f_approval_request_mgt) as a ),#request_user_id#,#request_comment#,'READY',#request_startdate#,#request_enddate#,now(),#pol_kinds#,#pol_seq#,#post_pol_seq#);
+	<selectKey resultClass="Integer" keyProperty="request_seq">
+			SELECT MAX(request_seq) from f_approval_request_mgt
+	</selectKey>
+	</insert>
+	
+	<!-- qwe 결재자오류관련 쿼리 수정부분 -->
+	<select id="selectApprovalList" resultClass="approvalForm">
+		SELECT
+			a.*,
+			r.request_comment AS title,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id) AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id) AS appr_nm
+		FROM
+			approval a,
+			f_approval_request_mgt r
+		WHERE
+			a.request_seq = r.request_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			a.np_cd = #np_cd#
+		</isNotEmpty>
+<!-- 	<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty> -->
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDateOrTime"/>
+		<isGreaterThan compareValue="0" prepend="AND" property="request_seq">
+			a.request_seq = #request_seq#
+		</isGreaterThan>
+		<!-- 	
+		<isNotEmpty prepend="AND" property="appr_id">
+			(a.appr_id = #appr_id# OR a.real_appr_id = #appr_id#)
+		</isNotEmpty> 
+		-->
+		<isNotEmpty property="appr_id">
+			<iterate prepend="AND a.appr_id in" property="apprIdsList" open="(" close=")" conjunction=",">
+				#apprIdsList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+		<include refid="orderby"/>
+		LIMIT $offSet$, $pageListSize$
+	</select>
+
+	<!-- normal user -->
+	<select id="selectIsNotApproverApprovalList" resultClass="approvalForm">
+		SELECT
+			a.*,
+			r.request_comment AS title,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id) AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id) AS appr_nm
+		FROM
+			(select 
+					* 
+				from 
+					approval a
+				where
+					1=1
+				AND app_ord = (
+						SELECT max(app_ord)
+						FROM approval sub
+						WHERE a.request_seq = sub.request_seq
+							AND app_turn_yn = 'Y'
+						)
+				<isNotEmpty prepend="AND" property="del_yn">
+					del_yn = #del_yn#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="np_cd">
+					np_cd = #np_cd#
+				</isNotEmpty> 
+				<isNotEmpty prepend="AND" property="app_turn_yn">
+					app_turn_yn = #app_turn_yn#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="users_id">
+					users_id = #users_id#
+				</isNotEmpty>
+			)a,
+			f_approval_request_mgt r
+		WHERE
+			a.request_seq = r.request_seq
+		
+<!-- 		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty> -->
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDateOrTime"/>
+		<!-- <include refid="where_searchDate"/> -->
+		<!-- <isGreaterThan compareValue="0" prepend="AND" property="request_seq">
+			a.request_seq = #request_seq#
+		</isGreaterThan> -->
+		<!-- 	
+		<isNotEmpty prepend="AND" property="appr_id">
+			(a.appr_id = #appr_id# OR a.real_appr_id = #appr_id#)
+		</isNotEmpty> 
+		-->
+		<!-- <isNotEmpty property="appr_id">
+			<iterate prepend="AND a.appr_id in" property="apprIdsList" open="(" close=")" conjunction=",">
+					#apprIdsList[]#
+			</iterate>
+		</isNotEmpty> -->
+		<!-- <isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty> -->
+		<include refid="orderby"/>
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectExistSelfApproval" resultClass="authRequestForm">
+	SELECT
+			*
+		FROM
+			f_approval_request_mgt
+		WHERE
+			request_seq = #request_seq#
+		AND
+			pol_kinds = 'SELFAPPROVAL'
+	</select>
+	<select id="selectSelfApprovalList" resultClass="approvalForm">
+		SELECT a.*,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id) AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id) AS appr_nm
+		FROM
+			APPROVAL a 
+		WHERE
+			REQUEST_SEQ = #request_seq# 
+		AND
+			DEL_YN = 'N' AND NP_CD = 'I'
+	</select>
+	
+	<update id="updateSelfApprovalRequest">
+		UPDATE approval
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="app_yn">
+				app_yn = #app_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="del_yn">
+				del_yn = #del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_type">
+				app_type = #app_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="reason">
+				reason = #reason#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_time">
+				app_time = #app_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="real_appr_id">
+				real_appr_id = #real_appr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_turn_yn">
+				app_turn_yn = #app_turn_yn#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan compareValue="0" prepend="AND" property="approval_seq">
+				approval_seq = #approval_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="request_seq">
+				request_seq = #request_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="app_ord">
+				app_ord = #app_ord#
+			</isGreaterThan>
+		</dynamic> 
+	</update>
+	
+	<select id="selectChkSelfApprUser" resultClass="authRequestForm">
+	<![CDATA[  
+		SELECT *
+		FROM (
+			SELECT A.*,
+				R.REQUEST_USER_ID,
+				R.REQUEST_COMMENT, 
+				R.REQUEST_STATUS, 
+				R.REQUEST_STARTDATE,
+				R.REQUEST_ENDDATE,
+				R.CRT_DATE,
+				R.POL_KINDS,
+				R.POL_SEQ,
+				R.POST_POL_SEQ
+			FROM
+				APPROVAL A,
+				F_APPROVAL_REQUEST_MGT R
+			WHERE
+				A.REQUEST_SEQ = R.REQUEST_SEQ AND
+				R.POL_KINDS = 'SELFAPPROVAL'
+		) m
+		WHERE
+			NOW() >= m.REQUEST_STARTDATE AND
+			NOW() <= m.REQUEST_ENDDATE AND
+			m.DEL_YN = 'N' AND
+			m.APP_YN = 'Y' AND
+			m.APP_TYPE in ('Y','SF','AF') AND
+			/* 마지막 결재 차수 가져오기 */
+			m.APP_ORD = (
+				SELECT max(sub.APP_ORD)
+				FROM APPROVAL sub
+				WHERE sub.REQUEST_SEQ = m.REQUEST_SEQ
+			) AND
+			m.USERS_ID = #users_id#
+		LIMIT 1
+	]]>
+	</select>
+	<select id="selectSelfApprovalApprIdList" resultClass="approvalForm">
+		SELECT * FROM
+		APPROVAL
+		WHERE
+		DATA_SEQ = 0 AND 
+		NP_CD = 'I' AND 
+		APP_YN = 'N' AND 
+		APP_TURN_YN = 'Y' AND 
+		(APPR_ID = #users_id# OR REAL_APPR_ID = #users_id#)
+	</select>
+	<select id="selectRequestUserPostPolSeq" resultClass="authRequestForm">
+		SELECT * FROM
+		F_APPROVAL_REQUEST_MGT 
+		WHERE 
+		REQUEST_USER_ID = #request_user_id#
+		AND
+		REQUEST_STATUS = 'INUSE' 
+		ORDER BY REQUEST_SEQ 
+		DESC LIMIT 1 ;
+	</select>
+	<select id="selectAuthRequestORDCount" resultClass ="Integer">
+		SELECT
+			IFNULL(MAX(APP_ORD), 0)
+		FROM
+			APPROVAL AS a
+		WHERE
+			a.USERS_ID = #users_id#
+		AND
+			a.REQUEST_SEQ = 
+			(SELECT 
+				REQUEST_SEQ 
+			FROM 
+				F_APPROVAL_REQUEST_MGT
+			WHERE
+				REQUEST_USER_ID = a.USERS_ID
+			ORDER BY 
+				REQUEST_SEQ DESC LIMIT 1);
+	</select>
+	<select id="selectApprovalListCount" resultClass="Integer">
+		SELECT
+			count(a.request_seq)
+		FROM
+			approval a,
+			f_approval_request_mgt r
+		WHERE
+			a.request_seq = r.request_seq
+		<isNotEmpty prepend="AND" property="del_yn">
+			a.del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			a.np_cd = #np_cd#
+		</isNotEmpty>
+<!-- 		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty> -->
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDateOrTime"/>
+		<isGreaterThan compareValue="0" prepend="AND" property="request_seq">
+			a.request_seq = #request_seq#
+		</isGreaterThan>
+		<!-- 	
+		<isNotEmpty prepend="AND" property="appr_id">
+			(a.appr_id = #appr_id# OR a.real_appr_id = #appr_id#)
+		</isNotEmpty> 
+		-->
+		<isNotEmpty property="appr_id">
+			<iterate prepend="AND a.appr_id in" property="apprIdsList" open="(" close=")" conjunction=",">
+					#apprIdsList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="app_turn_yn">
+			app_turn_yn = #app_turn_yn#
+		</isNotEmpty>
+	</select>
+	<select id="selectIsNotApproverApprovalListCount" resultClass="Integer">
+		SELECT
+			count(a.request_seq)
+		FROM
+			(
+				select 
+					* 
+				from 
+					approval a
+				where
+					1=1
+				AND app_ord = (
+						SELECT max(app_ord)
+						FROM approval sub
+						WHERE a.request_seq = sub.request_seq
+							AND app_turn_yn = 'Y'
+						)
+				<isNotEmpty prepend="AND" property="del_yn">
+					del_yn = #del_yn#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="np_cd">
+					np_cd = #np_cd#
+				</isNotEmpty> 
+				<isNotEmpty prepend="AND" property="app_turn_yn">
+					app_turn_yn = #app_turn_yn#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="users_id">
+					users_id = #users_id#
+				</isNotEmpty>
+			)a,
+			f_approval_request_mgt r
+		WHERE
+			a.request_seq = r.request_seq
+		
+<!-- 		<isNotEmpty prepend="AND" property="app_yn">
+			a.app_yn = #app_yn#
+		</isNotEmpty> -->
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDateOrTime"/>
+		<!-- <include refid="where_searchDate"/> -->
+		<!-- <isGreaterThan compareValue="0" prepend="AND" property="request_seq">
+			a.request_seq = #request_seq#
+		</isGreaterThan> -->
+		<!-- 	
+		<isNotEmpty prepend="AND" property="appr_id">
+			(a.appr_id = #appr_id# OR a.real_appr_id = #appr_id#)
+		</isNotEmpty> 
+		-->
+		<!-- <isNotEmpty property="appr_id">
+			<iterate prepend="AND a.appr_id in" property="apprIdsList" open="(" close=")" conjunction=",">
+					#apprIdsList[]#
+			</iterate>
+		</isNotEmpty> -->
+		<!-- <isNotEmpty prepend="AND" property="app_type">
+			app_type = #app_type#
+		</isNotEmpty> -->
+	</select>
+	<select id="selectSelfApprovalTotalList" resultClass="approvalForm">
+		SELECT
+			a.*,
+			r.request_comment AS title,
+			r.request_startdate AS startDate,
+			r.request_enddate AS endDate,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id) AS users_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id) AS real_appr_nm,
+			(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id) AS appr_nm
+		FROM
+			APPROVAL a,
+			f_approval_request_mgt r
+		WHERE
+			a.DEL_YN = 'N' 
+		AND
+			a.request_seq = r.request_seq
+		AND
+			a.NP_CD = 'I'
+		AND
+			a.Request_seq !='0'
+		AND
+			a.app_ord = (select max(app_ord) from approval where request_seq = a.request_seq)
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_searchDate"/>
+		GROUP BY request_seq 
+		ORDER BY a.crt_time desc
+		LIMIT $offSet$, $pageListSize$
+	</select>
+	<select id="selectSelfApprovalTotalListCount" resultClass="Integer">
+		SELECT
+			count(aa.request_seq)
+		FROM
+			(SELECT
+				a.*,
+				r.request_comment AS title,
+				(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.users_id) AS users_nm,
+				(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.real_appr_id) AS real_appr_nm,
+				(SELECT users_nm FROM c_user_mgt WHERE rst_seq = 0 and rst_seq = 0 and users_id = a.appr_id) AS appr_nm
+			FROM
+				APPROVAL a,
+				f_approval_request_mgt r
+			WHERE
+				a.DEL_YN = 'N'
+			AND
+				a.request_seq = r.request_seq
+			AND
+				a.NP_CD = 'I'
+			AND
+				a.request_seq !='0'
+			AND
+				a.app_ord = (select max(app_ord) from approval where request_seq = a.request_seq)
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_searchDate"/>
+			GROUP BY a.request_seq
+			) as aa
+	</select>
+	<update id="updateApprovalRequestMgt" parameterClass="authRequestForm">
+		UPDATE
+			f_approval_request_mgt
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="request_user_id">
+				request_user_id = #request_user_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_comment">
+				request_comment = #request_comment#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_status">
+				request_status = #request_status#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_startdate">
+				request_startdate = #request_startdate#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_enddate">
+				request_enddate = #request_enddate#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="pol_kinds">
+				pol_kinds = #pol_kinds#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="pol_seq">
+				pol_seq = #pol_seq#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="post_pol_seq">
+				post_pol_seq = #post_pol_seq#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="requestSeqList">
+			<iterate prepend="request_seq in" property="requestSeqList" open="(" close=")" conjunction=",">
+				#requestSeqList[]#
+			</iterate>
+			</isNotEmpty>
+			<isGreaterThan prepend="AND" property="request_seq" compareValue="0">
+				request_seq = #request_seq#
+			</isGreaterThan>
+		</dynamic> 
+	</update>
+
+	<update id="updateSelfApprovalDate">
+		UPDATE
+			f_approval_request_mgt
+		SET
+			request_startdate = #request_startdate#,
+			request_enddate = #request_enddate#
+		WHERE
+			request_seq = #request_seq#
+	</update>
+</sqlMap>

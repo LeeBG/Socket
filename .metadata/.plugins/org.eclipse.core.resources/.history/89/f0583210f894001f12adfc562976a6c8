@@ -1,0 +1,17 @@
+package multiableServerClient;
+
+import java.net.Socket;
+
+public class ClientHandler extends Thread{
+	private Socket clientSocket;
+
+	public ClientHandler(Socket clientSocket) {
+		this.clientSocket = clientSocket;
+	}
+	
+	@Override
+	public void run() {
+		
+	}
+	
+}

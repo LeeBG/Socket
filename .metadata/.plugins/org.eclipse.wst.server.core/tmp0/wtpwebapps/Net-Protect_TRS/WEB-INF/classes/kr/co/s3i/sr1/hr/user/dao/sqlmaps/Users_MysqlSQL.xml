@@ -1,0 +1,1090 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Users">
+	<typeAlias alias="usersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	<typeAlias alias="deptApprovalForm" type="kr.co.s3i.sr1.approval.model.DeptApprovalForm" />
+	<typeAlias alias="dept" type="kr.co.s3i.sr1.hr.dept.model.Dept" />
+	<typeAlias alias="userTree" type="kr.co.s3i.sr1.hr.user.model.UserTree" />
+	
+	<sql id="include_adminManagement">
+		<isEqual prepend="AND" property="isAdminManageUse" compareValue="true">
+			EXISTS(SELECT 1 FROM vw_manage_user_list_d a, (SELECT @users_id:=#admin_id#) b WHERE a.users_id = u.users_id)
+		</isEqual>
+	</sql>
+	
+	<select id="selectUsers" resultClass="usersForm">
+		<![CDATA[
+			/** selectUsers */
+			select a.seq
+		 , a.USERS_ID
+		 , a.rst_seq
+		 , a.cud_cd
+		 , a.USERS_PW
+		 , a.USERS_NM
+		 , a.AUTH_CD
+		 , a.DEPT_SEQ
+		 , a.HP
+		 , a.EMAIL
+		 , a.POSITION_ID
+		 , a.POSITION_NM
+		 , a.JOB_ID
+		 , a.JOB_NM
+		 , a.NOTE
+		 , a.A_POL_SEQ
+		 , a.L_POL_SEQ
+	     , a.F_POL_SEQ
+	     , a.FP_POL_SEQ
+		 , a.CUSTOM_ADD_YN
+		 , a.INIT_PWD_YN
+		 , a.USE_YN
+		 , a.INNER_IP
+		 , a.OUTER_IP
+		 , a.INNER_MAC
+		 , a.OUTER_MAC
+		 , a.ORDER1
+		 , a.ORDER2
+		 , a.ORDER3
+		 , a.PWD_MOD_DATE
+		 , a.PKI_INFO
+		 , a.AGENT_UUID
+		 , a.CRT_DATE
+		 , a.CRT_ID
+		 , a.MOD_DATE
+		 , a.MOD_ID
+		 , b.DEPT_NM
+		 , a.GPKI_DN
+		 , a.INNER_TOKEN
+		 , a.OUTER_TOKEN
+		 , a.PREV_INNER_TOKEN
+		 , a.PREV_OUTER_TOKEN
+		 , a.airport_user_yn
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.dept_seq = b.dept_seq
+	  AND a.users_id = #users_id#	
+	  ]]>	    
+	</select>
+	
+	<select id="selectUseUsers" resultClass="usersForm">
+		<![CDATA[
+			/** selectUseUsers */
+			select a.seq
+		 , a.USERS_ID
+		 , a.rst_seq
+		 , a.cud_cd
+		 , a.USERS_PW
+		 , a.USERS_NM
+		 , a.AUTH_CD
+		 , a.DEPT_SEQ
+		 , a.HP
+		 , a.EMAIL
+		 , a.POSITION_ID
+		 , a.POSITION_NM
+		 , a.JOB_ID
+		 , a.JOB_NM
+		 , a.NOTE
+		 , a.A_POL_SEQ
+		 , a.L_POL_SEQ
+	     , a.F_POL_SEQ
+	     , a.FP_POL_SEQ
+		 , a.CUSTOM_ADD_YN
+		 , a.INIT_PWD_YN
+		 , a.USE_YN
+		 , a.INNER_IP
+		 , a.OUTER_IP
+		 , a.INNER_MAC
+		 , a.OUTER_MAC
+		 , a.ORDER1
+		 , a.ORDER2
+		 , a.ORDER3
+		 , a.PWD_MOD_DATE
+		 , a.PKI_INFO
+		 , a.AGENT_UUID
+		 , a.CRT_DATE
+		 , a.CRT_ID
+		 , a.MOD_DATE
+		 , a.MOD_ID
+		 , b.DEPT_NM
+		 , a.GPKI_DN
+		 , a.INNER_TOKEN
+		 , a.OUTER_TOKEN
+		 , a.PREV_INNER_TOKEN
+		 , a.PREV_OUTER_TOKEN
+		 , a.airport_user_yn
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.dept_seq = b.dept_seq
+	  and a.cud_cd != 'D'
+	  AND a.users_id = #users_id#	
+	  ]]>	    
+	</select>
+	
+	<select id="selectUsersCsLoginYn" resultClass="usersForm">
+		<![CDATA[
+			/** selectUsersCsLoginYn */
+			select a.seq
+		 , a.USERS_ID
+		 , a.INNER_CS_LOGIN
+		 , a.OUTER_CS_LOGIN
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.dept_seq = b.dept_seq
+	  AND a.users_id = #users_id#	
+	  ]]>	    
+	</select>
+	
+	<select id="selectExistUsersList" resultClass="usersForm">
+		<![CDATA[
+			/** selectExistUsersList */
+			select a.seq
+		 , a.USERS_ID
+		 , a.rst_seq
+		 , a.cud_cd
+		 , a.USERS_PW
+		 , a.USERS_NM
+		 , a.AUTH_CD
+		 , a.DEPT_SEQ
+		 , a.HP
+		 , a.EMAIL
+		 , a.POSITION_ID
+		 , a.POSITION_NM
+		 , a.JOB_ID
+		 , a.JOB_NM
+		 , a.NOTE
+		 , a.A_POL_SEQ
+		 , a.L_POL_SEQ
+	     , a.F_POL_SEQ
+	     , a.FP_POL_SEQ
+		 , a.CUSTOM_ADD_YN
+		 , a.INIT_PWD_YN
+		 , a.USE_YN
+		 , a.INNER_IP
+		 , a.OUTER_IP
+		 , a.INNER_MAC
+		 , a.OUTER_MAC
+		 , a.ORDER1
+		 , a.ORDER2
+		 , a.ORDER3
+		 , a.PWD_MOD_DATE
+		 , a.PKI_INFO
+		 , a.AGENT_UUID
+		 , a.CRT_DATE
+		 , a.CRT_ID
+		 , a.MOD_DATE
+		 , a.MOD_ID
+		 , b.DEPT_NM
+		 , a.airport_user_yn
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.use_yn = 'Y'
+	  and a.dept_seq = b.dept_seq]]>	
+	  <isNotEmpty property="users_id_list" prepend="AND">
+			<iterate prepend="a.users_id in" open="(" close=")" conjunction="," property="users_id_list">
+				#users_id_list[]#
+			</iterate>
+	  </isNotEmpty>
+	  <isNotEmpty prepend="AND" property="searchValue">
+			( users_nm LIKE CONCAT('%',#searchValue#,'%') OR
+			  users_id LIKE CONCAT('%',#searchValue#,'%') )
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectUserList" resultClass="usersForm">
+		/** selectUserList */
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		  AND rst_seq = 0 
+		<isGreaterThan prepend="AND" compareValue="0" property="dept_seq">
+			dept_seq = #dept_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="users_nm">
+			users_nm = #users_nm#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dept_nm">
+			dept_seq IN (SELECT
+							dept_seq
+						FROM
+							c_dept_mgt
+						WHERE
+							dept_nm LIKE CONCAT('%',#dept_nm#,'%')
+						)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="arrAuthCd">
+			auth_cd in ($arrAuthCd$)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="f_pol_seq">
+			f_pol_seq = #f_pol_seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="fp_pol_seq">
+			fp_pol_seq = #fp_pol_seq#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectApprUserList" resultClass="usersForm">
+		/** selectApprUserList */
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		  AND rst_seq = 0 
+		<isNotEmpty prepend="AND" property="POSITION_ID">
+			POSITION_ID = #POSITION_ID#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectDeptUserList" resultClass="usersForm">
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		  AND rst_seq = 0 
+		<isNotEmpty prepend="AND" property="deptSeq">
+			dept_seq = #deptSeq#
+		</isNotEmpty>
+		<isEqual property="validUserYn" compareValue="Y">
+			and cud_cd in ('C', 'U')
+			and use_yn = 'Y'
+		</isEqual>
+	</select>
+	
+	<select id="selectDeptApprUserList" resultClass="usersForm">
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		  AND rst_seq = 0 
+		<isNotEmpty prepend="AND" property="dept_seq">
+			dept_seq = #dept_seq#
+		</isNotEmpty>
+		<isNotEmpty property="apprPosition_idList">
+			<iterate prepend="AND position_id in" property="apprPosition_idList" open="(" close=")" conjunction=",">
+					#apprPosition_idList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="use_yn">
+			use_yn = #use_yn#
+		</isNotEmpty>
+			order by dept_seq desc;
+	</select>
+
+	<select id="selectUserList2" resultClass="usersForm">
+		/** selectUserList2 */
+		SELECT u.users_id
+			  ,u.users_nm
+			  ,u.dept_seq
+		FROM c_user_mgt u
+		JOIN c_dept_mgt d on d.dept_seq = u.dept_seq
+		WHERE 1 = 1
+		  AND rst_seq = 0
+		  AND auth_cd = '5' 
+	</select>
+
+	<select id="selectRstUserList" resultClass="usersForm">
+		/** selectRstUserList */
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		AND rst_seq = 0
+		AND dept_seq = #dept_seq#
+	</select>
+
+	<insert id="insertUser">
+		/* insertUser cud_cd $cud_cd$ */
+		INSERT INTO c_user_mgt(
+								SEQ,
+								USERS_ID,
+								RST_SEQ,
+								CUD_CD,
+								USERS_PW,
+								USERS_NM,
+								AUTH_CD,
+								DEPT_SEQ,
+								HP,
+								EMAIL,
+								POSITION_ID,
+								POSITION_NM,
+								JOB_ID,
+								JOB_NM,
+								PKI_INFO,
+								NOTE,
+								A_POL_SEQ,
+								L_POL_SEQ,
+								F_POL_SEQ,
+								FP_POL_SEQ,
+								<isNotNull property="custom_add_yn">
+								CUSTOM_ADD_YN,
+								</isNotNull>
+								INIT_PWD_YN,
+								USE_YN,
+								INNER_IP,
+								OUTER_IP,
+								INNER_MAC,
+								OUTER_MAC,
+								ORDER1,
+								ORDER2,
+								ORDER3,
+								AGENT_UUID,
+								<isEqual property="cud_cd" compareValue="U">
+									PWD_MOD_DATE,
+								</isEqual>
+								<isNotEqual property="cud_cd" compareValue="U">
+									PWD_MOD_DATE,
+								</isNotEqual>
+								CRT_DATE,
+								CRT_ID,
+								MOD_DATE,
+								MOD_ID,
+								GPKI_DN,
+								<isNotEmpty property="airport_user_yn">
+									AIRPORT_USER_YN,
+								</isNotEmpty>
+								INNER_TOKEN,
+								OUTER_TOKEN,
+								PREV_INNER_TOKEN,
+								PREV_OUTER_TOKEN
+							) VALUES (
+								( select max(seq) + 1 from (select 0 as seq union SELECT max(seq) FROM c_user_mgt) as a ),
+								#users_id#,
+								#rst_seq#,
+								#cud_cd#,
+								#users_pw#,
+								#users_nm#,
+								#auth_cd#,
+								#dept_seq#,
+								#hp#,
+								#email#,
+								#position_id#,
+								#position_nm#,
+								#job_id#,
+								#job_nm#,
+								#pki_info#,
+								#note#,
+								#a_pol_seq#,
+								#l_pol_seq#,
+								#f_pol_seq#,
+								#fp_pol_seq#,
+								<isNotNull property="custom_add_yn">
+								#custom_add_yn#,
+								</isNotNull>
+								#init_pwd_yn#,
+								#use_yn#,
+								#inner_ip#,
+								#outer_ip#,
+								#inner_mac#,
+								#outer_mac#,
+								#order1#,
+								#order2#,
+								#order3#,
+								#agent_uuid#,
+								<isEqual property="cud_cd" compareValue="U">
+									#pwd_mod_date#,
+								</isEqual>
+								<isNotEqual property="cud_cd" compareValue="U">
+									now(),
+								</isNotEqual>
+								now(),
+								#crt_id#,
+								now(),
+								#mod_id#,
+								#gpki_dn#,
+								<isNotEmpty property="airport_user_yn">
+									#airport_user_yn#,
+								</isNotEmpty>
+								#inner_token#,
+								#outer_token#,
+								#prev_inner_token#,
+								#prev_outer_token#
+							)
+	</insert>
+
+	<update id="updateFMPL0700ChildYN">
+		/** updateFMPL0700ChildYN */
+		UPDATE c_dept_mgt
+		   SET child_yn = 'Y'
+			 , mod_date = NOW()
+		WHERE dept_seq = #dept_seq#
+	</update>
+
+	<update id="updateUser">
+		/* updateUser 1 cud_cd $cud_cd$ */
+		UPDATE c_user_mgt
+           SET rst_seq = ( select * from ( select max(rst_seq) + 1 as rst_seq from c_user_mgt where users_id = #users_id# ) as a )
+         WHERE users_id = #users_id#
+           AND rst_seq = 0
+	</update>
+	
+	<update id="updateAdminAudit">
+		update admin_audit a set button_yn = 'N'
+			WHERE a.log_code = 'USER_MGT'
+			    AND EXISTS( SELECT 1 FROM c_user_mgt b
+						        WHERE b.users_id = #users_id#
+						           AND a.table_seq = b.seq
+						           AND a.log_text LIKE CONCAT('%',#users_id#,'%') )
+	</update>
+	
+	<update id="updateTokenUser">
+		UPDATE c_user_mgt
+           SET 
+           <isNotEmpty property="inner_token">
+				inner_token = #inner_token#
+		   </isNotEmpty>
+		   <isNotEmpty property="outer_token">
+				outer_token = #outer_token#
+		   </isNotEmpty>
+		   <isNotEmpty prepend="," property="prev_inner_token">
+				prev_inner_token = #prev_inner_token#
+		   </isNotEmpty>
+		   <isNotEmpty prepend="," property="prev_outer_token">
+				prev_outer_token = #prev_outer_token#
+		   </isNotEmpty>
+         WHERE users_id = #users_id#
+           AND rst_seq = 0
+	</update>
+	
+	<update id="updateUserApproval" parameterClass="usersForm">
+		/* updateUserApproval */
+		UPDATE c_user_mgt
+			SET mod_date = now()
+			<isNotNull prepend="," property="a_pol_seq">
+				a_pol_seq = #a_pol_seq# 
+			</isNotNull>
+			<isNotNull prepend="," property="l_pol_seq">
+				l_pol_seq = #l_pol_seq# 
+			</isNotNull>
+			<isNotNull prepend="," property="f_pol_seq">
+				f_pol_seq = #f_pol_seq#
+			</isNotNull>
+			<isNotNull prepend="," property="fp_pol_seq">
+				fp_pol_seq = #fp_pol_seq#
+			</isNotNull>
+		WHERE 
+			users_id = #users_id#
+			AND rst_seq = 0
+	</update>
+
+	<delete id="deleteUser">
+		/** deleteUser */
+		DELETE
+		FROM c_user_mgt
+		WHERE users_id = #users_id#
+	</delete>
+
+	<update id="resetPasswordUpdateUser">
+		/** resetPasswordUpdateUser */
+		UPDATE
+			c_user_mgt
+		SET
+			mod_date = now(),
+			init_pwd_yn = 'Y'
+			<isNotEmpty prepend="," property="pwd_mod_date">
+				pwd_mod_date = #pwd_mod_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="users_pw">
+				users_pw = #users_pw#
+			</isNotEmpty>
+		WHERE
+			users_id = #users_id# and rst_seq = 0
+	</update>
+
+	<update id="updateUserPwdEmail" parameterClass="usersForm">
+		/** updateUserPwdEmail */
+		UPDATE 
+			c_user_mgt
+		SET
+			mod_date = now(),
+			init_pwd_yn = 'N',
+			mod_id = #users_id#
+			<isNotEmpty prepend="," property="pwd_mod_date">
+				pwd_mod_date = #pwd_mod_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="users_pw">
+				users_pw = #users_pw#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="email">
+				email = #email#
+			</isNotEmpty>
+		WHERE
+			users_id = #users_id#
+	</update>
+	
+	<select id="selectCUsersLogRstSeq" resultClass="Integer">
+		/** selectCUsersLogRstSeq */
+		SELECT
+			MAX(RST_SEQ)+1
+		FROM
+			c_user_log
+		WHERE
+			users_id = #users_id#
+	</select>
+
+	<insert id="insertCUserLog">
+		INSERT INTO c_user_log
+		(
+			users_id,
+			rst_seq,
+			cud_cd,
+			users_pw,
+			users_nm,
+			dept_seq,
+			init_pwd_yn,
+			auth_cd,
+			approver_type,
+			hp,
+			email,
+			a_pol_seq,
+			l_pol_seq,
+			f_pol_seq,
+			fp_pol_seq,
+			custom_add_yn,
+			self_approval_yn,
+			position_id,
+			position_nm,
+			job_id,
+			job_nm,
+			pki_info,
+			note,
+			use_yn,
+			inner_ip,
+			outer_ip,
+			inner_mac,
+			outer_mac,
+			order1,
+			order2,
+			order3,
+			crt_date,
+			crt_id,
+			mod_date,
+			mod_id
+		)
+		VALUES
+		(
+			#users_id#,
+			#rst_seq#,
+			#cud_cd#,
+			(select users_pw from c_user_mgt where users_id = #users_id#),
+			#users_nm#,
+			#dept_seq#,
+			'Y',
+			#auth_cd#,
+			(select approver_type from c_user_mgt where users_id = #users_id#),
+			#hp#,
+			#email#,
+			#a_pol_seq#,
+			#l_pol_seq#,
+			#f_pol_seq#,
+			#fp_pol_seq#,
+			#custom_add_yn#,
+			(select self_approval_yn from c_user_mgt where users_id = #users_id#),
+			(select position_id from c_user_mgt where users_id = #users_id#),
+			#position_nm#,
+			#job_id#,
+			#job_nm#,
+			#pki_info#,
+			#note#,
+			#use_yn#,
+			#inner_ip#,
+			#outer_ip#,
+			#inner_mac#,
+			#outer_mac#,
+			#order1#,
+			#order2#,
+			#order3#,
+			now(),
+			(select crt_id from c_user_mgt where users_id = #users_id#),
+			now(),
+			#mod_id#
+		)
+	</insert>
+
+	<select id="selectSeq" resultClass="Integer">
+		/** selectSeq */
+		SELECT max(seq)
+		  FROM c_user_mgt
+		 WHERE 1 = 1
+		   and users_id = #users_id#
+		   and rst_seq = 0		 
+	</select>
+
+	<select id="getNowTimeStamp" resultClass="java.sql.Timestamp">
+		SELECT
+			now()
+		FROM
+			dual
+	</select>
+
+	<select id="selectUserChkList" resultClass="usersForm">
+		/* selectUserChkList */
+		<!-- SELECT 
+			users_id as appr_id, 
+			dept_seq , 
+			users_nm , 
+			(select status AS status FROM dept_approval d WHERE u.rst_seq = 0 and u.users_id = d.appr_id AND status = 'Y' ) AS status
+		FROM c_user_mgt u
+		where u.rst_seq = 0 -->
+		 SELECT
+        	u.users_id as appr_id,
+        	u.dept_seq,
+        	d.dept_nm,
+        	u.users_nm,
+        	u.position_nm,
+        	u.job_nm,
+        	u.use_yn
+    	    <!-- d.status -->
+	    FROM
+        	c_user_mgt u, (select dept_seq, dept_nm from c_dept_mgt where rst_seq = 0 and cud_cd != 'D') d
+		<!-- LEFT OUTER JOIN dept_approval d on u.users_id = d.appr_id and d.rst_seq = 0  and status = 'Y'  -->
+    	WHERE
+        	u.rst_seq = 0
+        	and u.dept_seq = d.dept_seq
+        AND
+        	u.auth_cd = 5
+		<include refid="include_adminManagement"/>
+		<isGreaterThan prepend="AND" compareValue="0" property="dept_seq">
+			u.dept_seq = #dept_seq#
+		</isGreaterThan>
+		<isNotNull prepend="AND u.dept_seq IN " property="deptSeqList">
+			<iterate open="(" close=")" conjunction="," property="deptSeqList">
+				#deptSeqList[]#
+			</iterate>
+		</isNotNull>
+		<isNotNull property="searchField">
+			<isEqual property="searchField" compareValue="users_id">
+				<isNotEmpty property="searchValue" prepend="AND">
+					u.users_id LIKE CONCAT('%', #searchValue#, '%')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchField" compareValue="users_nm">
+				<isNotEmpty property="searchValue" prepend="AND">
+					u.users_nm LIKE CONCAT('%', #searchValue#, '%')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchField" compareValue="position_nm">
+				<isNotEmpty property="searchValue" prepend="AND">
+					u.position_nm LIKE CONCAT('%', #searchValue#, '%')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchField" compareValue="job_nm">
+				<isNotEmpty property="searchValue" prepend="AND">
+					u.job_nm LIKE CONCAT('%', #searchValue#, '%')
+				</isNotEmpty>
+			</isEqual>
+		</isNotNull>
+		<isEqual property="orderType" compareValue="kins">
+			ORDER BY u.order1
+		</isEqual>
+		<isEqual property="orderType" compareValue="common">
+			ORDER BY u.use_yn DESC, position_nm ASC, users_nm ASC
+		</isEqual>
+	</select>
+	
+	<select id="selectProxyApproverList" resultClass="usersForm">
+		SELECT
+			u.users_id,
+			u.users_nm,
+			u.position_nm,
+			d.dept_nm,
+			u.job_nm
+		FROM
+			c_user_mgt u
+		LEFT JOIN
+			c_dept_mgt d
+		ON
+			u.dept_seq = d.dept_seq
+		WHERE u.use_yn = 'Y'
+		  and u.rst_seq = 0
+		  and d.rst_seq = 0
+		  and d.use_yn = 'Y'
+		  AND	users_id <![CDATA[<>]]> #users_id#
+		<isNotEmpty prepend="AND" property="dept_seq">
+			u.dept_seq = #dept_seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="auth_cd">
+			u.auth_cd = #auth_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="users_nm">
+			users_nm LIKE CONCAT('%',#users_nm#,'%')
+		</isNotEmpty>
+		<isNotEmpty property="users_id_list" prepend="AND">
+			<iterate prepend="users_id in" open="(" close=")" conjunction="," property="users_id_list">
+				#users_id_list[]#
+			</iterate>
+	  	</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchValue">
+			( users_nm LIKE CONCAT('%',#searchValue#,'%') OR
+			  users_id LIKE CONCAT('%',#searchValue#,'%') )
+		</isNotEmpty>
+		ORDER BY
+			d.dept_nm, u.users_nm asc
+			LIMIT $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectProxyApproverListCount" resultClass="Integer">
+		/* selectProxyApproverListCount */
+		SELECT
+			COUNT(u.users_id)
+		FROM
+			c_user_mgt u
+		LEFT JOIN
+			c_dept_mgt d
+		ON
+			u.dept_seq = d.dept_seq
+		WHERE u.use_yn = 'Y'
+			and u.rst_seq = 0
+			and d.rst_seq = 0
+			and d.use_yn = 'Y'
+			AND	users_id <![CDATA[<>]]> #users_id#
+			<isNotEmpty prepend="AND" property="dept_seq">
+				u.dept_seq = #dept_seq#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="auth_cd">
+				u.auth_cd = #auth_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="users_nm">
+				users_nm LIKE CONCAT('%',#users_nm#,'%')
+			</isNotEmpty>
+			<isNotEmpty property="users_id_list" prepend="AND">
+			<iterate prepend="users_id in" open="(" close=")" conjunction="," property="users_id_list">
+				#users_id_list[]#
+			</iterate>
+		  	</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchValue">
+				( users_nm LIKE CONCAT('%',#searchValue#,'%') OR
+				  users_id LIKE CONCAT('%',#searchValue#,'%') )
+			</isNotEmpty>
+	</select>
+
+	<!-- 인사디비동기화시 사용자가 존재하지않을때 인서트 -->
+	<insert id="insertHrdbUser">
+		/* insertHrdbUser cud_cd $cud_cd$ */
+		INSERT INTO c_user_mgt(
+								SEQ,
+								USERS_ID,
+								USERS_PW,
+								USERS_NM,
+								AUTH_CD,
+								DEPT_SEQ,
+								USE_YN,	
+								EMAIL,
+								HP,
+								POSITION_ID,
+								POSITION_NM,	
+								INIT_PWD_YN,
+								<isEqual property="cud_cd" compareValue="U">
+									PWD_MOD_DATE,
+								</isEqual>
+								<isNotEqual property="cud_cd" compareValue="U">
+									PWD_MOD_DATE,
+								</isNotEqual>
+								CRT_DATE,
+								CRT_ID,
+								MOD_DATE,
+								GPKI_DN
+							) VALUES (
+								( select max(seq) + 1 from (select 0 as seq union SELECT max(seq) FROM c_user_mgt) as a ),
+								#users_id#,
+								#users_pw#,
+								#users_nm#,
+								#auth_cd#,
+								#dept_seq#,
+								'Y',	
+								#email#,
+								#hp#,
+								#position_id#,
+								#position_nm#,	
+								#init_pwd_yn#,
+								<isEqual property="cud_cd" compareValue="U">
+									#pwd_mod_date#,
+								</isEqual>
+								<isNotEqual property="cud_cd" compareValue="U">
+									now(),
+								</isNotEqual>
+								now(),
+								#crt_id#,
+								now(),
+								#gpki_dn#
+							)
+	</insert>
+	<update id="updateHrdbUser">
+		UPDATE c_user_mgt
+		   set rst_seq = 0
+			 , users_nm = #users_nm#
+			 , dept_seq = #dept_seq#
+			 , hp = #hp#
+			 , email = #email#
+			 , position_id = #position_id#
+			 , position_nm = #position_nm#
+			 <isNotEmpty property="a_pol_seq">
+			 , a_pol_seq = #a_pol_seq#
+			 </isNotEmpty>			   
+		 WHERE 1 = 1
+		   and rst_seq = 0
+		   and users_id = #users_id#
+	</update>
+	
+	<select id="selectApprovalUser" resultClass="usersForm">
+		/* Users.selectApprovalUser */
+		SELECT   DA.DEPT_SEQ
+				,DA.APPR_ID
+		        ,DA.APPR_NM
+		        ,P_DA.APPR_ID P_APPR_ID
+		        ,P_DA.APPR_NM P_APPR_NM
+		FROM DEPT_APPROVAL DA
+		JOIN C_DEPT_MGT DEPT ON DEPT.DEPT_SEQ = DA.DEPT_SEQ
+		LEFT OUTER JOIN DEPT_APPROVAL P_DA ON DEPT.P_DEPT_SEQ = P_DA.DEPT_SEQ AND   P_DA.RST_SEQ = 0
+		WHERE DA.RST_SEQ =0
+		AND DA.DEPT_SEQ = #dept_seq#
+		ORDER BY DA.CRT_DATE ASC LIMIT 1
+	</select>
+	
+	
+	<select id="selectApprovalUserInfo" resultClass="usersForm">
+		/* Users.selectApprovalUserInfo */
+		SELECT USERS_ID
+		      ,USERS_NM
+		FROM C_USER_MGT
+		WHERE RST_SEQ =0
+		AND USERS_ID = #users_id#
+	</select>
+	
+	<select id="selectApprovalUserList" resultClass="usersForm">
+		/* Users.selectApprovalUserList */
+		SELECT appr_id
+		      ,appr_nm
+		      ,dept_seq
+		FROM DEPT_APPROVAL
+		WHERE RST_SEQ =0
+		AND STATUS = 'Y'
+	</select>
+	
+	<insert id="insertHrdbApprovalUser">
+			<![CDATA[
+			/** insertDeptApproval */
+			INSERT INTO dept_approval(
+						SEQ,
+						DEPT_SEQ,
+						RST_SEQ,
+						CUD_CD,
+						APPR_ID,
+						APPR_NM,
+						STATUS,
+						FIRST_APPR_ID,
+						CRT_ID,
+						CRT_DATE,
+						MOD_ID,
+						MOD_DATE
+					) VALUES (
+						( select max(seq) + 1 from (select 0 as seq union SELECT max(seq) FROM dept_approval) as a ),
+						#dept_seq#,
+						#rst_seq#,
+						#cud_cd#,
+						#appr_id#,
+						#appr_nm#,
+						#status#,
+						#first_appr_id#,
+						#crt_id#,
+						now(),
+						#mod_id#,
+						now()	
+					)
+			]]>
+	</insert>
+	
+	
+	<update id="updateHrdbApprovalUser">
+		/* updateHrdbApprovalUser */
+		UPDATE dept_approval 
+		SET  APPR_ID = #appr_id#
+		    ,APPR_NM = #appr_nm#
+		    ,MOD_DATE =now()
+		WHERE RST_SEQ = 0
+		AND DEPT_SEQ = #dept_seq#
+	</update>
+	
+	<!-- 결재자 동기화전에 삭제 -->
+	<delete id="deleteApprovalUser">
+		/* program_id = deleteApprovalUser*/
+		delete from dept_approval
+		where 1=1
+		and crt_id ='monitor'
+	</delete>
+	<!-- update id="updateHrdbUser">
+		UPDATE c_user_mgt
+		<dynamic prepend="SET">
+			rst_seq = 0
+			<isNotEmpty prepend="," property="users_pwd">
+				users_pwd = #users_pwd#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="users_nm">
+				users_nm = #users_nm#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="use_yn">
+				use_yn = #use_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_date">
+				mod_date = #mod_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_id">
+				mod_id = #mod_id#
+			</isNotEmpty>					
+			<isGreaterThan compareValue="0" prepend="," property="dept_seq">
+				dept_seq = #dept_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="," property="auth_cd">
+				auth_cd = #auth_cd#
+			</isGreaterThan>
+		</dynamic>
+		WHERE
+			rst_seq = 0
+		<isNotEmpty property="users_id">
+			users_id = binary(#users_id#)
+		</isNotEmpty>
+	</update -->
+	
+	<select id="selectApprovalUserCnt" resultClass="Integer">
+		/* selectApprovalUserCnt */
+		SELECT count(*) cnt
+	    FROM DEPT_APPROVAL
+	    WHERE rst_seq = 0
+	    AND   dept_seq = #dept_seq#
+	    AND   appr_id LIKE CONCAT('%',#users_id#,'%') 
+	</select>
+	
+	<select id="selectPapprovalUser" resultClass="String">
+		/* selectPapprovalUser */
+		SELECT p_dept_seq 
+        FROM c_user_mgt u
+        JOIN c_dept_mgt d on d.dept_seq = u.dept_seq and d.rst_seq = 0
+        <!-- LEFT OUTER JOIN dept_approval p on p.dept_seq = d.p_dept_seq and p.rst_seq = 0 -->
+        where 1=1
+        and u.rst_seq = 0
+        and u.users_id = #users_id#
+	</select>
+
+	<select id="selectUsersLastAPOLSEQ" resultClass="usersForm">
+		/* selectUsersLastAPOLSEQ */
+		SELECT a_pol_seq,users_id 
+		FROM c_user_mgt 
+		WHERE users_id = #users_id# 
+		ORDER BY rst_seq DESC limit 1;
+	</select>
+	<select id="selectUsersDeptAPOLSEQ" resultClass="dept">
+		/* selectUsersDeptAPOLSEQ */
+		SELECT 
+			a.a_pol_seq 
+		FROM 
+			(SELECT * FROM c_dept_mgt WHERE rst_seq = '0' )as a, 
+			(SELECT dept_seq FROM c_user_mgt WHERE users_id = #users_id# AND rst_seq = '0' )as b 
+		WHERE
+			a.dept_seq = b.dept_seq;
+	</select>
+	
+	<select id="selectNormalUserList" resultClass="userTree">
+		/** selectNormalUserList */
+		SELECT u.seq
+			, u.users_id
+			, u.users_nm
+			, u.use_yn
+			, b.dept_nm
+			, b.dept_nm AS "users_dept_nm"
+			, b.dept_seq
+			, u.use_yn
+		FROM c_user_mgt u
+ 			, c_dept_mgt b
+		WHERE u.rst_seq = 0
+			AND u.cud_cd != 'D'
+			AND b.rst_seq = 0
+			AND b.cud_cd != 'D'
+			AND u.dept_seq = b.dept_seq
+			<isNotEmpty property="auth_cd" prepend="AND">
+				u.auth_cd = #auth_cd#
+			</isNotEmpty>
+			<isNotEmpty property="dept_seq" prepend="AND">
+				u.dept_seq = #dept_seq#
+			</isNotEmpty>
+			<isNotEmpty property="use_yn" prepend="AND">
+				u.use_yn = #use_yn#
+			</isNotEmpty>
+			<isNotNull property="searchValue" prepend="AND">
+				( 
+					u.users_nm LIKE CONCAT('%', #searchValue#, '%')
+					OR u.users_id LIKE CONCAT('%', #searchValue#, '%')
+				)
+			</isNotNull>
+			<isEmpty property="midadmin_auth">
+				<include refid="include_adminManagement"/>
+			</isEmpty>
+		<isEqual property="orderType" compareValue="kins">
+			ORDER BY u.order1
+		</isEqual>
+		<isEqual property="orderType" compareValue="common">
+			ORDER BY u.use_yn DESC, u.users_nm, b.dept_nm, u.users_id
+		</isEqual>
+	</select>
+	
+	<sql id="include_selectDeptUser">
+		FROM c_user_mgt u, 
+			( SELECT * FROM c_dept_mgt WHERE rst_seq = 0 AND cud_cd != 'D' ) b
+		WHERE u.rst_seq = 0
+			AND u.cud_cd != 'D'
+			AND u.dept_seq = #deptSeq#
+			AND u.users_id IN ( <isEmpty property="userCon">''</isEmpty><isNotEmpty property="userCon">$userCon$</isNotEmpty> )
+			AND u.dept_seq = b.dept_seq
+	</sql>
+	
+	<select id="selectDeptUserIdByIdStr" resultClass="java.lang.String">
+		/** Users.selectDeptUserIdByIdStr */
+		SELECT u.users_id
+		<include refid="include_selectDeptUser"/>
+		<include refid="include_adminManagement"/>
+	</select>
+	
+	<select id="selectDeptUserFormByIdStr" resultClass="usersForm">
+		/** Users.selectDeptUserFormByIdStr */
+		SELECT *
+		<include refid="include_selectDeptUser"/>
+		<include refid="include_adminManagement"/>
+	</select>
+	
+	<select id="selectAutocompleteUserIdList" resultClass="usersForm">
+		/** Users.selectAutocompleteUserIdList */
+		SELECT
+			u.users_id, u.position_nm, d.dept_nm
+		FROM
+			c_user_mgt u, c_dept_mgt d
+		WHERE
+		<isNotEmpty property="users_id">
+			u.users_id LIKE CONCAT(#users_id#,'%')
+		</isNotEmpty>
+		AND
+			u.rst_seq = 0
+		AND
+			u.use_yn = 'Y'
+		AND
+			d.rst_seq = 0
+		AND 
+			d.use_yn = 'Y'
+		AND 
+			u.dept_seq = d.dept_seq
+	</select>
+	
+	<select id="selectUserAgentAccessIp" resultClass="java.lang.String">
+		/* Users.selectUserAgentAccessIp */
+		SELECT connect_ip
+		FROM login_audit
+		WHERE users_id = #users_id#
+			AND np_cd = #np_cd#
+			AND system_cd = 'T'
+			AND login_yn = 'Y'
+			AND login_cd = 200
+		ORDER BY crt_date DESC LIMIT 1
+	</select>
+</sqlMap>

@@ -1,0 +1,2204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Data">
+
+	<sql id="select_appType_display">
+		 <isEqual prepend="," property="isAppTypeDisplayUse" compareValue="true">
+	        a.appr_users_id as appr_id, 
+	        IF(appr_users_id != '' AND appr_users_id IS NOT NULL, (SELECT appr_info.users_nm FROM c_user_mgt appr_info WHERE rst_seq = 0 AND a.appr_users_id = appr_info.users_id), '') as appr_nm,
+	        a.app_type as appr_type, a.app_time as appr_time
+	    </isEqual>
+	    <isNotEqual prepend="," property="isAppTypeDisplayUse" compareValue="true">
+	       '' as appr_id,
+	       '' as appr_nm,
+	       '' as appr_type,
+	       null as appr_time
+	    </isNotEqual>
+	</sql>
+	
+	<sql id="join_appType_display">
+		<isEqual prepend="LEFT JOIN" property="isAppTypeDisplayUse" compareValue="true">
+			(
+			    SELECT
+			        IFNULL(real_appr_id,appr_id) AS appr_users_id,
+			        np_cd,
+			        data_seq,
+			        app_type,
+			        app_time
+			    FROM
+			        approval appr
+			    WHERE
+			        appr.app_ord = 1
+			) a      
+			    ON (
+			        a.data_seq = io_data.data_seq
+					<isEqual property="networkPosition" compareValue="B">	
+						   AND a.np_cd = io_data.networkPosition
+					</isEqual>
+					<isNotEqual property="networkPosition" compareValue="B">	
+						   AND a.np_cd = #networkPosition#
+					</isNotEqual>
+			    )
+	    </isEqual>
+	</sql>
+	
+	<sql id="join_admin_management">
+		<isEqual property="isPastDeptInfo" compareValue="true">
+			<isEqual prepend="INNER JOIN" property="isAdminManageUse" compareValue="true">
+				(SELECT func_dept_nm(manage_value) as dept_nm
+				FROM admin_management
+				WHERE type = 0 AND cud_cd != 'D' AND admin_id = #admin_id#) a ON (a.dept_nm = io_data.dept_nm_path )
+			</isEqual>
+		</isEqual>
+	</sql>
+	
+	<sql id="join_admin_management_excel">
+		<isEqual property="isPastDeptInfo" compareValue="true">
+			<isEqual prepend="INNER JOIN" property="isAdminManageUse" compareValue="true">
+				(SELECT
+					func_dept_nm(manage_value) as dept_nm
+				FROM
+					admin_management
+				WHERE
+					type = 0
+				AND
+					cud_cd != 'D'
+				AND
+					admin_id = #admin_id#) a ON (a.dept_nm = i_o_data.dept_nm_path )
+			</isEqual>
+		</isEqual>
+	</sql>
+
+	<sql id="fromData">
+		<isEqual property="networkPosition" compareValue="I">
+			in_data
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_data
+		</isEqual>
+	</sql>
+	
+	<sql id="fromDataOtherSide">
+		<isEqual property="networkPosition" compareValue="O">
+			in_data
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="I">
+			out_data
+		</isEqual>
+	</sql>
+
+	<sql id="fromAttachFile">
+		<isEqual property="networkPosition" compareValue="I">
+			in_ath_file
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_ath_file
+		</isEqual>
+	</sql>
+	
+	<sql id="fromAttachFileOtherSide">
+		<isEqual property="networkPosition" compareValue="O">
+			in_ath_file
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="I">
+			out_ath_file
+		</isEqual>
+	</sql>
+
+	<sql id="isExcelDeptNm">
+		<isEqual property="isPastDeptInfo" compareValue="true">
+			if(dept_nm_path = '', func_dept_nm(m.dept_seq), dept_nm_path) as dept_nm
+		</isEqual>
+		<isEqual property="isPastDeptInfo" compareValue="false">
+			dept_nm
+		</isEqual>
+	</sql>
+	
+	<sql id="select_DeptNm">
+		<isEqual prepend="," property="isPastDeptInfo" compareValue="true">
+			if(io_data.dept_nm_past = '', m.dept_nm, io_data.dept_nm_past) as dept_nm
+		</isEqual>
+		<isEqual prepend="," property="isPastDeptInfo" compareValue="false">
+			m.dept_nm as dept_nm
+		</isEqual>
+	</sql>
+
+	<sql id="where_selectDataList">
+		<isNotEmpty property="data_seq">
+			<isGreaterThan prepend="AND" compareValue="0" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="users_id">
+			users_id = #users_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rx_yn">
+			rx_yn = #rx_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="tx_del_yn">
+			tx_del_yn = #tx_del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rx_del_yn">
+			rx_del_yn = #rx_del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="loggin_yn">
+			loggin_yn = #loggin_yn#
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_selectDataList_excel">
+		<isNotEmpty property="data_seq">
+			<isGreaterThan prepend="AND" compareValue="0" property="data_seq">
+				io_data.data_seq = #data_seq#
+			</isGreaterThan>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="users_id">
+			io_data.users_id = #users_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rx_yn">
+			io_data.rx_yn = #rx_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="status">
+			io_data.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="tx_del_yn">
+			io_data.tx_del_yn = #tx_del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rx_del_yn">
+			io_data.rx_del_yn = #rx_del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="loggin_yn">
+			io_data.loggin_yn = #loggin_yn#
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchFieldQuery">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				users_id in (
+					(
+						SELECT u.users_id 
+						FROM c_user_mgt u, c_dept_mgt d
+						WHERE d.rst_seq = 0 AND d.cud_cd != 'D' 
+							AND u.dept_seq = d.dept_seq
+							AND u.rst_seq = 0 
+							AND u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+					)
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				m.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="title">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				title LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="filterSearchValue">
+				<isNotEmpty prepend="AND" property="searchValue">
+					title LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEmpty>
+		</isEqual>
+		<isNotEmpty prepend="AND" property="dataSeqList">
+			<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+				#dataSeqList[]#
+			</iterate>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searcFieldDlp">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="users_id">
+			<isNotEmpty property="searchValue">
+				u.users_id LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				d.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+	
+	<sql id="where_searcFieldApt">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="users_id">
+			<isNotEmpty property="searchValue">
+				u.users_id LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				d.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+	
+	<sql id="where_searchFieldQuery_custom">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				<isEqual property="isPastDeptInfo" compareValue="true">
+					if(io_data.dept_nm_past = '', m.dept_nm, io_data.dept_nm_past) LIKE CONCAT('%',#searchValue#,'%')
+				</isEqual>
+				<isEqual property="isPastDeptInfo" compareValue="false">
+					m.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+				</isEqual>
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="title">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				title LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="filterSearchValue">
+				<isNotEmpty prepend="AND" property="searchValue">
+					title LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEmpty>
+		</isEqual>
+		<isNotEmpty prepend="AND" property="dataSeqList">
+			<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+				#dataSeqList[]#
+			</iterate>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchFileQuery_i_file_nm">
+		<isEqual prepend="AND" property="searchField" compareValue="file_nm">
+			<isNotEmpty property="searchValue">
+				i_ath.file_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+	
+	<sql id="where_searchFileQuery_o_file_nm">
+		<isEqual prepend="AND" property="searchField" compareValue="file_nm">
+			<isNotEmpty property="searchValue">
+				o_ath.file_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+	
+	<sql id="where_searchFileQuery_file_nm">
+		<isEqual prepend="AND" property="searchField" compareValue="file_nm">
+			<isNotEmpty property="searchValue">
+				file_ath_data.file_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<sql id="where_searchFieldQuery_excel">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				io_data.users_id in (
+					(
+						SELECT u.users_id 
+						FROM c_user_mgt u, c_dept_mgt d
+						WHERE d.rst_seq = 0 AND d.cud_cd != 'D' 
+							AND u.dept_seq = d.dept_seq
+							AND u.rst_seq = 0 
+							AND u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+					)
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				<isEqual property="isPastDeptInfo" compareValue="true">
+					if(dept_nm_past = '', m.dept_nm, dept_nm_past) LIKE CONCAT('%',#searchValue#,'%')
+				</isEqual>
+				<isEqual property="isPastDeptInfo" compareValue="false">
+					m.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+				</isEqual>				
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="file_nm">
+			<isNotEmpty property="searchValue">
+				io_data.file_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="title">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				io_data.title LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="filterSearchValue">
+				<isNotEmpty prepend="AND" property="searchValue">
+					io_data.title LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEmpty>
+		</isEqual>
+		<isNotEmpty prepend="AND" property="dataSeqList">
+			<iterate prepend="io_data.data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+				#dataSeqList[]#
+			</iterate>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchFieldQuery_excel_custom">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				i_o_data.users_id in (
+					(
+						SELECT u.users_id 
+						FROM c_user_mgt u, c_dept_mgt d
+						WHERE d.rst_seq = 0 AND d.cud_cd != 'D' 
+							AND u.dept_seq = d.dept_seq
+							AND u.rst_seq = 0 
+							AND u.users_nm LIKE CONCAT('%',#searchValue#,'%')
+					)
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="dept_nm">
+			<isNotEmpty property="searchValue">
+				<isEqual property="isPastDeptInfo" compareValue="true">
+					if(dept_nm_past = '', m.dept_nm, dept_nm_past) LIKE CONCAT('%',#searchValue#,'%')
+				</isEqual>
+				<isEqual property="isPastDeptInfo" compareValue="false">
+					m.dept_nm LIKE CONCAT('%',#searchValue#,'%')
+				</isEqual>				
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="file_nm">
+			<isNotEmpty property="searchValue">
+				i_o_data.file_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="title">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				i_o_data.title LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="filterSearchValue">
+				<isNotEmpty prepend="AND" property="searchValue">
+					i_o_data.title LIKE CONCAT('%',#searchValue#,'%')
+				</isNotEmpty>
+			</isEmpty>
+		</isEqual>
+		<isNotEmpty prepend="AND" property="dataSeqList">
+			<iterate prepend="io_data.data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+				#dataSeqList[]#
+			</iterate>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDate">
+		<isNotEmpty prepend="AND" property="startDate">
+			crt_time BETWEEN #startDate# AND #endDate#
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			AND DATE_FORMAT(crt_time,'%Y-%m-%d') <![CDATA[>=]]> #startDay#
+		</isNotEmpty>
+		<isNotEmpty property="startHour">
+			<isNotEmpty property="startMin">
+				AND DATE_FORMAT(crt_time,'%Y-%m-%d %H:%i') <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#)
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="endDay">
+			AND DATE_FORMAT(crt_time,'%Y-%m-%d') <![CDATA[<=]]> #endDay#
+		</isNotEmpty>
+		<isNotEmpty property="endHour">
+			<isNotEmpty property="endMin">
+				AND DATE_FORMAT(crt_time,'%Y-%m-%d %H:%i') <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#)
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDateOrTime_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDateOrTime_i_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND i.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND i.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND i.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND i.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND i.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND i.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDateOrTime_o_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND o.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND o.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND o.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND o.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND o.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND o.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDateOrTime_filedata_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND file_data.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND file_data.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND file_data.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND file_data.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND file_data.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND file_data.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_searchDateOrTime_excel_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND io_data.crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND io_data.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND io_data.crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND io_data.crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND io_data.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND io_data.crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_vcStatusList">
+		<isNotEmpty property="vcStatusList">
+			<iterate property="vcStatusList" open="(" close=")" prepend="AND vc_status IN" conjunction=",">
+				#vcStatusList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="searchVcStatus">
+			<isNotEqual property="searchVcStatus" compareValue="all" prepend="AND">
+				<isNotEqual property="searchVcStatus" compareValue="3">
+					vc_status = #searchVcStatus#
+				</isNotEqual>
+				<isEqual property="searchVcStatus" compareValue="3">
+					vc_status IN (3,4)
+				</isEqual>
+			</isNotEqual>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="include_adminManagement">
+		<isEqual prepend="AND" property="isAdminManageUse" compareValue="true">
+			EXISTS(SELECT 1 FROM vw_manage_user_list_d a, (SELECT @users_id:=#admin_id#) b WHERE a.users_id = u.users_id)
+		</isEqual>
+	</sql>
+
+	<sql id="include_adminManagement_as_id">
+		<isEqual property="isPastDeptInfo" compareValue="false">
+			<isEqual prepend="AND" property="isAdminManageUse" compareValue="true">
+				EXISTS(SELECT 1 FROM vw_manage_user_list_d a, (SELECT @users_id:=#admin_id#) b WHERE a.users_id = user.users_id)
+			</isEqual>
+		</isEqual>
+	</sql>
+
+	<select id="selectExistData" resultClass="dataForm">
+		SELECT
+			*
+		FROM
+			<include refid="fromData"/>
+		<dynamic prepend="WHERE">
+			<include refid="where_selectDataList"/>
+		</dynamic>
+	</select>
+
+	<select id="selectDuplicateData" resultClass="dataForm">
+		SELECT
+			*
+		FROM
+			<include refid="fromData"/>
+		WHERE
+			tx_del_yn = 'N'
+		AND
+			rx_del_yn = 'N'
+		AND
+			users_id = #users_id#
+		AND
+			title =  #title#
+		AND
+			crt_time = #crt_time#
+	</select>
+
+	<select id="selectUserLastData" resultClass="Integer">
+		SELECT
+			max(data_seq)
+		FROM
+			<include refid="fromData"/>
+		WHERE
+			users_id = #users_id#
+	</select>
+
+	<select id="selectDataList" resultClass="dataForm">
+		SELECT
+			file_data.*,
+			u.users_nm as users_nm
+		FROM
+			<include refid="fromData"/> as file_data
+			INNER JOIN 
+				(SELECT users_id as id, users_nm, dept_seq FROM c_user_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') u ON ( u.id = file_data.users_id ) 
+			INNER JOIN 
+				(SELECT dept_seq FROM c_dept_mgt WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+		WHERE
+			1=1
+			<include refid="where_selectDataList"/>
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_searchDateOrTime_custom"/>
+		ORDER BY crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectAdminDataList" resultClass="dataForm">
+		/* selectAdminDataList */
+		SELECT io_data.*, u.users_nm
+		<include refid="select_DeptNm"/>
+		<include refid="select_appType_display"/>
+		FROM	
+			(SELECT
+				file_data.*,
+				SUM(file_ath_data.file_size) as file_total_size,
+				file_ath_data.file_nm as file_nm,
+	            COUNT(*) as file_total_count,
+	            MAX(file_ath_data.user_download_time) as max_download_time
+			FROM
+				<include refid="fromData"/> as file_data ,
+				<include refid="fromAttachFile"/> as file_ath_data
+			WHERE
+				file_data.data_seq = file_ath_data.data_seq
+				<include refid="where_searchDateOrTime_filedata_custom"/>
+				<include refid="where_searchFileQuery_file_nm"/>
+			GROUP BY
+				data_seq
+			)AS io_data
+			INNER JOIN 
+				(SELECT users_id AS id, users_nm, dept_seq 
+				FROM c_user_mgt user
+				WHERE rst_seq = 0 AND cud_cd != 'D'
+				<include refid="include_adminManagement_as_id"/>
+				) u
+				ON (u.id = io_data.users_id)
+			INNER JOIN 
+			(SELECT dept_seq , dept_nm FROM c_dept_mgt WHERE rst_seq = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+			<include refid="join_admin_management" />
+			<include refid="join_appType_display"/>
+		WHERE
+			1=1
+			<include refid="where_selectDataList_excel"/>
+			<include refid="where_searchFieldQuery_custom"/>
+		GROUP BY io_data.data_seq
+		ORDER BY 
+		io_data.crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectDataListCount" resultClass="Integer">
+		/* selectDataListCount */
+		SELECT
+			COUNT(*)
+		FROM
+			(SELECT
+				file_data.*
+			FROM
+				<include refid="fromData"/> as file_data,
+				<include refid="fromAttachFile"/> as file_ath_data
+			WHERE 
+				file_data.data_seq = file_ath_data.data_seq
+				<include refid="where_searchDateOrTime_filedata_custom"/>
+				<include refid="where_searchFileQuery_file_nm"/>
+			GROUP BY
+				data_seq
+			)AS io_data
+			INNER JOIN 
+				(SELECT users_id AS id, users_nm, dept_seq 
+				FROM c_user_mgt user
+				WHERE rst_seq = 0 AND cud_cd != 'D'
+				<include refid="include_adminManagement_as_id"/>
+				) u
+				ON (u.id = io_data.users_id)
+			INNER JOIN 
+			(SELECT dept_seq , dept_nm FROM c_dept_mgt WHERE rst_seq = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+			<include refid="join_admin_management" />
+		WHERE
+			1=1
+			<include refid="where_selectDataList_excel"/>
+			<include refid="where_searchFieldQuery_custom"/>
+	</select>
+
+	<select id="selectDataTotalList" resultClass="dataForm">
+		/* selectDataTotalList */
+		SELECT 
+			io_data.*,
+	        u.users_nm as users_nm
+	        <include refid="select_DeptNm"/>
+	       	<include refid="select_appType_display"/>
+        FROM ( 
+			(SELECT
+				'I' as networkPosition,
+				i.*,
+				SUM(i_ath.file_size) as file_total_size,
+				i_ath.file_nm as file_nm,
+            	COUNT(*) as file_total_count,
+            	MAX(i_ath.user_download_time) as max_download_time
+			FROM
+				in_data as i,
+				in_ath_file as i_ath
+			WHERE
+				1=1
+				AND i.data_seq = i_ath.data_seq
+				<include refid="where_searchFileQuery_i_file_nm"/>
+				<include refid="where_searchDateOrTime_i_custom"/>
+			GROUP BY data_seq
+			)
+			UNION ALL
+			( SELECT
+				'O' as networkPosition,
+				o.*,
+				SUM(o_ath.file_size) as file_total_size,
+				o_ath.file_nm as file_nm,
+            	COUNT(*) as file_total_count,
+            	MAX(o_ath.user_download_time) as max_download_time
+			FROM
+				out_data as  o,
+				out_ath_file as o_ath
+			WHERE
+				1=1
+				AND o.data_seq = o_ath.data_seq 
+				<include refid="where_searchFileQuery_o_file_nm"/>
+				<include refid="where_searchDateOrTime_o_custom"/>
+			GROUP BY data_seq
+			)
+		) as io_data
+		INNER JOIN 
+			(SELECT users_id AS id, users_nm, dept_seq 
+			FROM c_user_mgt user
+			WHERE rst_seq = 0 AND cud_cd != 'D'
+			<include refid="include_adminManagement_as_id"/>
+			) u 
+			ON (u.id = io_data.users_id)
+		INNER JOIN 
+			(SELECT dept_seq , dept_nm FROM c_dept_mgt WHERE rst_seq = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+		<include refid="join_admin_management" />
+		<include refid="join_appType_display"/>
+		WHERE 1=1
+			<include refid="where_selectDataList_excel"/>
+			<include refid="where_searchFieldQuery_custom"/>
+		ORDER BY io_data.crt_time DESC
+		limit #offSet#, $pageListSize$
+	</select>
+	
+	<select id="selectDataExcelList" resultClass="dataForm">
+		/* selectDataExcelList */
+		SELECT
+			io_data.*,
+			u.users_nm as users_nm,
+			#networkPosition# as networkPosition,
+			<include refid="isExcelDeptNm"/>,
+			IFNULL(appr_users_id, 'N') AS appr_id,
+			IF(appr_users_id != '' AND appr_users_id IS NOT NULL, (SELECT appr_info.users_nm FROM c_user_mgt appr_info WHERE rst_seq = 0 AND appr.appr_users_id = appr_info.users_id), '') AS appr_nm,
+			app_type AS appr_type,
+			app_time AS appr_time
+		FROM
+			(SELECT
+				file_data.* ,
+				file_ath_data.file_nm,
+				file_ath_data.file_size,
+				file_ath_data.encrypt_yn,
+				file_ath_data.user_download_time
+			FROM
+				<include refid="fromData"/> as file_data ,
+				<include refid="fromAttachFile"/> as file_ath_data
+			WHERE
+				file_data.data_seq = file_ath_data.data_seq
+				<include refid="where_searchDateOrTime_filedata_custom"/>
+			)AS io_data
+			INNER JOIN 
+				(SELECT users_id, users_nm, dept_seq 
+					FROM c_user_mgt user
+					WHERE rst_seq = 0 AND cud_cd != 'D'
+					<include refid="include_adminManagement_as_id"/>
+				) u ON (u.users_id = io_data.users_id) 
+			INNER JOIN 
+				(SELECT dept_seq, dept_nm FROM c_dept_mgt WHERE rst_seq = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+			<include refid="join_admin_management" />
+			LEFT JOIN
+				(SELECT 
+					IFNULL(real_appr_id, appr_id) AS appr_users_id, np_cd, data_seq, app_type, app_time
+				FROM 
+					approval 
+				WHERE 
+					app_ord = 1
+				) appr ON (appr.np_cd = #networkPosition# AND appr.data_seq = io_data.data_seq)
+		WHERE
+			1=1
+			<include refid="where_selectDataList_excel"/>
+			<include refid="where_searchFieldQuery_excel"/>
+		ORDER BY crt_time DESC
+	</select>
+	
+	<select id="selectDataTotalExcelList" resultClass="dataForm">
+		/* selectDataTotalExcelList */
+		SELECT 
+			i_o_data.*,
+			u.users_nm as users_nm,
+			<include refid="isExcelDeptNm"/>,
+			IFNULL(appr_users_id, 'N') AS appr_id,
+			IF(appr_users_id != '' AND appr_users_id IS NOT NULL, (SELECT appr_info.users_nm FROM c_user_mgt appr_info WHERE rst_seq = 0 AND appr.appr_users_id = appr_info.users_id), '') AS appr_nm,
+			app_type AS appr_type,
+			app_time AS appr_time
+        FROM ( 
+			(SELECT
+				'I' as networkPosition,
+				io_data.title,
+            	io_data.status,
+            	io_data.dept_nm_past,
+            	io_data.dept_nm_path,
+            	i_a.*
+			FROM
+				in_data as io_data , in_ath_file as i_a
+			WHERE
+				1=1
+				AND io_data.data_seq = i_a.data_seq
+				<include refid="where_selectDataList_excel"/>
+				<include refid="where_searchDateOrTime_excel_custom"/>
+			)
+			UNION ALL
+			( SELECT
+				'O' as networkPosition,
+				io_data.title,
+            	io_data.status,
+            	io_data.dept_nm_past,
+            	io_data.dept_nm_path,
+            	o_a.*  
+			FROM
+				out_data as  io_data , out_ath_file as o_a 
+			WHERE
+				1=1
+				AND io_data.data_seq = o_a.data_seq
+				<include refid="where_selectDataList_excel"/>
+				<include refid="where_searchDateOrTime_excel_custom"/>
+			)
+		) as i_o_data
+		INNER JOIN 
+			(SELECT users_id, users_nm, dept_seq 
+			FROM c_user_mgt user
+			WHERE rst_seq = 0 AND cud_cd != 'D'
+			<include refid="include_adminManagement_as_id"/>
+			) u 
+			ON (u.users_id = i_o_data.users_id)
+		INNER JOIN 
+			(SELECT dept_seq, dept_nm FROM c_dept_mgt WHERE rst_seq = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+		<include refid="join_admin_management_excel" />
+		LEFT JOIN
+			(SELECT 
+				IFNULL(real_appr_id, appr_id) AS appr_users_id, np_cd, data_seq, app_type, app_time
+			FROM 
+				approval 
+			WHERE 
+				app_ord = 1
+			) appr ON (appr.np_cd = i_o_data.networkPosition AND appr.data_seq = i_o_data.data_seq)
+		WHERE 1=1
+			<include refid="where_searchFieldQuery_excel_custom" />
+		ORDER BY i_o_data.crt_time DESC
+	</select>
+
+	<select id="selectDataTotalListCount" resultClass="Integer">
+		/* selectDataTotalListCount */
+		
+		SELECT 
+			COUNT(*)
+		FROM
+		(
+			(SELECT
+				i.*
+			FROM
+				in_data as i,
+				in_ath_file as i_ath
+			WHERE
+				1=1
+				AND i.data_seq = i_ath.data_seq
+				<include refid="where_searchFileQuery_i_file_nm"/>
+				<include refid="where_searchDateOrTime_i_custom"/>
+			GROUP BY
+				data_seq	
+			)
+		UNION ALL
+			(SELECT
+				o.*
+			FROM
+				out_data as o,
+				out_ath_file as o_ath
+			WHERE
+				1=1
+				AND o.data_seq = o_ath.data_seq
+				<include refid="where_searchFileQuery_o_file_nm"/>
+				<include refid="where_searchDateOrTime_o_custom"/>
+			GROUP BY
+				data_seq
+		))AS io_data
+		INNER JOIN 
+			(SELECT users_id as id, users_nm, dept_seq 
+			FROM c_user_mgt user
+			WHERE RST_SEQ = 0 AND cud_cd != 'D'
+			<include refid="include_adminManagement_as_id"/>
+			) u ON (u.id = io_data.users_id)
+		INNER JOIN 
+			(SELECT dept_seq, dept_nm
+			FROM c_dept_mgt 
+			WHERE RST_SEQ = 0 AND cud_cd != 'D') m ON ( m.dept_seq = u.dept_seq )
+		<include refid="join_admin_management" />
+		WHERE 
+			1=1
+			<include refid="where_selectDataList_excel"/>
+			<include refid="where_searchFieldQuery_custom"/>
+	</select>
+
+	<select id="selectVcFileTotalList" resultClass="attachFileForm">
+		/* Data.selectVcFileTotalList */
+		SELECT b.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT a.*, 'I' as np_cd
+				FROM 
+					in_ath_file a
+				WHERE  
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+					<isEqual prepend="AND" property="apt_use_yn" compareValue="Y">
+						apt_status = 0
+					</isEqual>
+			) 
+			UNION ALL
+			(
+				SELECT a.*, 'O' as np_cd
+				FROM 
+					out_ath_file a
+				WHERE 
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+					<isEqual prepend="AND" property="apt_use_yn" compareValue="Y">
+						apt_status = 0
+					</isEqual>
+			)
+		) b, c_user_mgt u, c_dept_mgt d
+		WHERE b.crtr_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isNotEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						b.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isNotEqual>
+				<isEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						u.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		ORDER BY b.crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectVcFileTotalExcelList" resultClass="attachFileForm">
+		/* Data.selectVcFileTotalExcelList */
+		SELECT *
+		FROM (
+			(
+				SELECT a.*, 'I' as np_cd
+				FROM 
+					in_ath_file a
+				WHERE  
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT a.*, 'O' as np_cd
+				FROM 
+					out_ath_file a
+				WHERE 
+					1=1
+					<include refid="where_vcStatusList"/>
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			)
+		) b, c_user_mgt u, c_dept_mgt d
+		WHERE b.crtr_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isNotEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						b.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isNotEqual>
+				<isEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						u.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		ORDER BY b.crt_time DESC
+	</select>
+
+	<select id="selectVcFileList" resultClass="attachFileForm">
+		SELECT
+			a.*,
+			u.users_nm
+		FROM 
+		<isEqual property="networkPosition" compareValue="I">
+			in_ath_file a, c_user_mgt u
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_ath_file a, c_user_mgt u
+		</isEqual>
+		WHERE a.crtr_id = u.users_id
+		  and u.rst_seq = 0
+		  and u.rst_seq = 0
+			<include refid="where_vcStatusList"/>
+			<isNotEmpty property="searchField">
+				<isNotEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						b.$searchField$ = #filterSearchValue#
+					</isNotEmpty>
+				</isNotEqual>
+				<isEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						u.$searchField$ = #filterSearchValue#
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+			<include refid="where_searchDateOrTime_custom"/>
+		ORDER BY crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectVcFileListCount" resultClass="Integer">
+		SELECT
+			COUNT(data_seq)
+		FROM 
+		<isEqual property="networkPosition" compareValue="I">
+			in_ath_file a, c_user_mgt u
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_ath_file a, c_user_mgt u
+		</isEqual>
+		WHERE a.crtr_id = u.users_id
+		  and u.rst_seq = 0
+		<include refid="where_vcStatusList"/>
+		<isNotEmpty property="searchField">
+				<isNotEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						b.$searchField$ = #filterSearchValue#
+					</isNotEmpty>
+				</isNotEqual>
+				<isEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						u.$searchField$ = #filterSearchValue#
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		<include refid="where_searchDateOrTime_custom"/>
+	</select>
+	
+	<select id="selectVcFileListTotalCount" resultClass="Integer">
+		/* Data.selectVcFileListTotalCount */
+		SELECT COUNT(c.data_seq)
+		FROM  ( 
+			SELECT b.* , u.users_nm 
+			FROM (
+				(
+					SELECT a.*
+					FROM 
+						in_ath_file a
+					WHERE  
+						1=1
+						<include refid="where_vcStatusList"/>
+						<include refid="where_searchDateOrTime_custom"/>
+						<isEqual prepend="AND" property="apt_use_yn" compareValue="Y">
+							apt_status = 0
+						</isEqual>
+				) 
+				UNION ALL
+				(
+					SELECT a.*
+					FROM 
+						out_ath_file a
+					WHERE 
+						1=1
+						<include refid="where_vcStatusList"/>
+						<include refid="where_searchDateOrTime_custom"/>
+						<isEqual prepend="AND" property="apt_use_yn" compareValue="Y">
+							apt_status = 0
+						</isEqual>
+				)
+			) b, c_user_mgt u 
+			WHERE b.crtr_id = u.users_id AND u.rst_seq = 0
+			<include refid="include_adminManagement"/>
+				<isNotEmpty property="searchField">
+				<isNotEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						b.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isNotEqual>
+				<isEqual property="searchField" compareValue="users_nm">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						u.$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		) AS c
+		WHERE
+			1=1 
+	</select>
+
+	<select id="selectDlpFileTotalList" resultClass="attachFileForm">
+		/* selectDlpFileTotalList */
+		SELECT b.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT a.*, 'I' as np_cd
+				FROM 
+					in_ath_file a
+				WHERE  
+					1=1
+					AND dlp_status = #dlp_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT a.*, 'O' as np_cd
+				FROM 
+					out_ath_file a
+				WHERE 
+					1=1
+					AND dlp_status = #dlp_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			)
+		) b, c_user_mgt u, c_dept_mgt d
+		WHERE b.crtr_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<include refid="where_searcFieldDlp"/>
+		ORDER BY b.crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectAptFileTotalList" resultClass="attachFileForm">
+		/* selectAptFileTotalList */
+		SELECT b.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT a.*, 'I' as np_cd
+				FROM 
+					in_ath_file a
+				WHERE  
+					1=1
+					AND apt_status = #apt_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT a.*, 'O' as np_cd
+				FROM 
+					out_ath_file a
+				WHERE 
+					1=1
+					AND apt_status = #apt_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			)
+		) b, c_user_mgt u, c_dept_mgt d
+		WHERE b.crtr_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<include refid="where_searcFieldApt"/>
+		ORDER BY b.crt_time DESC
+		limit $offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectDlpFileTotalExcelList" resultClass="attachFileForm">
+		/* selectDlpFileTotalExcelList */
+		SELECT b.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT a.*, 'I' as np_cd
+				FROM 
+					in_ath_file a
+				WHERE  
+					1=1
+					AND dlp_status = #dlp_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT a.*, 'O' as np_cd
+				FROM 
+					out_ath_file a
+				WHERE 
+					1=1
+					AND dlp_status = #dlp_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			)
+		) b, c_user_mgt u, c_dept_mgt d
+		WHERE b.crtr_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<include refid="where_searcFieldDlp"/>
+		ORDER BY b.crt_time DESC
+	</select>
+	
+	<select id="selectAptFileTotalExcelList" resultClass="attachFileForm">
+		/* selectAptFileTotalExcelList */
+		SELECT b.*, u.users_nm, d.dept_seq , d.dept_nm
+		FROM (
+			(
+				SELECT a.*, 'I' as np_cd
+				FROM 
+					in_ath_file a
+				WHERE  
+					1=1
+					AND apt_status = #apt_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			) 
+			UNION ALL
+			(
+				SELECT a.*, 'O' as np_cd
+				FROM 
+					out_ath_file a
+				WHERE 
+					1=1
+					AND apt_status = #apt_status#
+					<include refid="where_searchDateOrTime_custom"/>
+				ORDER BY crt_time DESC
+			)
+		) b, c_user_mgt u, c_dept_mgt d
+		WHERE b.crtr_id = u.users_id
+			AND u.rst_seq = 0 and d.rst_seq = 0 and u.dept_seq = d.dept_seq
+			<include refid="include_adminManagement"/>
+			<include refid="where_searcFieldApt"/>
+		ORDER BY b.crt_time DESC
+	</select>
+
+	<select id="selectDlpFileListTotalCount" resultClass="Integer">
+		/* selectDlpFileListTotalCount */
+		SELECT COUNT(c.data_seq)
+		FROM  ( 
+			SELECT b.* , u.users_nm 
+			FROM (
+				(
+					SELECT a.*
+					FROM 
+						in_ath_file a
+					WHERE  
+						1=1
+						AND dlp_status = #dlp_status#
+						<include refid="where_searchDateOrTime_custom"/>
+				) 
+				UNION ALL
+				(
+					SELECT a.*
+					FROM 
+						out_ath_file a
+					WHERE 
+						1=1
+						AND dlp_status = #dlp_status#
+						<include refid="where_searchDateOrTime_custom"/>
+				)
+			) b, c_user_mgt u , c_dept_mgt d
+			WHERE b.crtr_id = u.users_id AND u.rst_seq = 0 AND u.dept_seq = d.dept_seq AND d.rst_seq = 0 
+			<include refid="include_adminManagement"/>
+			<include refid="where_searcFieldDlp"/>
+		) AS c
+		WHERE
+			1=1 
+	</select>
+	
+	<select id="selectAptFileListTotalCount" resultClass="Integer">
+		/* selectAptFileListTotalCount */
+		SELECT COUNT(c.data_seq)
+		FROM  ( 
+			SELECT b.* , u.users_nm 
+			FROM (
+				(
+					SELECT a.*
+					FROM 
+						in_ath_file a
+					WHERE  
+						1=1
+						AND apt_status = #apt_status#
+						<include refid="where_searchDateOrTime_custom"/>
+				) 
+				UNION ALL
+				(
+					SELECT a.*
+					FROM 
+						out_ath_file a
+					WHERE 
+						1=1
+						AND apt_status = #apt_status#
+						<include refid="where_searchDateOrTime_custom"/>
+				)
+			) b, c_user_mgt u , c_dept_mgt d
+			WHERE b.crtr_id = u.users_id AND u.rst_seq = 0 AND u.dept_seq = d.dept_seq AND d.rst_seq = 0 
+			<include refid="include_adminManagement"/>
+			<include refid="where_searcFieldApt"/>
+		) AS c
+		WHERE
+			1=1 
+	</select>
+
+	<select id="selectMaxData" resultClass="data">
+		SELECT
+			MAX(data_seq + 1) AS data_seq
+		FROM
+			<include refid="fromData"/>
+	</select>
+
+	<select id="selectExistAttachFile" resultClass="attachFileForm">
+		SELECT
+			*
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+		AND
+			data_seq = #data_seq#
+		AND
+			ath_ord = #ath_ord#
+	</select>
+
+	<select id="selectAttachFileList" resultClass="attachFileForm">
+		/* Data.selectAttachFileList */
+		SELECT
+			*
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="ath_ord">
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="dataSeqList">
+				<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="attachOrderList">
+				<iterate prepend="ath_ord in" property="attachOrderList" open="(" close=")" conjunction=",">
+					#attachOrderList[]#
+				</iterate>
+			</isNotEmpty>
+			<include refid="where_vcStatusList"/>
+			<isEqual prepend="AND" property="apt_use_yn" compareValue="Y">
+			 	  apt_status = 0
+			</isEqual>
+		ORDER BY
+			ath_ord ASC
+	</select>
+
+	<select id="selectAttachFileTotalList" resultClass="attachFileForm">
+			SELECT
+				*
+			FROM
+			in_ath_file 
+			WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="ath_ord">
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="dataSeqList">
+				<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="attachOrderList">
+				<iterate prepend="ath_ord in" property="attachOrderList" open="(" close=")" conjunction=",">
+					#attachOrderList[]#
+				</iterate>
+			</isNotEmpty>
+			UNION ALL
+			SELECT
+			*
+			FROM
+			out_ath_file 
+			WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan compareValue="0" prepend="AND" property="ath_ord">
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="dataSeqList">
+				<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="attachOrderList">
+				<iterate prepend="ath_ord in" property="attachOrderList" open="(" close=")" conjunction=",">
+					#attachOrderList[]#
+				</iterate>
+			</isNotEmpty>
+			ORDER BY
+			ath_ord ASC
+	</select>
+
+	<select id="selectAttachFileDataSeq" resultClass="Integer">
+		SELECT
+			DISTINCT(data_seq)
+		FROM 
+			<include refid="fromAttachFile"/>
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="," property="file_nm">
+				file_nm LIKE CONCAT('%',#file_nm#,'%')
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="selectAttachFileDataTotalSeq" resultClass="Integer">
+		SELECT
+			DISTINCT(data_seq)
+		FROM
+			in_ath_file
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="," property="file_nm">
+				file_nm = #file_nm#
+			</isNotEmpty>
+		</dynamic>
+		UNION ALL
+		SELECT
+			DISTINCT(data_seq)
+		FROM
+			out_ath_file
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="," property="file_nm">
+				file_nm = #file_nm#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getNowTimeStamp" resultClass="java.sql.Timestamp">
+		select now() from dual
+	</select>
+
+	<insert id="insertData">
+		INSERT INTO
+			<include refid="fromData"/>
+		(
+			users_id,
+			title,
+			crt_time,
+			compress_yn
+			<isNotEmpty prepend="," property="comment">
+				comment
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="status">
+				status
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="enc_yn">
+				enc_yn
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="enc_key">
+				enc_key
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="send_app_type">
+				send_app_type
+			</isNotEmpty> 
+			<isNotEmpty prepend="," property="connect_ip">
+				connect_ip
+			</isNotEmpty>
+			<isEqual prepend="," property="isPastDeptInfo" compareValue="true">
+				dept_nm_past, dept_nm_path
+			</isEqual>		
+		) VALUES (
+			#users_id#,
+			#title#,
+			#crt_time#,
+			#compress_yn#
+			<isNotEmpty prepend="," property="comment">
+				#comment#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="status">
+				#status#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="enc_yn">
+				#enc_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="enc_key">
+				#enc_key#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="send_app_type">
+				#send_app_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="connect_ip">
+				#connect_ip#
+			</isNotEmpty>
+			<isEqual prepend="," property="isPastDeptInfo" compareValue="true">
+				#dept_nm#, func_dept_nm(#dept_seq#)
+			</isEqual>
+		)
+
+	<selectKey resultClass="Integer" keyProperty="data_seq">
+			SELECT MAX(data_seq) from <include refid="fromData"/>
+	</selectKey>
+	</insert>
+
+	<insert id="insertAttachFile">
+		INSERT INTO
+			<include refid="fromAttachFile"/>
+		(
+			data_seq,
+			ath_ord,
+			file_nm,
+			file_ext,
+			file_size,
+			file_path,
+			crtr_id,
+			crt_time,
+			vc_status
+			<isNotEmpty  prepend="," property="virus_name">
+				virus_name
+			</isNotEmpty>
+			<isNotEmpty  prepend="," property="users_id">
+				users_id
+			</isNotEmpty>
+			<isNotEmpty  prepend="," property="connect_ip">
+				connect_ip
+			</isNotEmpty>
+		) VALUES (
+			#data_seq#,
+			#ath_ord#,
+			#file_nm#,
+			#file_ext#,
+			#file_size#,
+			#file_path#,
+			#crtr_id#,
+			#crt_time#,
+			#vc_status#
+			<isNotEmpty  prepend="," property="virus_name">
+				#virus_name#
+			</isNotEmpty>
+			<isNotEmpty  prepend="," property="users_id">
+				#users_id#
+			</isNotEmpty>
+			<isNotEmpty  prepend="," property="connect_ip">
+				#connect_ip#
+			</isNotEmpty>
+		)
+	</insert>
+
+	<update id="updateData">
+		UPDATE 
+			<include refid="fromData"/>
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="rx_yn">
+				rx_yn = #rx_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="rx_time">
+				rx_time = now()
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="status">
+				status = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="tx_del_yn">
+				tx_del_yn = #tx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="rx_del_yn">
+				rx_del_yn = #rx_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="zip_yn">
+				zip_yn = #zip_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="read_yn">
+				read_yn = #read_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="logging_path">
+				logging_path = #logging_path#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="loggin_yn">
+				loggin_yn = #loggin_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="tx_del_time">
+				tx_del_time = #tx_del_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="rx_del_time">
+				rx_del_time = #rx_del_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="enc_yn">
+				enc_yn = #enc_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="enc_key">
+				enc_key = #enc_key#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="dlp_yn">
+				dlp_yn = #dlp_yn#
+			</isNotEmpty> 
+			<isEqual prepend="," property="status" compareValue="SS">
+				statics_time = now()
+			</isEqual>
+			<isEqual prepend="," property="status" compareValue="F">
+				statics_time = now()
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan prepend="AND" property="data_seq" compareValue="0">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isNotEmpty prepend="AND" property="dataSeqList">
+			<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+				#dataSeqList[]#
+			</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</update>
+
+	<update id="deleteDownloadFile">
+		UPDATE
+			<include refid="fromAttachFile"/>
+		SET
+			del_yn = "Y",
+			del_time = NOW(),
+			mod_time = NOW()
+		WHERE
+			data_seq = #data_seq#
+		AND
+			ath_ord = #ath_ord#
+	</update>
+
+	<update id="updateAttachFile">
+		UPDATE 
+			<include refid="fromAttachFile"/>
+		<dynamic prepend="SET">
+			<isGreaterThan prepend="," property="vc_status" compareValue="-1">
+				vc_status = #vc_status# 
+			</isGreaterThan>
+			<isNotEmpty prepend="," property="send_result">
+				send_result = #send_result#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="file_path">
+				file_path = #file_path#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="in_del_yn">
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="out_del_yn">
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="in_del_time">
+				in_del_time = #in_del_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="out_del_time">
+				out_del_time = #out_del_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mod_time">
+				mod_time = NOW()
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="modr_id">
+				modr_id = #modr_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="virus_name">
+				virus_name = #virus_name#
+			</isNotEmpty>
+			<isGreaterThan prepend="," compareValue="0" property="file_size">
+				file_size = #file_size#
+			</isGreaterThan>
+			<isNotEmpty prepend="," property="file_block_detail_msg">
+				file_block_detail_msg = #file_block_detail_msg#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="block_step">
+				block_step = #block_step#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="dlp_status">
+				dlp_status = #dlp_status#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="apt_status">
+				apt_status = #apt_status#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="apt_send_yn">
+				apt_send_yn = #apt_send_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="dlp_detail_msg">
+				dlp_detail_msg = #dlp_detail_msg#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="encrypt_yn">
+				encrypt_yn = #encrypt_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="user_download_time">
+				user_download_time = #user_download_time#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="app_download_time">
+				app_download_time = #app_download_time#
+			</isNotEmpty>
+			<isGreaterThan prepend="," property="vc_status" compareValue="-1">
+				statics_time = now()
+			</isGreaterThan>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan prepend="AND" compareValue="0" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan prepend="AND" property="ath_ord" compareValue="0">
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+		</dynamic>
+	</update>
+
+	<update id="deleteAttachFile">
+		UPDATE
+			<include refid="fromAttachFile"/>
+		SET
+			del_yn = "Y",
+			del_time = NOW(),
+			mod_time = NOW()
+		<iterate prepend="WHERE data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</update>
+	
+	<!-- 데이터 다운로드 뷰부분에서 취약점 쿼리조회전에 체크 -->
+	<select id="selectCheckDataCnt" resultClass="Integer">
+		/* selectCheckDataCnt */
+		SELECT count(*)
+		FROM  <isEqual property="networkPosition" compareValue="I">
+				approval
+			  </isEqual>
+			  <isEqual property="networkPosition" compareValue="O">
+			    out_data
+			  </isEqual>
+		WHERE 1=1
+		AND data_seq = #data_seq#
+		<isEqual property="networkPosition" compareValue="I">
+		AND (users_id = #users_id# or appr_id = #users_id#)
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+		AND users_id = #users_id#
+		</isEqual>
+	</select>
+	
+	<select id="selectAthFileCnt" resultClass="Integer">
+		/* selectAthFileCnt */
+		SELECT count(*)
+		FROM  <isEqual property="networkPosition" compareValue="I">
+				in_ath_file
+			  </isEqual>
+			  <isEqual property="networkPosition" compareValue="O">
+			    out_ath_file
+			  </isEqual>
+		WHERE 1=1
+		AND data_seq = #data_seq#
+	</select>
+	
+	<update id="increaseDownloadCount">
+		UPDATE
+			<include refid="fromAttachFile"/>
+		SET
+			download_cnt = download_cnt+1
+		WHERE data_seq = #data_seq#
+		<isNotEmpty property="attachOrderList">
+			<iterate prepend="AND ath_ord in" property="attachOrderList" open="(" close=")" conjunction=",">
+				#attachOrderList[]#
+			</iterate>
+		</isNotEmpty>
+		<isEmpty property="attachOrderList">
+			<isNotEqual property="ath_ord" compareValue="0">
+				AND ath_ord = #ath_ord#
+			</isNotEqual>
+		</isEmpty>
+	</update>
+	
+	<update id="rollbackDownloadCount">
+		UPDATE
+			<include refid="fromAttachFile"/>
+		SET
+			download_cnt = download_cnt-1
+		WHERE data_seq = #data_seq#
+		<isNotEmpty property="attachOrderList">
+			<iterate prepend="AND ath_ord in" property="attachOrderList" open="(" close=")" conjunction=",">
+				#attachOrderList[]#
+			</iterate>
+		</isNotEmpty>
+		<isEmpty property="attachOrderList">
+			<isNotEqual property="ath_ord" compareValue="0">
+				AND ath_ord = #ath_ord#
+			</isNotEqual>
+		</isEmpty>
+	</update>
+	
+	<select id="selectUserUsedRepositorySize" resultClass="java.lang.Long">
+		/* selectUserUsedRepositorySize */
+		SELECT (
+			SELECT IFNULL(SUM(file_size), 0)/1024/1024 /* MB */
+			FROM <include refid="fromData" /> d,
+				<include refid="fromAttachFile"/> a
+			WHERE d.data_seq = a.data_seq
+				AND d.users_id = #users_id#
+				AND a.in_del_yn = 'N'
+				AND d.tx_del_yn = 'N'
+		) + 
+		(
+			SELECT IFNULL(SUM(file_size), 0)/1024/1024 /* MB */
+			FROM <include refid="fromDataOtherSide" /> d,
+				<include refid="fromAttachFileOtherSide"/> a
+			WHERE d.data_seq = a.data_seq
+				AND d.users_id = #users_id#
+				AND a.in_del_yn = 'N'
+				AND d.rx_del_yn = 'N'
+				AND d.rx_yn = 'Y'
+		) AS used
+		FROM dual
+	</select>
+	<update id="resetDownloadCnt" parameterClass="attachFileForm">
+		UPDATE <include refid="fromAttachFile"/> 
+		SET download_cnt=0 
+		WHERE 
+			data_seq=#data_seq# 
+			<isNotEqual property="ath_ord" compareValue="0" prepend="AND">
+				ath_ord=#ath_ord#
+			</isNotEqual>
+	</update>
+	
+	<update id="updateApprovalWait">
+		/* updateApprovalWait */
+		UPDATE <include refid="fromData" />
+		SET status = #status#
+		WHERE data_seq = #data_seq#
+	</update>
+	
+	<select id="selectAttachFileMetaList" resultClass="kr.co.s3i.sr1.data.file.model.AttachFileListMeta">
+		/* selectAttachFileMetaList */
+		SELECT
+			data_seq,
+			count(IF(vc_status=0,1,NULL)) AS scanfail_cnt ,
+			count(IF(vc_status=1,1,NULL)) AS clean_cnt ,
+			count(IF(vc_status=3 OR vc_status=4,1,NULL)) infected_cnt ,
+			count(IF(vc_status=10,1,NULL)) AS password_cnt ,
+			count(IF(vc_status=11,1,NULL)) AS forgery_cnt ,
+			count(IF(vc_status=12,1,NULL)) AS filtering_cnt ,
+			count(IF(vc_status=13,1,NULL)) AS approval_cnt ,
+			count(IF(vc_status=14,1,NULL)) AS compress_cnt ,
+			count(IF(dlp_status=1,1,NULL)) AS dlp_cnt ,
+			count(IF(apt_status=1 OR (apt_status > 1 AND apt_send_yn = 'N'),1,NULL)) AS apt_cnt ,
+			SUM(file_size) size,
+			count(data_seq) as total_cnt
+		FROM <include refid="fromAttachFile" />
+		<isNotEmpty property="datas">
+			<iterate prepend="WHERE data_seq IN" property="datas" open="(" close=")" conjunction=",">
+				#datas[].data_seq#
+			</iterate>
+		</isNotEmpty>
+		GROUP BY data_seq
+	</select>
+
+	<select id="selectRestDataList" resultClass="kr.co.s3i.sr1.data.file.model.Data">
+		SELECT main.*,
+			u.users_nm, d.dept_nm
+		FROM (
+			SELECT
+				file_data.data_seq,
+				file_data.status,
+				file_data.send_app_type,
+				file_data.title,
+				file_data.crt_time,
+				file_data.rx_time,
+				file_data.comment,
+				file_data.users_id,
+				file_data.enc_key,
+				file_data.compress_yn,
+				file_data.dlp_yn
+			FROM
+				<include refid="fromData"/> as file_data
+			WHERE
+				1=1
+				<include refid="where_selectDataList"/>
+				<include refid="where_searchFieldQuery"/>
+				<include refid="where_searchDateOrTime_custom"/>
+			<isNotNull property="sortBy">
+				<isNotNull property="descending">
+				ORDER BY $sortBy$ $descending$
+				</isNotNull>
+			</isNotNull>
+			<isGreaterThan compareValue="0" property="currentPage">
+				limit $offSet$, $pageListSize$
+			</isGreaterThan>
+		) main
+		LEFT OUTER JOIN c_user_mgt u ON ( u.users_id = main.users_id and u.use_yn = 'Y' and u.rst_seq = 0 and u.cud_cd != 'D' )
+		LEFT OUTER JOIN c_dept_mgt d ON ( u.dept_seq = d.dept_seq and d.use_yn = 'Y' and d.rst_seq = 0 and d.cud_cd != 'D' )
+	</select>
+	<select id="selectRestAttachFileList" resultClass="kr.co.s3i.sr1.data.file.model.AttachFile">
+		SELECT
+			data_seq,
+			ath_ord,
+			vc_status,
+			send_result,
+			file_size,
+			file_nm,
+			in_del_yn,
+			out_del_yn,
+			file_block_detail_msg,
+			block_step,
+			download_cnt,
+			file_block_detail_msg as block_msg,
+			dlp_status,
+            apt_status,
+            apt_send_yn
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE
+			1=1
+			<isGreaterThan compareValue="0" prepend="AND" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+	</select>
+	 
+	<insert id="insertReceiveData" parameterClass="kr.co.s3i.sr1.data.file.model.ReceiveData">
+	/* data.insertReceiveData */
+	INSERT INTO receive_data(data_seq, io_cd, users_id, downloadable, result_code, result_msg, mod_id)
+	VALUES (
+		#data_seq#, 
+		#io_cd#,
+		#users_id#,
+		'Y',
+		#result_code#,
+		#result_msg#,
+		#mod_id#
+	)
+	</insert>
+	
+	<delete id="deleteReceiveData">
+	/* data.deleteReceiveData */
+	DELETE FROM receive_data
+	WHERE data_seq = #data_seq# AND io_cd = #io_cd#
+	</delete>
+	
+	<delete id="deleteReceiveDataList">
+	/* data.deleteReceiveDataList */
+	DELETE FROM receive_data
+	WHERE io_cd = #io_cd#
+		<iterate prepend="AND data_seq IN" property="dataSeqList" open="(" close=")" conjunction=",">
+			#dataSeqList[]#
+		</iterate>
+	</delete>
+	
+	<select id="selectDataReceive" resultClass="kr.co.s3i.sr1.data.file.model.ReceiveData">
+	/* Data.selectDataReceive */
+	SELECT r.data_seq, r.users_id, d.title, d.enc_yn, d.enc_key, d.crt_time, r.io_cd
+	FROM receive_data r, <include refid="fromData"/> d
+	WHERE 1=1
+		AND r.data_seq = d.data_seq
+		AND r.result_code &lt; 0
+		AND d.rx_del_yn = 'N'
+		AND d.rx_yn = 'Y'
+		AND d.status = 'SS'
+		<isNotEmpty property="downloadable" prepend="AND">
+			r.downloadable = #downloadable#
+		</isNotEmpty>
+		<isNotEmpty property="users_id" prepend="AND">
+			r.users_id = #users_id#
+		</isNotEmpty>
+		<isNotEmpty property="networkPosition" prepend="AND">
+			r.io_cd = #networkPosition#
+		</isNotEmpty>
+		<isNotEmpty property="data_seq" prepend="AND">
+			r.data_seq = #data_seq#
+		</isNotEmpty>
+	ORDER BY r.crt_time ASC
+	<isNotEmpty property="limit">
+		LIMIT #limit#
+	</isNotEmpty>
+	</select>
+	
+	<select id="selectDownloadableDataAttachFile" resultClass="kr.co.s3i.sr1.data.file.model.ReceiveAttachFile">
+	/*  Data.selectDownloadableDataAttachFile */
+	SELECT ath_ord, file_nm, vc_status
+	FROM  <include refid="fromData"/> d, <include refid="fromAttachFile"/> a
+	WHERE d.data_seq = #data_seq#
+		AND d.data_seq = a.data_seq
+		AND ( SELECT CONCAT(',', common_value, ',') FROM c_common_code WHERE common_cd = 'NOT_NORMAL' ) NOT LIKE CONCAT('%,', a.VC_STATUS,',%')
+		<isEqual property="networkPosition" compareValue="I" prepend="AND">
+			out_del_yn = 'N'
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O" prepend="AND">
+			in_del_yn = 'N'
+		</isEqual>
+	</select>
+	
+	<update id="updateReceiveData">
+		/* data.updateReceiveData */
+		UPDATE receive_data
+		SET result_code = #result_code#
+			, result_msg = #result_msg#
+			, mod_id = #mod_id#
+		WHERE data_seq = #data_seq#
+			AND io_cd = #io_cd#
+	</update>
+
+	<select id="selectFindDataList" resultClass="dataForm">
+		/* data.selectFindDataList */
+		SELECT
+			*
+		FROM
+			<include refid="fromData"/>
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="dataSeqList">
+				<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+		ORDER BY
+			data_seq ASC
+	</select>
+
+	<select id="selectFindAttachFileList" resultClass="attachFileForm">
+		/* data.selectFindAttachFileList */
+		SELECT
+			*
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="in_del_yn" >
+				in_del_yn = #in_del_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="out_del_yn" >
+				out_del_yn = #out_del_yn#
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="download_cnt" compareValue="-1">
+				download_cnt <![CDATA[<]]> #download_cnt#
+			</isNotEqual>
+			<isNotEmpty prepend="AND" property="data_seq">
+				<iterate prepend="data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="vc_status">
+				<iterate prepend="NOT vc_status IN" property="vcStatusList" open="(" close=")" conjunction=",">
+					#vcStatusList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="send_result">
+				send_result != #send_result#
+			</isNotEmpty>
+		ORDER BY
+			data_seq ASC
+	</select>
+	
+	<select id="getAllDownloadCnt" resultClass="Integer">
+	/* data.getAllDownloadCnt */
+		SELECT
+			count(*)
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE 
+			data_seq = #data_seq#
+		AND	
+			<isEqual property="isAppDownloadUse" compareValue="true">
+				app_download_time is null
+			</isEqual>
+			<isEqual property="isAppDownloadUse" compareValue="false">
+				user_download_time is null
+			</isEqual>
+		<isNotEmpty prepend="AND" property="vc_status">
+			<iterate prepend="NOT vc_status IN" property="vcStatusList" open="(" close=")" conjunction=",">
+				#vcStatusList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+	
+	<update id="removeEncKey">
+		UPDATE
+			<include refid="fromData"/>
+		<dynamic prepend="SET">
+			enc_key = 'REMOVE'
+		</dynamic>
+		<dynamic prepend="WHERE">
+			data_seq = #data_seq#
+		</dynamic>
+	</update>
+	
+	<select id="selectDeleteDataList" resultClass="dataForm">
+		/* selectDeleteDataList */
+		SELECT
+			file_data.*
+		FROM
+			<include refid="fromData"/> as file_data
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="dataSeqList">
+				<iterate prepend="file_data.data_seq in" property="dataSeqList" open="(" close=")" conjunction=",">
+					#dataSeqList[]#
+				</iterate>
+			</isNotEmpty>
+	</select>
+	
+	<update id="updateAttachFileDrmYn">
+		UPDATE 
+			<include refid="fromAttachFile"/>
+		<dynamic prepend="SET">
+			drm_yn = #drm_yn#
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isGreaterThan prepend="AND" compareValue="0" property="data_seq">
+				data_seq = #data_seq#
+			</isGreaterThan>
+			<isGreaterThan prepend="AND" property="ath_ord" compareValue="0">
+				ath_ord = #ath_ord#
+			</isGreaterThan>
+		</dynamic>
+	</update>
+</sqlMap>

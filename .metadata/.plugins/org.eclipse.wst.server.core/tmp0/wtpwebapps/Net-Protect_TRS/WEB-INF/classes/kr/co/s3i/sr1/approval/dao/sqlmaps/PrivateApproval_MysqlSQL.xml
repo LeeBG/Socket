@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PrivateApproval">
+	<typeAlias alias="privateApprovalForm" type="kr.co.s3i.sr1.approval.model.PrivateApprovalForm" />
+	<typeAlias alias="approval" type="kr.co.s3i.sr1.approval.model.Approval" />
+	<typeAlias alias="privateApprovalRestForm" type="kr.co.s3i.sr1.approval.model.PrivateApprovalRestForm" />
+	
+	<select id="selectPrivateApprovalForm" resultClass="privateApprovalForm">
+		SELECT
+			p.*,
+			(SELECT users_nm FROM c_user_mgt WHERE users_id = p.proxy_id and rst_seq=0 and cud_cd != 'D') as proxy_nm,
+			DATE_FORMAT(p.start_date, "%Y-%m-%d") as display_start_date,
+			DATE_FORMAT(p.end_date, "%Y-%m-%d") as display_end_date
+		FROM
+			f_private_approval p,
+			c_user_mgt u
+		WHERE
+			p.user_id = u.users_id
+		<isNotEmpty prepend="AND" property="user_id">
+			p.user_id = #user_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="approval_type">
+			p.approval_type = #approval_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="io_cd">
+			p.io_cd = #io_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proxy_id">
+			p.proxy_id = #proxy_id#
+		</isNotEmpty>
+		ORDER BY seq DESC
+		LIMIT 1
+	</select>
+	
+	<select id="selectPrivateApprovalFormList" resultClass="privateApprovalForm">
+		SELECT
+			*,
+			DATE_FORMAT(start_date, "%Y-%m-%d") as display_start_date,
+			DATE_FORMAT(end_date, "%Y-%m-%d") as display_end_date
+		FROM
+			f_private_approval
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="user_id">
+				user_id = #user_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="approval_type">
+				approval_type = #approval_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="use_type">
+				use_type = #use_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="proxy_id">
+				proxy_id = #proxy_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY seq DESC
+	</select>
+
+	<select id="selectPriApprLJoinList" resultClass="privateApprovalForm">
+		select
+			f.* , u.users_nm as proxy_nm
+		from
+			(
+			select * from f_private_approval where
+			1=1
+			<isEqual property="period_yn" compareValue="Y" prepend="AND">
+				start_date <![CDATA[<]]> now() and end_date <![CDATA[>=]]> now()
+			</isEqual>
+			<isNotEmpty prepend="AND" property="user_id">
+				user_id = #user_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="approval_type">
+				approval_type = #approval_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="use_type">
+				use_type = #use_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="proxy_id">
+				proxy_id = #proxy_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+			) f
+		left join c_user_mgt u
+			on f.proxy_id = u.users_id and u.use_yn = 'Y' and u.rst_seq = 0 and u.cud_cd != 'D'
+			
+		left join c_dept_mgt d
+			on d.rst_seq = 0 and d.use_yn = 'Y' and d.cud_cd !=	'D' and u.dept_seq = d.dept_seq
+		order by proxy_id ASC
+	</select>
+	
+	<insert id="insertPrivateApproval">
+		INSERT INTO f_private_approval(
+			user_id,
+			approval_type,
+			use_type,
+			crt_date,
+			crt_id,
+			io_cd
+			<isNotEmpty prepend="," property="proxy_id">
+				proxy_id
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="period_date">
+				period_date
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="start_date">
+				start_date
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="end_date">
+				end_date
+			</isNotEmpty>
+		) VALUES (
+			#user_id#,
+			#approval_type#,
+			#use_type#,
+			now(),
+			#crt_id#,
+			#io_cd#
+			<isNotEmpty prepend="," property="proxy_id">
+				#proxy_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="period_date">
+				#period_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="start_date">
+				#start_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="end_date">
+				#end_date#
+			</isNotEmpty>
+		)
+
+		<selectKey resultClass="Integer" keyProperty="seq">
+			SELECT MAX(seq) as seq FROM f_private_approval
+		</selectKey>
+	</insert>
+	
+	<update id="updatePrivateApproval">
+		UPDATE f_private_approval
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="use_type">
+				use_type = #use_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="proxy_id">
+				proxy_id = #proxy_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="period_date">
+				period_date = #period_date#
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			user_id = #user_id#
+		AND
+			approval_type = #approval_type#
+		AND
+			io_cd = #io_cd#
+	</update>
+	
+	<delete id="deletePrivateApproval">
+		DELETE 
+		FROM 
+			f_private_approval
+		WHERE
+			approval_type = #approval_type#
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userList">
+				<iterate prepend="user_id in" property="userList" open="(" close=")" conjunction=",">
+					#userList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="user_id">
+				user_id = #user_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="proxy_id">
+				proxy_id = #proxy_id#
+			</isNotEmpty>
+	</delete>
+
+	<update id="saveProxyPeriod">
+		UPDATE f_private_approval
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="start_date">
+				start_date = #start_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="end_date">
+				end_date = #end_date#
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			user_id = #user_id#
+			AND approval_type = #approval_type#
+			AND io_cd = #io_cd#
+			AND proxy_id = #proxy_id#
+	</update>
+	
+	<select id="selectProxyUserList" resultClass="privateApprovalForm">
+		SELECT
+			p.*,
+			(SELECT users_nm FROM c_user_mgt WHERE users_id = p.proxy_id and rst_seq=0 and cud_cd != 'D') as proxy_nm,
+			DATE_FORMAT(p.start_date, "%Y-%m-%d") as display_start_date,
+			DATE_FORMAT(p.end_date, "%Y-%m-%d") as display_end_date
+		FROM
+			f_private_approval p,
+			c_user_mgt u
+		WHERE
+			p.user_id = u.users_id
+		AND
+			u.rst_seq = 0
+		<isNotEmpty prepend="AND" property="user_id">
+			p.user_id = #user_id#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="userList">
+			<iterate prepend="p.user_id in" property="userList" open="(" close=")" conjunction=",">
+				#userList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="approval_type">
+			p.approval_type = #approval_type#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="io_cd">
+			p.io_cd = #io_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proxy_id">
+			p.proxy_id = #proxy_id#
+		</isNotEmpty>
+		GROUP BY seq DESC
+		ORDER BY proxy_id ASC
+	</select>
+	<select id="selectValidProxyIdCount" resultClass="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM
+			(
+			SELECT * FROM f_private_approval 
+			WHERE start_date <![CDATA[<]]> now() AND end_date <![CDATA[>=]]> now()
+			AND approval_type = 'PR'
+			AND use_type = 'P'
+			<isNotEmpty prepend="AND" property="user_id">
+				user_id = #user_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="proxy_id">
+				proxy_id = #proxy_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+			) f
+		left join c_user_mgt u on f.proxy_id = u.users_id and u.rst_seq = 0
+		left join c_dept_mgt d on d.rst_seq = 0 and u.dept_seq = d.dept_seq
+		WHERE 
+			u.use_yn = 'Y'  and 
+			u.cud_cd != 'D' and 
+			d.use_yn = 'Y' and 
+			d.cud_cd !=	'D'
+	</select>
+	<select id="selectPrivateApprovalsName" resultClass="java.util.HashMap">
+		SELECT GROUP_CONCAT(users_nm) AS private_appr_nm , user_id
+		FROM( 
+			SELECT a.user_id, u.USERS_nm FROM f_private_approval a
+			INNER JOIN c_user_mgt u ON ( u.users_id=a.proxy_id AND u.rst_seq=0 AND u.cud_cd != 'D' AND u.use_yn = 'Y')
+			WHERE 1=1
+			<isEqual property="isActivePeriod" compareValue="true" prepend="AND">
+				SYSDATE() BETWEEN start_date AND end_date 
+			</isEqual>
+			<isNotEmpty property="approvals">
+				<iterate prepend="AND user_id IN" property="approvals" open="(" close=")" conjunction=",">
+					#approvals[].appr_id#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="io_cd" prepend="AND ">
+				a.io_cd = #io_cd#
+			</isNotEmpty>
+		) AS A
+		GROUP BY user_id
+	</select>
+	
+	<select id="selectPrivateApprovalsInfo" resultClass="approval">
+		SELECT GROUP_CONCAT(users_nm) AS private_appr_nm, GROUP_CONCAT(proxy_id) AS private_appr_id , users_id
+		FROM( 
+			SELECT a.user_id as users_id, u.USERS_nm, a.proxy_id  
+			FROM f_private_approval a, c_user_mgt u			  
+			WHERE a.proxy_id = u.users_id
+				AND u.rst_seq=0 AND u.cud_cd != 'D' AND u.use_yn = 'Y'
+			<isEqual property="isActivePeriod" compareValue="true" prepend="AND">
+				SYSDATE() BETWEEN a.start_date AND a.end_date 
+			</isEqual>
+			<isNotEmpty property="approvals">
+				<iterate prepend="AND a.user_id IN" property="approvals" open="(" close=")" conjunction=",">
+					#approvals[].appr_id#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="io_cd" prepend="AND ">
+				a.io_cd = #io_cd#
+			</isNotEmpty>
+		) AS A
+		GROUP BY users_id
+	</select>
+	
+	<select id="selectRestProxyApprovalList" resultClass="privateApprovalRestForm">
+		SELECT
+			u.users_id,
+			u.users_nm,
+			u.position_nm,
+			d.dept_nm,
+			p.start_date,
+			p.end_date
+		FROM
+			f_private_approval p
+			INNER JOIN c_user_mgt u ON u.users_id=p.proxy_id AND u.rst_seq=0 AND u.cud_cd != 'D'
+			INNER JOIN c_dept_mgt d ON d.dept_seq=u.dept_seq AND d.rst_seq=0 AND d.cud_cd != 'D'
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="user_id">
+				user_id = #user_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userList">
+				<iterate prepend="p.user_id in" property="userList" open="(" close=")" conjunction=",">
+					#userList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="approval_type">
+				approval_type = #approval_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="use_type">
+				use_type = #use_type#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="proxy_id">
+				proxy_id = #proxy_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

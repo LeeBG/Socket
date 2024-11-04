@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FPreservationPolicy">
+	<typeAlias alias="fPreservationPolMgtForm" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolMgtForm" />
+	<typeAlias alias="fPreservationPolInfo" type="kr.co.s3i.sr1.policy.filePreservationPolicy.model.FPreservationPolInfo" />
+
+	<select id="selectFPreservationPolInfoList" resultClass="fPreservationPolInfo">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_info
+		WHERE
+				CUD_CD <![CDATA[!=]]> 'D'
+			AND
+				RST_SEQ <![CDATA[=]]> 0
+	</select>
+
+	<select id="selectFPreservationPolInfo" resultClass="fPreservationPolInfo">
+		SELECT
+			*
+		FROM
+			f_preservation_pol_file_info
+		WHERE
+				CUD_CD <![CDATA[!=]]> 'D'
+			AND
+				RST_SEQ <![CDATA[=]]> 0
+			AND 
+				POL_SEQ = #pol_seq#
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+	</select>
+</sqlMap>

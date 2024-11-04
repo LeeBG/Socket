@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Common">
+	<typeAlias alias="commonModel" type="kr.co.s3i.sr1.common.model.CommonModel" />
+	<typeAlias alias="UsersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+
+	<select id="selectLateCrtTimeData" resultClass="java.util.HashMap">
+		SELECT 
+			* 
+		FROM 
+			$tab_nm$
+		WHERE
+			1 = 1
+			<isNotEmpty prepend="AND" property="code_nm">
+				$code_nm$ = #log_cd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="cud_cd">
+				CUD_CD = #cud_cd#
+			</isNotEmpty>
+		limit 1
+	</select>
+	
+	<insert id="insertEmailSend" parameterClass="kr.co.s3i.sr1.sender.mail.model.SendMailForm">
+	INSERT INTO C_EMAIL_SEND(
+		EMAIL_SUBJECT
+		, EMAIL_CONTENT
+		, EMAIL_SND_TYPE
+		, SND_EMAIL
+		, SNDER_NM
+		, RCV_EMAIL
+		, RCVER_NM
+		, NP_CD
+	) VALUES (
+		#emailSubject#
+		, #emailContent#
+		, #emailSndType#
+		, #sndEmail#
+		, #snderNm#
+		, #rcvEmail#
+		, #rcverNm#
+		, #networkPosition#
+	)
+	</insert>
+	
+	<select id="selectSendMail" resultClass="kr.co.s3i.sr1.sender.mail.model.SendMailForm">
+	SELECT 
+		seq AS seq
+		,email_subject AS emailSubject
+		,email_content AS emailContent
+		,email_snd_type AS emailSndType
+		,snd_email AS sndEmail
+		,snder_nm AS snderNm
+		,rcv_email AS rcvEmail
+		,rcver_nm AS rcverNm
+	FROM c_email_send
+	WHERE 
+		NP_CD = #networkPosition#
+		AND (result is null OR result != 'S') 
+		AND try_cnt <![CDATA[<]]> 3 
+		AND crt_time <![CDATA[>]]> date_add(now(), interval -1 hour)
+		AND snd_email != '' AND rcv_email != ''
+	</select>
+	
+	<update id="updateAlarmEmailResult">
+		UPDATE c_email_send 
+		SET result = #result#, MOD_TIME = now()
+		<isEqual property="result" compareValue="F">
+			, try_cnt = try_cnt +1
+		</isEqual>
+		WHERE seq = #seq#
+	</update>
+	
+	<delete id="deleteSendMailOnlySuccess">
+		DELETE FROM c_email_send
+		WHERE result ='S'
+	</delete>
+	
+	<update id="updateInvalidSendEmailToEmptyData">
+		UPDATE c_email_send 
+		SET 
+			EMAIL_SUBJECT = 'DEL', 
+			EMAIL_CONTENT = 'DEL', 
+			FAIL_CODE = (CASE 
+				WHEN result='F' AND try_cnt <![CDATA[>=]]> 3 THEN '3TRY'
+				WHEN snd_email = '' OR rcv_email = '' THEN 'EMPTY' 
+				ELSE 'ETC' 
+			END),
+			MOD_TIME = now(),
+			RESULT = 'F'
+		WHERE FAIL_CODE is null AND ( ( result ='F' AND try_cnt <![CDATA[>=]]> 3 ) OR snd_email = '' OR rcv_email = '' )
+	</update>
+
+	<select id="selectadminIpList" resultClass="String">
+		SELECT distinct
+			inner_ip
+		FROM 
+			c_user_mgt
+		WHERE 
+			auth_cd <![CDATA[<]]> 5
+		AND rst_seq = 0
+		AND cud_cd != 'D'
+		AND use_yn = 'Y'
+		AND inner_ip is not null
+		AND inner_ip != '';
+	</select>
+
+	<select id="selectUserIpList" resultClass="String">
+		/* Common.selectUserIpList */
+		SELECT distinct
+			<isEqual property="networkPosition" compareValue="I">
+				inner_ip
+			</isEqual>
+			<isEqual property="networkPosition" compareValue="O">
+				outer_ip
+			</isEqual>
+		FROM 
+			c_user_mgt
+		WHERE 
+		auth_cd = 5
+		AND rst_seq = 0
+		AND cud_cd != 'D'
+		AND use_yn = 'Y'
+		<isEqual property="networkPosition" compareValue="I">
+			AND inner_ip is not null
+			AND inner_ip != '';
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			AND outer_ip is not null
+			AND outer_ip != '';
+		</isEqual>
+	</select>
+</sqlMap>

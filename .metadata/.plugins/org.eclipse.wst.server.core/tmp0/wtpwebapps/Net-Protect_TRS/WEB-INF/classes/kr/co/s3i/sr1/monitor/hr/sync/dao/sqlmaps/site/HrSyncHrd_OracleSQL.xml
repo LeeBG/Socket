@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_hrd">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="DeptSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptSyncForm" />
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectSiteDeptList_hrd" resultClass="DeptSyncForm">
+	/*selectSiteDeptList_hrd*/
+	SELECT
+		DEPT_CD AS DEPT_SEQ,
+		SOSOK AS DEPT_NM,
+		1 AS P_DEPT_SEQ,
+		1 AS DEPTH
+	FROM HMA080TB
+	WHERE USE_YN='Y'
+	ORDER BY FOA_RNK ASC
+	</select>
+
+	<select id="selectSiteUserList_hrd" resultClass="UserSyncForm">
+	/*selectSiteUserList_hrd*/
+	SELECT
+		JKN AS USERS_ID
+		, NM AS USERS_NM
+		, DEPT_CD AS DEPT_SEQ
+		, E_MAIL AS EMAIL
+		, JKW_CD AS POSITION_ID
+		, JKW_NM AS POSITION_NM
+	FROM HMA200TB
+	WHERE RTI_CD = '1'	 
+	AND JKN IS NOT NULL 
+	AND NM IS NOT NULL 
+	AND DEPT_CD IS NOT NULL
+	</select>
+
+	<select id="selectSiteDeptApprovalUser_hrd" resultClass="DeptApprovalUserSyncForm">
+	/*selectSiteDeptApprovalUser_hrd*/
+	SELECT 
+		JKN AS USERS_ID
+		, NM AS USERS_NM
+		, DEPT_CD AS DEPT_SEQ
+		, JKW_CD AS POSITION_ID
+		, JKW_NM AS POSITION_NM
+	FROM HMA200TB
+	WHERE RTI_CD = '1'
+	AND (JKW_CD = '1210' OR JKW_CD = '1700')
+	</select>
+</sqlMap>

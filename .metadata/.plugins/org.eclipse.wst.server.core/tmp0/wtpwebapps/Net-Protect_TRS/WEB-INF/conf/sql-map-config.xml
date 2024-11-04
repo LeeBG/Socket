@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings useStatementNamespaces="true" />
+	<typeAlias alias="data" type="kr.co.s3i.sr1.data.file.model.Data" />
+	<typeAlias alias="dataForm" type="kr.co.s3i.sr1.data.file.model.DataForm" />
+	<typeAlias alias="attachFile" type="kr.co.s3i.sr1.data.file.model.AttachFile" />
+	<typeAlias alias="attachFileForm" type="kr.co.s3i.sr1.data.file.model.AttachFileForm" />
+	<typeAlias alias="Users" type="kr.co.s3i.sr1.hr.user.model.Users" />
+	<typeAlias alias="sconnInfoForm" type="kr.co.s3i.sr1.audit.streamAudit.model.SConnInfoForm" />
+	<typeAlias alias="spacketSizeForm" type="kr.co.s3i.sr1.audit.streamAudit.model.SPacketSizeForm" />
+	<typeAlias alias="LicenseInfoForm" type="kr.co.s3i.sr1.license.model.LicenseInfoForm" />
+	<typeAlias alias="emlData" type="kr.co.s3i.sr1.emlProcess.model.EmlData" />
+	<typeAlias alias="emlFile" type="kr.co.s3i.sr1.emlProcess.model.EmlFile" />
+
+	<sqlMap resource="kr/co/s3i/sr1/license/dao/sqlmaps/License_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/cacheEnv/cache/dao/sqlmaps/Cache_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/cacheEnv/code/dao/sqlmaps/Code_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/hr/user/dao/sqlmaps/Users_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/hr/dept/dao/sqlmaps/Dept_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/audit/loginAudit/dao/sqlmaps/LoginAudit_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/approval/dao/sqlmaps/Approval_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/approval/dao/sqlmaps/DeptApproval_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/cacheEnv/minimax/dao/sqlmaps/MiniMax_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/approvalPolicy/dao/sqlmaps/ApprovalPolicy_MySQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/policy/approvalPolicy/dao/sqlmaps/ApprovalLine_MySQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/policy/approvalPolicy/dao/sqlmaps/ApprovalLineUser_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/extPolicy/dao/sqlmaps/ExtPolicy_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/filePolicy/dao/sqlmaps/FilePolicy_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/loginPolicy/dao/sqlmaps/LoginPolicy_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/authPolicy/dao/sqlmaps/AuthPolicy_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/systemAlertPolicy/dao/sqlmaps/SystemAlertPolicy_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/fm/st/dao/sqlmaps/FMST0500_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/common/dao/sqlmaps/Common_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/data/file/dao/sqlmaps/Data_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/sender/mail/dao/sqlmaps/Smtp_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/vaccine/dao/sqlmaps/Vaccine_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/syncServer/dao/sqlmaps/SyncServer_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/systemInfo/dao/sqlmaps/SystemInfo_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/systemManagement/testManagement/dao/sqlmaps/TestManagement_MysqlSQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/systemManagement/envManagement/dao/sqlmaps/EnvManagement_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/agent/dao/sqlmaps/Agent_MysqlSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/site/hrdb/dao/sqlmaps/Hrdb_SiteSQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/policy/filePreservationPolicy/dao/sqlmaps/FPreservationPolicy_MySQL.xml" />
+
+	<!--관리자 감사 -->
+	<sqlMap resource="kr/co/s3i/sr1/audit/adminAudit/dao/sqlmaps/AdminAudit_MysqlSQL.xml" />
+	
+	<!-- 망연계 vip -->
+	<sqlMap resource="kr/co/s3i/sr1/policy/streamPolicy/dao/sqlmaps/StreamPolicy_MySQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/policy/streamPolicy/dao/sqlmaps/VipPolicy_MySQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/fm/lg/dao/sqlmaps/FMLG0000_MysqlSQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/systemManagement/serverManagement/dao/sqlmaps/ServerManagement_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/dashboard/dao/sqlmaps/DashboardChart_MySQL.xml" />
+
+	<!-- 부재중, 대리결재자 -->
+	<sqlMap resource="kr/co/s3i/sr1/approval/dao/sqlmaps/PrivateApproval_MysqlSQL.xml" />
+
+	<!-- IpObjec 그룹화 -->
+	<sqlMap resource="kr/co/s3i/sr1/policy/ipObjectPolicy/dao/sqlmaps/IpObject_MySQL.xml" />
+	<!-- DestObject -->
+	<sqlMap resource="kr/co/s3i/sr1/policy/destObjectPolicy/dao/sqlmaps/DestObject_MySQL.xml" />
+	<!-- DestObjectGroup -->
+	<sqlMap resource="kr/co/s3i/sr1/policy/destObjectPolicy/dao/sqlmaps/DestObjectGroup_MySQL.xml" />
+	
+	<!-- 자가승인 권한 요청 -->
+	<sqlMap resource="kr/co/s3i/sr1/authRequest/users/dao/sqlmaps/AuthRequestUsers_Mysql.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/authRequest/dept/dao/sqlmaps/AuthRequestDept_MySQL.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/authRequest/auth/dao/sqlmaps/SelfApprovalRequest_Mysql.xml" />
+	
+	<!-- 기능코드관리 -->
+	<sqlMap resource="kr/co/s3i/sr1/code/dao/sqlmap/CommonCode_MysqlSQL.xml" />
+	
+	<!-- GPKI sqlmap -->
+	<sqlMap resource="kr/co/s3i/sr1/gpki/dao/sqlmaps/gpki_MySQL.xml" />
+	
+	<!-- 결재제한 기능 -->
+	<sqlMap resource="kr/co/s3i/sr1/policy/approvalLock/dao/sqlmaps/ApprovalLock_MySQL.xml" />
+
+	<!-- 커스텀 유저 -->
+	<sqlMap resource="kr/co/s3i/sr1/hr/user/dao/sqlmaps/CustomUsers_MysqlSQL.xml" />
+	
+	<!-- 인사DB동기화 셋팅 -->
+	<sqlMap resource="kr/co/s3i/sr1/hrdb/dao/sqlmaps/HrSyncSetting_MysqlSQL.xml" />
+	
+	<!-- 관리자 수동 변경 정보 -->
+	<sqlMap resource="kr/co/s3i/sr1/hr/custom/dao/sqlmaps/CustomEdit_MysqlSQL.xml" />
+	
+	<!-- 사용자 자료함 용량 관리 -->
+	<sqlMap resource="kr/co/s3i/sr1/policy/repository/dao/sqlmaps/RepositoryVolume_MySQL.xml" />
+	
+	<!-- 사이트별 기본결재자 관리 -->
+	<sqlMap resource="kr/co/s3i/sr1/approval/dao/sqlmaps/DeptApprovalSite_MysqlSQL.xml" />
+	
+	<sqlMap resource="kr/co/s3i/sr1/rest/data/file/dao/sqlmaps/DataRest_MySQL.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/rest/alarm/dao/sqlmaps/AgentAlarm_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/dashboard/dao/sqlmaps/Graph_MySQL.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/trsMonitor/dashboard/dao/sqlmaps/TrsDashboard_MySQL.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/trsMonitor/totalStatistics/dao/sqlmaps/TotalStatistics_MySQL.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/trsMonitor/user/dao/sqlmaps/TrsUser_MySQL.xml" />
+
+	<sqlMap resource="kr/co/s3i/sr1/fm/lg/dao/sqlmaps/FMLGEml_MysqlSQL.xml" />
+	<sqlMap resource="kr/co/s3i/sr1/systemManagement/commonManagement/dao/sqlmaps/AgentInfo_MysqlSQL.xml" />
+	
+	<!--  클립보드 -->
+	<sqlMap resource="kr/co/s3i/sr1/data/clipboard/dao/sqlmaps/Clipboard_MysqlSQL.xml" />
+</sqlMapConfig>

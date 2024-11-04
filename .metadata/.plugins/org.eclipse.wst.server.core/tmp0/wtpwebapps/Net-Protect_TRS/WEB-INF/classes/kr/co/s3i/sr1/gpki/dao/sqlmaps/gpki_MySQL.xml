@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="gpki">
+	<typeAlias alias="users" type="kr.co.s3i.sr1.hr.user.model.Users" />
+	<typeAlias alias="gpkiData" type="kr.co.s3i.sr1.gpki.model.GpkiCopyData" />
+
+	<sql id="where_searchDateOrTime">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searcField">
+		<isEqual prepend="AND" property="searchField" compareValue="users_nm">
+			<isNotEmpty property="searchValue">
+				users_nm LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchField" compareValue="users_id">
+			<isNotEmpty property="searchValue">
+				users_id LIKE CONCAT('%',#searchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<select id="getUser" resultClass="users">
+		SELECT
+			users_id,
+			users_nm,
+			auth_cd,
+			dept_seq,
+			position_nm
+		FROM
+			c_user_mgt
+		WHERE
+			rst_seq = 0 AND
+			CUD_CD != 'D' AND
+			gpki_dn = <![CDATA[#gpki_dn#]]>
+	</select>
+
+	<update id="updateGPKIDn">
+		UPDATE 
+			c_user_mgt 
+		SET
+			gpki_dn = #gpki_dn#
+		WHERE
+			rst_seq = 0 AND
+			CUD_CD != 'D' AND
+			users_id = #users_id#
+	</update>
+
+	<update id="deleteGPKIDn" parameterClass="users">
+		UPDATE 
+			c_user_mgt 
+		SET
+			gpki_dn = null
+		WHERE
+			rst_seq = 0 AND
+			users_id != #users_id# AND
+			gpki_dn = <![CDATA[#gpki_dn#]]>
+	</update>
+
+	<insert id="insertGpkiCopyData">
+		INSERT INTO
+			user_certificate
+		(
+			users_id,
+			users_nm,
+			np_cd,
+			file_path,
+			file_nm,
+			file_save_name,
+			download_status,
+			certificate_number,
+			result,
+			crt_time
+			<isNotEmpty prepend="," property="download_crt_time">
+				download_crt_time
+			</isNotEmpty>
+		) VALUES (
+			#users_id#,
+			#users_nm#,
+			#np_cd#,
+			#file_path#,
+			#file_nm#,
+			#file_save_name#,
+			'W',
+			#certificate_number#,
+			#result#,
+			now()
+			<isNotEmpty prepend="," property="download_crt_time">
+				#download_crt_time#
+			</isNotEmpty>
+		)
+	</insert>
+
+	<select id="selectUserCertificate" resultClass="gpkiData">
+		SELECT
+			*
+		FROM
+			user_certificate
+		WHERE
+			users_id = #users_id#
+			AND np_cd = #np_cd#
+			AND download_status = #download_status#
+			AND certificate_number = #certificate_number#
+		ORDER BY crt_time desc LIMIT 1;
+	</select>
+
+	<update id="updateBeforeUserCertificate">
+		UPDATE 
+			user_certificate 
+		SET
+			download_status = 'D'
+		WHERE
+			np_cd = #np_cd#
+			AND users_id = #users_id#
+			AND users_nm = #users_nm#
+			AND download_status = 'W'
+	</update>
+
+	<update id="updateUserCertificate">
+		UPDATE 
+			user_certificate 
+		SET
+			download_status = #download_status#,
+			result = #result#,
+			download_crt_time = now()
+		WHERE
+			seq = #seq#
+			AND np_cd = #np_cd#
+			AND users_id = #users_id#
+	</update>
+
+	<select id="selectGpkiDataList" resultClass="gpkiData">
+		SELECT 
+			users_id,
+			users_nm,
+			np_cd,
+			download_status,
+			result,
+			certificate_number,
+			crt_time
+		FROM
+			user_certificate
+		WHERE
+			download_status in ('Y', 'W', 'D')
+			<include refid="where_searchDateOrTime"/>
+			<include refid="where_searcField"/>
+			ORDER BY crt_time DESC
+			limit #offSet#, $pageListSize$
+	</select>
+
+	<select id="selectGpkiDataListCount" resultClass="Integer">
+		SELECT 
+			COUNT(*)
+		FROM
+			user_certificate
+		WHERE
+			download_status in ('Y', 'W', 'D')
+			<include refid="where_searchDateOrTime"/>
+			<include refid="where_searcField"/>
+	</select>
+
+	<select id="selectUsersList" resultClass="gpkiData">
+		SELECT
+			u.users_id, u.users_nm, d.dept_nm
+		FROM
+			c_user_mgt u,
+			(SELECT
+				dept_seq, dept_nm
+			FROM
+				c_dept_mgt
+			WHERE
+				rst_seq = 0
+				AND cud_cd != 'D'
+			) AS d
+		WHERE
+			u.dept_seq = d.dept_seq
+			<include refid="where_searcField"/>
+			AND u.rst_seq = 0
+			AND u.cud_cd != 'D'
+			AND u.auth_cd = 5
+			AND use_yn != 'N';
+	</select>
+</sqlMap>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DashboardChart">
+	<typeAlias alias="dashboardChart" type="kr.co.s3i.sr1.dashboard.model.DashboardChart" />
+	<typeAlias alias="dashboardChartForm" type="kr.co.s3i.sr1.dashboard.model.DashboardChartForm" />
+	<typeAlias alias="approvalForm" type="kr.co.s3i.sr1.approval.model.ApprovalForm" />
+	<typeAlias alias="SConnInfo" type="kr.co.s3i.sr1.audit.streamAudit.model.SConnInfo" />
+	
+	<sql id="fromAttachFile">
+		<isEqual property="np_cd" compareValue="I">
+			in_ath_file
+		</isEqual>
+		<isEqual property="np_cd" compareValue="O">
+			out_ath_file
+		</isEqual>
+	</sql>
+
+	<sql id="fromData">
+		<isEqual property="networkPosition" compareValue="I">
+			in_data
+		</isEqual>
+		<isEqual property="networkPosition" compareValue="O">
+			out_data
+		</isEqual>
+	</sql>
+
+	<sql id = "dayList">
+		(SELECT
+			ADDDATE(#startDate#, t4*10000 + t3*1000 + t2*100 + t1*10 + t0) trs_day
+		FROM
+			(SELECT 0 t0 UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t0,
+			(SELECT 0 t1 UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t1,
+			(SELECT 0 t2 UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t2,
+			(SELECT 0 t3 UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t3,
+			(SELECT 0 t4 UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t4) v
+		WHERE trs_day BETWEEN #startDate# AND #endDate#)AS a
+	</sql>
+
+	<sql id="timeList">
+				SELECT '01' UNION
+				SELECT '02' UNION
+				SELECT '03' UNION
+				SELECT '04' UNION
+				SELECT '05' UNION
+				SELECT '06' UNION
+				SELECT '07' UNION
+				SELECT '08' UNION
+				SELECT '09' UNION
+				SELECT '10' UNION
+				SELECT '11' UNION
+				SELECT '12' UNION
+				SELECT '13' UNION
+				SELECT '14' UNION
+				SELECT '15' UNION
+				SELECT '16' UNION
+				SELECT '17' UNION
+				SELECT '18' UNION
+				SELECT '19' UNION
+				SELECT '20' UNION
+				SELECT '21' UNION
+				SELECT '22' UNION
+				SELECT '23'
+				)AS bbb) a 
+	</sql>
+
+	<select id="selectDashboardChart" resultClass="dashboardChartForm">
+		SELECT 
+			*
+		FROM
+			system_info
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="hostIp">
+				hostIp = #hostIp#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY crt_time DESC
+		LIMIT 1
+	</select> 
+
+	<select id="selectDashboardChartList" resultClass="dashboardChartForm">
+		SELECT 
+			*
+		FROM
+			system_info
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="hostIp">
+				hostIp = #hostIp#
+			</isNotEmpty>
+			<isGreaterThan compareValue="0" prepend="AND" property="intervalHour">
+				crt_time> SUBDATE(NOW(), INTERVAL #intervalHour# hour)
+			</isGreaterThan>
+		</dynamic>
+		ORDER BY crt_time DESC
+		LIMIT $offSet$, $pageListSize$
+	</select> 
+
+	<select id="selectLastVcFileList" resultClass="attachFileForm">
+		SELECT main.*, IFNULL(u.users_nm, '삭제된 사용자') AS users_nm
+		FROM (
+			(SELECT
+				*, 'O'AS np_cd
+			FROM
+				out_ath_file o
+			WHERE
+				vc_status not in (1,10,13) <!-- 중부발전에서는 암호화파일은 정상파일 -->
+			ORDER BY crt_time DESC
+			LIMIT 5)
+				UNION ALL
+			(SELECT
+				*, 'I'AS np_cd
+			FROM
+				in_ath_file
+			WHERE
+				vc_status not in (1,10,13) <!-- 중부발전에서는 암호화파일은 정상파일 -->
+			ORDER BY crt_time DESC
+			LIMIT 5)
+		) main LEFT OUTER JOIN c_user_mgt u ON ( main.crtr_id = u.users_id AND u.cud_cd != 'D' AND rst_seq = 0 )
+		ORDER BY crt_time DESC
+		LIMIT 5
+	</select>
+
+	<select id="selectLastApprovalList" resultClass="approvalForm">
+   select distinct io.*, IFNULL(u.users_nm, '삭제된 사용자') AS users_nm, IFNULL(au.users_nm, '삭제된 사용자') AS appr_nm
+   FROM (
+            ( select b.title, a.approval_seq, a.users_id, a.data_seq, a.appr_id, a.crt_time, a.app_yn, 'I'AS np_cd
+                from approval a,
+                     in_data b
+               where a.data_seq = b.data_seq     
+                 and a.app_yn = 'N'
+                 and a.np_cd = 'I'
+                 and a.app_time is null
+               order by a.crt_time desc
+               limit 5 )
+               union
+            ( select b.title, a.approval_seq, a.users_id, a.data_seq, a.appr_id, a.crt_time, a.app_yn, 'O'AS np_cd
+                from approval a,
+                     out_data b
+               where a.data_seq = b.data_seq     
+                 and a.app_yn = 'N'
+                 and a.np_cd = 'O'
+                 and a.app_time is null
+               order by a.crt_time desc
+               limit 5 )
+       ) io 
+       LEFT OUTER JOIN c_user_mgt u ON ( u.users_id = io.users_id AND u.cud_cd != 'D' AND u.rst_seq = 0 )
+       LEFT OUTER JOIN c_user_mgt au ON ( au.users_id = io.appr_id AND au.cud_cd != 'D' AND au.rst_seq = 0 )
+  order by io.crt_time desc
+  limit 5
+	</select>
+
+	<insert id="insertDashboardChart">
+		INSERT INTO system_info (
+			hostMemory,
+			hostCpu,
+			systemDate
+			hostIp,
+			diskname,
+			disksize
+		) VALUES (
+			#hostMemory#,
+			#hostCpu#,
+			now(),
+			#hostIp#,
+			#diskname#,
+			#disksize#
+		)
+	</insert>
+
+	<select id = "selectTopFileExtList" resultClass="attachFileForm">
+		SELECT
+			file_ext, COUNT(file_ext)AS ext_cnt 
+		FROM
+			<include refid="fromAttachFile"/>
+		WHERE
+			crt_time> SUBDATE(NOW(), INTERVAL 1 DAY)
+		GROUP BY
+			file_ext
+		ORDER BY ext_cnt DESC
+		LIMIT 5
+	</select>
+
+	<select id = "selectTopSTMIdList" resultClass="sPacketSizeForm">
+		SELECT
+			stm_id, SUM(data_sum)AS data_sum
+		FROM
+			stm_toppolicy
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="io_cd">
+				io_cd = #io_cd#
+			</isNotEmpty>
+				AND crt_time> SUBDATE(NOW(), INTERVAL 1 DAY)
+		</dynamic>
+		GROUP BY
+			stm_id
+		ORDER BY data_sum DESC
+		LIMIT 5
+	</select>
+
+	<select id = "selectNowSTMIdList" resultClass="sPacketSizeForm">
+		SELECT
+			*
+		FROM
+			stm_toppolicy
+		WHERE
+			crt_time> SUBDATE(NOW(), INTERVAL 1 MINUTE)
+		ORDER BY data_sum DESC
+		LIMIT 10
+	</select>
+
+	<select id = "selectTRSTopUserList" resultClass="dataForm">
+
+		SELECT
+			d.users_id, COUNT(data_seq)AS users_cnt, IFNULL(u.users_nm, '삭제된 사용자') AS users_nm
+		FROM
+			(SELECT * FROM <include refid="fromData"/> WHERE crt_time BETWEEN #startDate# AND #endDate# ) d
+				LEFT OUTER JOIN c_user_mgt u ON (d.users_id =  u.users_id AND u.rst_seq = 0 AND u.cud_cd != 'D' )
+		GROUP BY d.users_id
+		ORDER BY users_cnt DESC
+
+		LIMIT 5
+	</select>
+
+	<select id ="selectSTMTopUserList" resultClass="SConnInfo">
+		SELECT
+			rank, sum(data_sum) as data_sum, source_ip
+		FROM
+			stm_topuser
+		WHERE
+			crt_time BETWEEN #startDate# AND #endDate#
+		<isNotEmpty prepend="AND" property="io_cd">
+			io_cd = #io_cd#
+		</isNotEmpty>
+		GROUP BY
+			source_ip
+		ORDER BY
+			data_sum DESC
+		LIMIT 5
+	</select>
+
+	<select id="selectTRSMonthDataCntList" resultClass="dataForm">
+		SELECT
+			a.trs_month, IFNULL(data_cnt, 0)data_cnt
+		FROM
+			(SELECT
+				trs_month
+			FROM
+				(SELECT '01' AS 'trs_month' UNION
+				SELECT '02' UNION
+				SELECT '03' UNION
+				SELECT '04' UNION
+				SELECT '05' UNION
+				SELECT '06' UNION
+				SELECT '07' UNION
+				SELECT '08' UNION
+				SELECT '09' UNION
+				SELECT '10' UNION
+				SELECT '11' UNION
+				SELECT '12'
+				)AS bbb) a 
+				LEFT OUTER JOIN
+				(SELECT
+					DATE_FORMAT(crt_time, '%m') AS trs_month, COUNT(*)AS data_cnt
+				FROM
+					<include refid="fromData"/>
+				WHERE
+					crt_time BETWEEN #startDate# AND #endDate#
+				GROUP BY
+					date_format(crt_time, '%m')
+				ORDER BY trs_month ASC) b
+		ON a.trs_month = b.trs_month
+	</select>
+
+	<select id="selectTRSMonthDataSumList" resultClass="attachFileForm">
+		SELECT
+			a.trs_month, IFNULL(data_sum, 0)data_sum
+		FROM
+			(SELECT
+				trs_month
+			FROM
+				(SELECT '01' AS 'trs_month' UNION
+				SELECT '02' UNION
+				SELECT '03' UNION
+				SELECT '04' UNION
+				SELECT '05' UNION
+				SELECT '06' UNION
+				SELECT '07' UNION
+				SELECT '08' UNION
+				SELECT '09' UNION
+				SELECT '10' UNION
+				SELECT '11' UNION
+				SELECT '12'
+				)AS bbb) a 
+				LEFT OUTER JOIN
+				(SELECT
+					DATE_FORMAT(crt_time, '%m') AS trs_month, SUM(file_size)AS data_sum
+				FROM
+					<include refid="fromAttachFile"/>
+				WHERE
+					crt_time BETWEEN #startDate# AND #endDate#
+				GROUP BY DATE_FORMAT(crt_time, '%m')
+				ORDER BY trs_month ASC) b
+		ON a.trs_month = b.trs_month
+	</select>
+
+	<select id="selectTRSDayDataSumList" resultClass="attachFileForm">
+		SELECT
+			a.trs_day AS trs_day, IFNULL(data_sum, 0)AS data_sum
+		FROM
+			(SELECT
+				date_format(trs_day, '%Y-%m-%d')AS trs_day
+			FROM 
+				<include refid = "dayList"/>
+			LEFT OUTER JOIN
+				(SELECT
+					date_format(crt_time, '%Y-%m-%d') AS trs_day, SUM(file_size)AS data_sum
+				FROM
+					<include refid="fromAttachFile"/>
+				WHERE
+					crt_time BETWEEN #startDate# AND #endDate#
+				GROUP BY
+					date_format(crt_time, '%Y-%m-%d')
+				ORDER BY trs_day ASC)AS b
+			ON a.trs_day = b.trs_day
+	</select>
+
+	<select id="selectTRSDayDataCntList" resultClass="dataForm">
+		SELECT
+			a.trs_day AS trs_day, IFNULL(data_cnt, 0)AS data_cnt
+		FROM
+			(SELECT
+				date_format(trs_day, '%Y-%m-%d')AS trs_day
+			FROM 
+				<include refid = "dayList"/>
+			LEFT OUTER JOIN
+				(SELECT
+					date_format(crt_time, '%Y-%m-%d') AS trs_day, COUNT(*)AS data_cnt
+				FROM
+					<include refid="fromData"/>
+				WHERE
+					crt_time BETWEEN #startDate# AND #endDate#
+				GROUP BY
+					date_format(crt_time, '%Y-%m-%d')
+				ORDER BY trs_day ASC)AS b
+			ON a.trs_day = b.trs_day
+	</select>
+
+	<select id="selectTRSTimeDataCntList" resultClass="dataForm">
+		SELECT
+			a.trs_time, IFNULL(data_cnt, 0)data_cnt
+		FROM
+			(SELECT
+				trs_time
+			FROM
+				(SELECT '00' AS 'trs_time' UNION
+				<include refid="timeList"/>
+				LEFT OUTER JOIN
+				(SELECT
+					DATE_FORMAT(crt_time, '%H') AS trs_time, count(*)AS data_cnt
+				FROM
+					<include refid="fromData"/>
+				WHERE
+					date(crt_time)=(select curdate())
+				GROUP BY 
+				DATE_FORMAT(crt_time, '%H')
+				ORDER BY 
+				trs_time DESC) b
+		ON a.trs_time = b.trs_time
+	</select>
+
+	<select id="selectTRSTimeDataSumList" resultClass="attachFileForm">
+		SELECT
+			a.trs_time, IFNULL(data_sum, 0)data_sum
+		FROM
+			(SELECT
+				trs_time
+			FROM
+				(SELECT '00' AS 'trs_time' UNION
+				<include refid="timeList"/>
+				LEFT OUTER JOIN
+				(SELECT
+					DATE_FORMAT(crt_time, '%H') AS trs_time, SUM(file_size)AS data_sum
+				FROM
+					<include refid="fromAttachFile"/>
+				WHERE
+					date(crt_time)=(select curdate())
+				GROUP BY 
+				DATE_FORMAT(crt_time, '%H')
+				ORDER BY 
+				trs_time DESC) b
+		ON a.trs_time = b.trs_time
+	</select>
+
+	<insert id="insertSTMTopuser">
+	INSERT INTO stm_topuser 
+	(RANK,
+	 DATA_SUM,
+	 SOURCE_IP,
+	 IO_CD,
+	 CRT_TIME)
+	VALUES(	 
+	 #rank#,
+	 #data_sum#,
+	 #source_ip#,
+	 #io_cd#,
+	 now()
+	);
+	</insert>
+	
+	<insert id="insertSTMTopPolicy">
+	INSERT INTO stm_toppolicy 
+	(RANK,
+	 STM_ID,
+	 DATA_SUM,
+	 IO_CD,
+	 CRT_TIME)
+	VALUES(	 
+	 #rank#,
+	 #stm_id#,
+	 #data_sum#,
+	 #io_cd#,
+	 now()
+	);
+	</insert>
+
+
+	<insert id="STMPacketSizeinsert">
+		INSERT INTO stm_packet_size (
+			io_cd,
+			data_sum,
+			crt_time
+		) VALUES (
+			#io_cd#,
+			#data_sum#,
+			#crt_time#
+		)
+	</insert>
+
+	<insert id="stmSTMSessionCntinsert">
+		INSERT INTO stm_session_cnt (
+			io_cd,
+			data_cnt,
+			crt_time
+		) VALUES (
+			#io_cd#,
+			#data_cnt#,
+			#crt_time#
+		)
+	</insert>
+
+	<select id="selectSTMSessionCntList" resultClass="sconnInfoForm">
+		SELECT
+			a.stm_time, IFNULL(data_cnt, 0)data_cnt
+		FROM
+			(SELECT
+				stm_time
+			FROM
+				(SELECT '00' AS 'stm_time' UNION
+				<include refid="timeList"/>
+				LEFT OUTER JOIN
+				(SELECT
+					DATE_FORMAT(crt_time, '%H') AS stm_time, count(*)AS data_cnt
+				FROM
+					stm_session_cnt
+				WHERE
+					date(crt_time)=(select curdate())
+				<isNotEmpty prepend="AND" property="io_cd">
+					io_cd = #io_cd#
+				</isNotEmpty>
+				GROUP BY 
+				DATE_FORMAT(crt_time, '%H')
+				ORDER BY 
+				stm_time DESC) b
+		ON a.stm_time = b.stm_time
+	</select>
+
+	<select id="selectSTMPacketSumList" resultClass="spacketSizeForm">
+		SELECT
+			a.stm_time, IFNULL(data_sum, 0)data_sum
+		FROM
+			(SELECT
+				stm_time
+			FROM
+				(SELECT '00' AS 'stm_time' UNION
+				<include refid="timeList"/>
+				LEFT OUTER JOIN
+				(SELECT
+					DATE_FORMAT(crt_time, '%H') AS stm_time, SUM(data_sum)AS data_sum
+				FROM
+					stm_packet_size
+				WHERE
+					date(crt_time)=(select curdate())
+				<isNotEmpty prepend="AND" property="io_cd">
+					io_cd = #io_cd#
+				</isNotEmpty>
+				GROUP BY 
+				DATE_FORMAT(crt_time, '%H')
+				ORDER BY 
+				stm_time DESC) b
+		ON a.stm_time = b.stm_time
+	</select>
+
+	<select id="selectSTMRecentSessionCnt" resultClass="sconnInfoForm">
+		SELECT
+			*
+		FROM
+			stm_session_cnt
+		WHERE
+		crt_time> SUBDATE(NOW(), INTERVAL 1 MINUTE)
+		<isNotEmpty prepend="AND" property="io_cd">
+			io_cd = #io_cd#
+		</isNotEmpty>
+		ORDER BY
+			session_seq
+		DESC
+		LIMIT 1
+	</select>
+
+	<select id="selectSTMRecentPacketDataSum" resultClass="spacketSizeForm">
+		SELECT
+			*
+		FROM
+			stm_packet_size
+		WHERE
+		crt_time> SUBDATE(NOW(), INTERVAL 1 MINUTE)
+		<isNotEmpty prepend="AND" property="io_cd">
+			io_cd = #io_cd#
+		</isNotEmpty>
+		ORDER BY
+			packet_seq
+		DESC
+		LIMIT 1
+	</select>
+</sqlMap>

@@ -1,0 +1,100 @@
+@charset "utf-8";
+
+@font-face{
+	font-family: 'MalgunGothic';
+	src: url('/Images/font/MalgunGothic.eot?#iefix') format('embedded-opentype'),
+	     url('/Images/font/MalgunGothic.TTF') format('truetype');
+	font-weight:normal;
+	font-stype:normal;
+}
+@font-face{
+	font-family: 'NanumGothicBold';
+	src: url('/Images/font/NanumGothic-Bold.woff') format('woff'),
+		 url('/Images/font/NanumGothic-Bold.eot?#iefix') format('embedded-opentype'),
+		 url('/Images/font/NanumGothic-Bold.ttf') format('truetype');
+}
+@font-face{
+	font-family: 'NanumGothicRegular';
+	src: url('/Images/font/NanumGothic-Regular.woff') format('woff'),
+		 url('/Images/font/NanumGothic-Regular.eot?#iefix') format('embedded-opentype'),
+		 url('/Images/font/NanumGothic-Regular.ttf') format('truetype');
+}
+@font-face{
+	font-family: 'SCDreamLight';
+	src: url('/Images/font/SCDream3.woff') format('woff'),url('/Images/font/SCDream3.otf') format('opentype');
+}
+@font-face{
+	font-family: 'SCDreamRegular';
+	src: url('/Images/font/SCDream4.woff') format('woff'),url('/Images/font/SCDream4.otf') format('opentype');
+}
+@font-face{
+	font-family: 'SCDreamMedium';
+	src: url('/Images/font/SCDream5.woff') format('woff'),url('/Images/font/SCDream5.otf') format('opentype');
+}
+@font-face{
+	font-family: 'SCDreamBold';
+	src: url('/Images/font/SCDream6.woff') format('woff'),url('/Images/font/SCDream6.otf') format('opentype');
+}
+
+/* scroll */
+::-webkit-scrollbar{width: 16px;}
+::-webkit-scrollbar-arrow-comor{color: white;}
+::-webkit-scrollbar-track {background-color:#343758;}
+::-webkit-scrollbar-thumb {background-color:#3c4262;} 
+::-webkit-scrollbar-button:start:decrement, 
+::-webkit-scrollbar-button:end:increment {display: block; width: 12px;height: 20px; color:white; background: #3c4262;}
+
+BODY
+{
+	SCROLLBAR-FACE-COLOR: #3c4262;
+	SCROLLBAR-TRACK-COLOR: #343758;
+	COLOR: #3c4262;
+	SCROLLBAR-BUTTON-BACKGROUND-COLOR: #3c4262;
+	SCROLLBAR-ARROW-COLOR: white;
+	SCROLLBAR-HIGHLIGHT-COLOR: #3c4262;
+	SCROLLBAR-SHADOW-COLOR: #3c4262;
+}
+/* scroll end */
+
+/* reset */
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,img,fieldset,legend,p,button,input,table,th,tr,td,thead,tbody,tfoot,a,textarea,
+label,del,dfn,em,ins,kbd,q,s,samp,select,small,strike,strong,sub,sup,tt,var,acronym,form,textarea,blockquote,abbr,pre,address,big,cite,code{margin:0;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
+h1,h2,h3,h4,h5,h6{font-weight:normal;}
+img,fieldset,iframe{border:0;border-style:none;}
+caption,legend{visibility:hidden;height:0;font-size:0;line-height:0;width:0;overflow:hidden;text-align:left;}
+table{border-collapse:collapse;}
+li{list-style:none;}
+input[type=checkbox],input[type=radio]{vertical-align:middle;width:17px;height:17px;margin:0;padding:0;}
+em{font-style:normal;}
+img,embed,ogject,video{max-width:100%;}
+button{border:none;background:none;margin:0;padding:0;cursor:pointer;vertical-align:middle;}
+form{height:100%;}
+
+/* blind */
+.blind,#skip_navi,legend{position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+
+/* default */
+body{font-size:0.8em;font-family:SCDreamLight,NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;line-height:1em;color:#363636;}
+select,button{font-size:1em;font-family:SCDreamLight,NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;}
+textarea{font-family:SCDreamLight,NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;}
+
+/* input */
+input[type=text],input[type=password],input[type=email]{width:100%;font-size:1em;height:27px;line-height:1.8em; padding:0 2px;color:#363636;font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+input[type=submit]{font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;}
+/*textarea{font-size:1em;line-height:1em;border:1px solid #bbb;padding:3px 5px;color:#363636;resize:none;
+font-family:"돋움",Dotum,Helvetica,AppleGothic,Sans-serif;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}*/
+.input_chk{vertical-align:middle;width:17px;height:17px;margin:0;padding:0;}
+
+/* ir */
+.ir_desc{display:block;text-indent:-9999px;overflow:hidden;}
+
+/* link */
+a{selector-dummy : expression(this.hideFocus=true);}
+a:link,a:visited{color:#363636;text-decoration:none;}
+a:active,a:hover{color:#363636;text-decoration:none;}
+
+/* bg clear */
+.bg_none{background:none !important;}
+

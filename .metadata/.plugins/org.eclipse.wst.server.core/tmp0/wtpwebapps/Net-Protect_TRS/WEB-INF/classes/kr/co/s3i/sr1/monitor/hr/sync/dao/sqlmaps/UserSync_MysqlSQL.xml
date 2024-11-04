@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="UserSync">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="deptApprovalForm" type="kr.co.s3i.sr1.approval.model.DeptApprovalForm" />
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+	<typeAlias alias="UsersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	
+
+	<select id="selectUserList" resultClass="UserSyncForm">
+		/** selectUserList */
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		  AND rst_seq = 0 
+		<isEqual prepend="AND" property="airportCustomCondition" compareValue="Y">
+		    AIRPORT_USER_YN = 'N'
+		</isEqual>
+		<isGreaterThan prepend="AND" compareValue="0" property="dept_seq">
+			dept_seq = #dept_seq#
+		</isGreaterThan>
+		<isNotEmpty prepend="AND" property="users_nm">
+			users_nm = #users_nm#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dept_nm">
+			dept_seq IN (SELECT
+							dept_seq
+						FROM
+							c_dept_mgt
+						WHERE
+							dept_nm LIKE CONCAT('%',#dept_nm#,'%')
+						)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="arrAuthCd">
+			auth_cd in ($arrAuthCd$)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="f_pol_seq">
+			f_pol_seq = #f_pol_seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="fp_pol_seq">
+			fp_pol_seq = #fp_pol_seq#
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectExistUser" resultClass="UserSyncForm">
+		<![CDATA[
+			/** selectUsers */
+			select a.seq
+		 , a.USERS_ID
+		 , a.rst_seq
+		 , a.cud_cd
+		 , a.USERS_PW
+		 , a.USERS_NM
+		 , a.AUTH_CD
+		 , a.DEPT_SEQ
+		 , a.HP
+		 , a.EMAIL
+		 , a.POSITION_ID
+		 , a.POSITION_NM
+		 , a.JOB_ID
+		 , a.JOB_NM
+		 , a.NOTE
+		 , a.A_POL_SEQ
+		 , a.L_POL_SEQ
+	     , a.F_POL_SEQ
+	     , a.FP_POL_SEQ
+		 , a.CUSTOM_ADD_YN
+		 , a.INIT_PWD_YN
+		 , a.USE_YN
+		 , a.INNER_IP
+		 , a.OUTER_IP
+		 , a.INNER_MAC
+		 , a.OUTER_MAC
+		 , a.ORDER1
+		 , a.ORDER2
+		 , a.ORDER3
+		 , a.PWD_MOD_DATE
+		 , a.PKI_INFO
+		 , a.AGENT_UUID
+		 , a.CRT_DATE
+		 , a.CRT_ID
+		 , a.MOD_DATE
+		 , a.MOD_ID
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.dept_seq = b.dept_seq
+	  AND a.users_id = #users_id#	
+	  ]]>	    
+	</select>
+
+	<select id="selectDeptApprUserList" resultClass="DeptApprovalUserSyncForm">
+		SELECT *
+		FROM c_user_mgt
+		WHERE 1 = 1
+		  AND rst_seq = 0 
+		<isNotEmpty prepend="AND" property="dept_seq">
+			dept_seq = #dept_seq#
+		</isNotEmpty>
+		<isNotEmpty property="apprPosition_idList">
+			<iterate prepend="AND position_id in" property="apprPosition_idList" open="(" close=")" conjunction=",">
+					#apprPosition_idList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="use_yn">
+			use_yn = #use_yn#
+		</isNotEmpty>
+			order by dept_seq desc;
+	</select>
+	
+	<update id="updateAutoSyncLevel5UserPolicy">
+		UPDATE c_user_mgt
+		SET a_pol_seq = #a_pol_seq#,
+			l_pol_seq = #l_pol_seq#,
+			f_pol_seq = #f_pol_seq#,
+			fp_pol_seq = #fp_pol_seq#
+		WHERE rst_seq = 0
+			AND cud_cd != 'D'
+			AND custom_add_yn = 'N'
+			AND auth_cd = 5
+	</update>
+	
+	<update id="updateAirportUserYn">
+		update c_user_mgt set airport_user_yn = job_id  where airport_user_yn != job_id and custom_add_yn = 'N'
+	</update>
+	
+	<update id="updateUserApprovalBulk">
+		UPDATE c_user_mgt
+		   set rst_seq = 0
+			 <isNotEmpty prepend = "," property="a_pol_seq">
+				a_pol_seq = #a_pol_seq#
+			 </isNotEmpty>
+			 <isNotEmpty prepend = "," property="l_pol_seq">
+				l_pol_seq = #l_pol_seq#
+			 </isNotEmpty>
+			 <isNotEmpty prepend = "," property="f_pol_seq">
+				f_pol_seq = #f_pol_seq#
+			 </isNotEmpty>
+			 <isNotEmpty prepend = "," property="fp_pol_seq">
+				fp_pol_seq = #fp_pol_seq#
+			 </isNotEmpty>
+		 WHERE rst_seq = 0
+		 	<isNotEmpty property="userList">
+				<iterate prepend="AND users_id IN" property="userList" open="(" close=")" conjunction=",">
+					#userList[].users_id#
+				</iterate>
+			</isNotEmpty>
+	</update>
+	
+	<select id="selectCustomAddUserIdList" resultClass="java.lang.String">
+		SELECT users_id
+		FROM c_user_mgt
+		WHERE rst_seq = 0
+			AND cud_cd != 'D'
+			AND custom_add_yn = 'Y'
+	</select>
+	
+	<select id="selectChangedNormalPolicyUser" resultClass="UserSyncForm">
+		SELECT *
+		FROM c_user_mgt
+		WHERE rst_seq = 0
+			AND cud_cd != 'D'
+			AND auth_cd = #arrAuthCd#
+			AND (
+				a_pol_seq != #a_pol_seq#
+				OR f_pol_seq != #f_pol_seq#
+				OR l_pol_seq != #l_pol_seq#
+				OR fp_pol_seq != #fp_pol_seq#
+			)
+	</select>
+	
+	<select id="motie_findNoDeptApprUserList" resultClass="UserSyncForm">
+		/*UserSync.findNoDeptApprUserList*/
+			SELECT 
+				* 
+			FROM c_user_mgt u,
+				 dept_approval d
+			WHERE
+				u.dept_seq = d.dept_seq
+			AND
+				u.rst_seq = 0
+			AND
+				u.cud_cd != 'D'
+			AND
+				u.use_yn = 'Y'
+			AND 
+				u.custom_add_yn = 'N'
+			AND 
+				d.rst_seq = 0   
+			AND 
+				d.cud_cd != 'D'   
+			AND 
+				d.status = 'Y'
+			AND
+				d.dept_seq not in ('C23000001451182','2')
+			AND
+				(d.appr_id = '' or d.appr_id is null)
+			ORDER by u.dept_seq asc
+	</select>
+	<select id="hrd_findNoDeptApprUserList" resultClass="UserSyncForm">
+		/*UserSync.findNoDeptApprUserList*/
+			SELECT 
+				* 
+			FROM c_user_mgt u,
+				 dept_approval d
+			WHERE
+				u.dept_seq = d.dept_seq
+			AND
+				u.rst_seq = 0
+			AND
+				u.cud_cd != 'D'
+			AND
+				u.use_yn = 'Y'
+			AND 
+				u.custom_add_yn = 'N'
+			AND 
+				d.rst_seq = 0   
+			AND 
+				d.cud_cd != 'D'   
+			AND 
+				d.status = 'Y'
+			AND
+				d.dept_seq not in ('2')
+			AND
+				(d.appr_id = '' or d.appr_id is null)
+			ORDER by u.dept_seq asc
+	</select>
+	<select id="find000000106UserList" resultClass="UserSyncForm">
+		/*UserSync.find000000106UserList*/
+			SELECT 
+				* 
+			FROM c_user_mgt 
+			WHERE 
+				rst_seq = 0 
+			AND 
+				use_yn = 'Y' 
+			AND
+				cud_cd != 'D' 
+			AND 
+				custom_add_yn = 'N' 
+			AND 
+				position_id = '000000106'
+	</select>
+	<select id="findHighPositionUserList" resultClass="UserSyncForm">
+		/*UserSync.findHighPositionUserList*/
+			SELECT 
+				* 
+			FROM c_user_mgt 
+			WHERE 
+				rst_seq = 0 
+			AND 
+				use_yn = 'Y' 
+			AND
+				cud_cd != 'D' 
+			AND 
+				custom_add_yn = 'N' 
+			AND 
+				job_nm is not null
+			AND 
+				job_nm not in ('','담당')
+	</select>
+	
+	<select id="selectExceptionUserList" resultClass="UsersForm">
+		$query$
+	</select>
+</sqlMap>

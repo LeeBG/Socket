@@ -1,0 +1,124 @@
+@charset ("utf-8");
+@import url("reset.css");
+.placeholder {color:#aaa;}
+body{font-size:0.8em;font-family:"돋움",Dotum,Helvetica,AppleGothic,Sans-serif;line-height:1em;color:black;}
+html,body{width:100%;height:100%; overflow:auto; background-color:#f9f9f9;}
+form{ height: unset; }
+#login_wrap {     width: 100%;
+    height: 100%;
+    position: absolute;
+    min-height: 720px;
+    min-width: 800px;}
+#login_area { width: 100%; height: calc(100% - 50px); background-color: #1c1f32; display: flex; justify-content: center; align-items: center; min-height: 880px;}
+/* login area */
+#login_area h1{ width: 100%; height: calc(100% - 50px); position: relative;}
+#login_area .login_type{margin:15px auto 10px auto; _margin:15px auto 30px auto;  background-image:url('../Images/new_login/logo_login_total.png'); background-size:100%; position:relative; background-repeat: no-repeat;  overflow:hidden; }
+#login_area .login_type.workPC, #login_area .login_type.internetPC { width: 600px; height: 287px; background-position:0px -92px;}
+#login_area .netprotect{height: 55px;background-image: url(../Images/new_login/NetProtect.png);background-size: auto 100%;background-repeat: no-repeat;background-position: center;}
+#login_area .title{line-height:normal; padding:19px; font-size:40px; text-align:center;font-family: '맑은 고딕', 'MalgunGothic';color: #757575;font-weight:600;}
+.title .network_text{color: #267bc0;}
+
+/* noticeBox 2014-11-24 추가 */
+.noticeBox{position:absolute; bottom:-10px; right:15px; width:230px; height:300px; padding:10px; background-color:#fff; border:1px solid #d7d7d7; border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;-o-border-radius:10px;}
+.noticeBox_top{width:100%; padding:10px 0 10px 3px; background:url("../Images/new_login/noticeBox_bg.gif") no-repeat 95% 100%; border-bottom:1px solid #d7d7d7;}
+.notice_contents_box{width:100%; height:185px; overflow-y:scroll; overflow-x:scroll; border:1px solid #ebebeb; line-height:1.3em; padding:5px 0;}
+
+.download_area{position:absolute; top:25px; right:-8px; _right:7px;}
+.download_area span a{font-weight:bold; color:#898989;}
+
+.loginBox_wrap{width:100%; color: #ddd; top:0px; bottom:0px; right: 0; left: 0; }
+.loginBox_wrap.agent_css{height:100%;}
+
+button.btn_certificate{background-image:url(../Images/new_login/btn_login_certificate.gif);}
+button.btn_certificate.login{width:160px; height:43px; background-position:0 0;}
+button.btn_certificate.register{width:160px; height:43px; background-position:0 -43px; _margin-left:5px; *margin-left:5px;}
+button.btn_certificate.loginOnly{width:330px; height:43px; background-position:0 -86px;}
+
+.login_form_area{overflow:auto; text-align: center;}
+.login_form_area h2.loginStyle{background-image:url(../Images/new_login/login_style_title.gif); display:block;text-indent:-9999px;overflow:hidden;}
+.login_form_area h2.loginStyle.IdPw{width:168px; height:20px; background-position:0 0;}
+.login_form_area h2.loginStyle.certificate{width:98px; height:20px; background-position:0 -20px;}
+
+.id_pw_login_box{float:left; width:270px; padding-left: 122px;  padding-top: 32px; }
+.certificate_login_box{width: 250px; margin: 0 auto; text-align: center; display: inline-block; } 
+.certificate_login_box .optionBox{ padding-top: 5px; padding-bottom: 5px; text-align: right; line-height: 18px; } 
+
+.input_area{ padding-bottom: 8px; }
+.input_area .input_login{height: 38px; margin-bottom: 2px; margin-top: 2px; font-size: 13px; padding-left: 5px; background-color: #0e1327; border: none; padding: 8px 10px; border-radius: 3px; color: inherit;}
+.input_area .input_login:focus{ outline: none; }
+.input_area p{ color: #ddd; }
+.login_label{float:left; display:block; background-image:url(../Images/new_login/login_style_title.gif); text-indent:-9999px; overflow:hidden; padding-left:70px;}
+
+#remember{vertical-align:middle;width:15px; height:15px; margin:0;padding:0; visibility: hidden;}
+label { cursor: pointer; }
+#input[type="checkbox"] + label:before {
+  background: grey;
+  border: 1px solid #333;
+  content: "\00a0";
+  display: inline-block;
+  font: 14px/1em sans-serif;
+  margin: 0 .25em 0 0;
+  padding: 0;
+  vertical-align: top;
+  height: 14px;
+  width: 14px;
+}
+#remember:checked + label:before { background: #93d7f7; color: #333; content: "\2713"; text-align: center;}
+#remember:checked + label:after {font-weight: bold;}
+button.btn_login{ width: 100%; height: 54px; margin-bottom: 2px;}
+div.btn_login_workPC, div.btn_login_internetPC{
+	color: #fff;
+	background: #24a9e1;
+    background: -webkit-linear-gradient(to right, #24a9e1, #283991);
+    background: -moz-linear-gradient(to right, #24a9e1, #283991);
+    background: -o-linear-gradient(to right, #24a9e1, #283991);
+    background: -ms-linear-gradient(to right, #24a9e1, #283991);
+    background: linear-gradient(to right, #24a9e1, #283991);
+    height: 50px;
+    line-height: 50px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-size: 1.3em;
+}
+div.btn_login_workPC + .btn_login_border, div.btn_login_internetPC + .btn_login_border {
+	height: 4px;
+	border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background: #2088b5;
+    background: -webkit-linear-gradient(to right, #2088b5, #1f2a67);
+    background: -moz-linear-gradient(to right, #2088b5, #1f2a67);
+    background: -o-linear-gradient(to right, #2088b5, #1f2a67);
+    background: -ms-linear-gradient(to right, #2088b5, #1f2a67);
+    background: linear-gradient(to right, #2088b5, #1f2a67);
+}
+p.alertArea{clear:both; width:100%; text-align:center; color:red; font-weight:bold; line-height:1.2em; } 
+
+/* footer */
+#footer{width: 100%; height: 50px; background-color: #0e1327; }
+.copyright{text-align: center; font-size: 1em; color: #3c415f; line-height: 50px;}
+
+.indexDownload button{
+	background-color: #3972b2 !important;
+	color: white;
+	padding: 5px !important;
+	border-radius: 5px !important;
+	border: 1px solid #276393 !important;
+}
+.agent_area{ text-align: right; color: #267bc0; font-size: 1.3em; font-weight: bold; width: 99%; height:110px; padding-top:50px;}
+.agent_area button.btn_down_main{ background: linear-gradient(to right, #24a9e1, #283991); color: #fff; border-top-left-radius: 3px; border-top-right-radius: 3px; padding: 6px 6px 3px 6px; cursor: pointer;}
+.agent_area button.btn_down_main.spare{ background: linear-gradient(to right, #a83ae4, #b0bce3); }
+.agent_area button img{ vertical-align: middle; margin-top: 0px; width:20px; height:20px; }
+
+input.button[class*='gpki_']{width:250px; padding:15px 0px; font-size:1.2em; font-weight:bold; cursor:pointer;}
+form[name='register_gpki_form']{margin-top:1%;}
+#gpki_form_div{display:inline-block;width:100%; text-align:center; vertical-align:middle;}
+#gpki_form_div form{ display:inherit !important; width:53%;}
+
+form{height: auto !important;}
+inpyt[type='hidden']{display:none !important;}
+form[name='lform']{display:none !important;}
+.login_text{padding:19px 0 19px 0 !important; width:100% !important}
+#gpkiUI{width:48%; overflow:auto; float:left;}
+#modal_alert{display:none;}
+.workPC .button{background:linear-gradient(rgba(62, 137, 200, 1),rgba(5, 116, 188, 1)); color:white;}
+.internetPC .button{background:linear-gradient(rgba(193, 74, 106, 1),rgba(143, 9, 47, 1)); color:white;}

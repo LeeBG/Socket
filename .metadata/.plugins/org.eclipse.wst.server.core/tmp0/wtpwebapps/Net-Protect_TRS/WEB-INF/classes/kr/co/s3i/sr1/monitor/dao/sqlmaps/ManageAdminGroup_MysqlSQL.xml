@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ManageAdminGroup">
+
+	<typeAlias alias="UsersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	
+	<select id="getManageAdminList" resultClass="usersForm">
+		SELECT 
+		    admin_id
+		FROM
+		    ADMIN_MANAGEMENT
+		GROUP BY admin_id
+	</select>
+	
+	<select id="getGroupList" resultClass="usersForm">
+		SELECT
+			a.*
+		FROM
+			ADMIN_MANAGEMENT as a
+			JOIN c_dept_mgt as b on a.manage_value = b.dept_seq AND b.rst_seq = '0' AND b.cud_cd != 'D'
+		WHERE
+			a.ADMIN_ID = #admin_id#
+		order by a.seq
+	</select>
+	
+	<select id="getGroupValueList" resultClass="java.lang.String">
+		SELECT
+			a.manage_value
+		FROM
+			ADMIN_MANAGEMENT as a
+		WHERE
+			a.ADMIN_ID = #admin_id#
+		order by a.seq
+	</select>
+	
+	<select id="selectChildDeptSeqList" resultClass="java.lang.String">
+		SELECT 
+			dept_seq
+		FROM 
+			c_dept_mgt
+		WHERE 
+			rst_seq <![CDATA[=]]> 0
+		AND
+			cud_cd in ('C','U')
+		<isNotNull property="pDeptList" prepend="AND p_dept_seq IN ">
+			<iterate open="(" close=")" conjunction="," property="pDeptList">
+				#pDeptList[]#
+			</iterate>
+		</isNotNull>
+	</select>
+	
+	<delete id="deleteDeptGroup">
+		/* deleteAdminManagement */
+		DELETE
+		FROM 
+			admin_management
+		WHERE 
+			ADMIN_ID = #admin_id#
+	</delete>
+	
+	<insert id="insertDeptGroup">
+		/* insertDeptGroup */
+		INSERT INTO ADMIN_MANAGEMENT (
+		CUD_CD,
+		TYPE,
+		MANAGE_VALUE,
+		DOWN_DEPT_YN,
+		ADMIN_ID,
+		CRT_DATE,
+		MOD_DATE
+		) VALUES (
+		'C',
+		#manage_type#,
+		#manage_value#,
+		#down_dept_yn#,
+		#admin_id#,
+		NOW(),
+		NOW()
+		)
+	</insert>
+</sqlMap>

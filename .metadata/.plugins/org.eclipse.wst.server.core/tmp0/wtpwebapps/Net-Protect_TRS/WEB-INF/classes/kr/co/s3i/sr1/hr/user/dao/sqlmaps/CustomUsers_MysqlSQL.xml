@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CustomUsers">
+
+	<typeAlias alias="customUsers" type="kr.co.s3i.sr1.hr.user.model.CustomUsers" />
+
+	<select id="selectCustomUser" parameterClass="customUsers" resultClass="customUsers">
+	SELECT
+		*
+	FROM
+		c_custom_user
+	WHERE
+		users_id = #users_id#;
+	</select>
+
+	<select id="selectCustomUserList" resultClass="customUsers">
+	/* selectCustomUserList */
+	SELECT
+		u.*,
+		a.seq,
+		a.appr_yn
+	FROM
+		c_custom_user a,
+		c_user_mgt u
+	WHERE
+		u.rst_seq = 0
+		AND a.users_id = u.users_id
+		AND u.cud_cd != 'D'
+		AND a.dept_seq = u.dept_seq
+		AND a.dept_seq = #dept_seq#
+	</select>
+
+	<select id="selectCustomDeptList" resultClass="customUsers">
+	SELECT
+		distinct(c.dept_seq)
+	FROM
+		c_custom_user c,
+		c_dept_mgt d
+	WHERE
+		d.rst_seq = 0
+		AND d.cud_cd != 'D'
+		AND d.use_yn = 'Y'
+		AND c.dept_seq = d.dept_seq
+	</select>
+
+	<insert id="insertCustomUser" parameterClass="customUsers"> 
+	INSERT INTO
+		c_custom_user (SEQ,USERS_ID,USERS_NM,DEPT_SEQ,APPR_YN,CRT_TIME) 
+	VALUES
+		((select max(seq) + 1 from (select 0 as seq union SELECT max(seq) FROM c_custom_user) as a ),#users_id#,#users_nm#,#dept_seq#,#appr_yn#,now());
+	</insert>
+
+	<delete id="deleteCustomUser" parameterClass="customUsers">
+		DELETE FROM c_custom_user WHERE users_id = #users_id#;
+	</delete>
+
+	<update id="updateCustomUser" parameterClass="customUsers">
+	UPDATE c_custom_user
+		SET crt_time = now()
+		<isNotNull prepend="," property="appr_yn">
+			appr_yn = #appr_yn#
+		</isNotNull>
+		WHERE 
+			users_id = #users_id#
+	</update>
+</sqlMap>

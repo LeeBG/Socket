@@ -1,0 +1,44 @@
+@charset "utf-8";
+
+/* reset */
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,img,fieldset,legend,p,button,input,table,th,tr,td,thead,tbody,tfoot,a,textarea,
+label,del,dfn,em,ins,kbd,q,s,samp,select,small,strike,strong,sub,sup,tt,var,acronym,form,textarea,blockquote,abbr,pre,address,big,cite,code{margin:0;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
+h1,h2,h3,h4,h5,h6{font-weight:normal;}
+img,fieldset,iframe{border:0;border-style:none;}
+caption,legend{visibility:hidden;height:0;font-size:0;line-height:0;width:0;overflow:hidden;text-align:left;}
+table{border-collapse:collapse;}
+li{list-style:none;}
+input[type=checkbox],input[type=radio]{vertical-align:middle;width:17px;height:17px;margin:0;padding:0;}
+em{font-style:normal;}
+img,embed,ogject,video{max-width:100%;}
+button{border:none;background:none;margin:0;padding:0;cursor:pointer;vertical-align:middle;}
+form{height:100%;}
+
+/* blind */
+.blind,#skip_navi,legend{position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+
+/* default */
+body{font-size:0.9em;font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;line-height:1em;color:#363636;}
+select{font-size:1em;font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;}
+textarea{font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;}
+
+/* input */
+input[type=text],input[type=password],input[type=email]{width:100%;font-size:1em;height:27px;line-height:1.8em; padding:0 2px;color:#363636;font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+input[type=submit]{font-family:NanumGothicRegular,"맑은 고딕",Dotum,Helvetica,AppleGothic,Sans-serif;}
+/*textarea{font-size:1em;line-height:1em;border:1px solid #bbb;padding:3px 5px;color:#363636;resize:none;
+font-family:"돋움",Dotum,Helvetica,AppleGothic,Sans-serif;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}*/
+.input_chk{vertical-align:middle;width:17px;height:17px;margin:0;padding:0;}
+
+/* ir */
+.ir_desc{display:block;text-indent:-9999px;overflow:hidden;}
+
+/* link */
+a{selector-dummy : expression(this.hideFocus=true);}
+a:link,a:visited{color:#363636;text-decoration:none;}
+a:active,a:hover{color:#363636;text-decoration:none;}
+
+/* bg clear */
+.bg_none{background:none !important;}
+

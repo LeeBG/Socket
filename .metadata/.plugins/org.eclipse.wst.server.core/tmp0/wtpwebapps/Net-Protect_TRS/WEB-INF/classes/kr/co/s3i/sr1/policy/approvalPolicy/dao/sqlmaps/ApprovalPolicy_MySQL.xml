@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ApprovalPolicy">
+	<typeAlias alias="ApprovalPolicyForm" type="kr.co.s3i.sr1.policy.approvalPolicy.model.ApprovalPolicyForm" />
+	<typeAlias alias="usersForm" type="kr.co.s3i.sr1.hr.user.model.UsersForm" />
+	<typeAlias alias="fileInfoForm" type="kr.co.s3i.sr1.policy.filePolicy.model.FPolFileInfoForm" />
+
+	<sql id="where_basicCondition">
+		WHERE
+			CUD_CD != 'D'
+		AND
+			RST_SEQ = 0
+		<isNotEmpty prepend="AND" property="app_seq">
+			APP_SEQ = #app_seq#
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_notUsed">
+		<isNotEmpty property="NotUse">
+			AND APP_SEQ != 'N'
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchFieldQuery">
+		<isEqual property="searchField" compareValue="app_seq">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				APP_SEQ LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="app_nm">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				APP_NM LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="note">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				a.NOTE LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<sql id="where_searchField_UsersQuery">
+		<isEqual property="searchField" compareValue="dept_nm">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				(
+					c.DEPT_SEQ LIKE CONCAT('%',#filterSearchValue#,'%')
+					OR DEPT_NM LIKE CONCAT('%',#filterSearchValue#,'%')
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="users">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				(
+					USERS_ID LIKE CONCAT('%',#filterSearchValue#,'%')
+					OR USERS_NM LIKE CONCAT('%',#filterSearchValue#,'%')
+				)
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+
+	
+	<select id="selectApprovalPolicy" resultClass="ApprovalPolicyForm">
+		SELECT
+			*
+		FROM
+			F_POL_APPROVAL_MGT
+		<include refid="where_basicCondition"/>
+		<isNotEmpty prepend="AND" property="isdel_yn">
+			ISDEL_YN = #isdel_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="np_cd">
+			NP_CD = #np_cd#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectApprovalPolicyList" resultClass="ApprovalPolicyForm">
+		/* ApprovalPolicy.selectApprovalPolicyList */
+		SELECT 
+			app_seq,
+			app_nm,
+			a.note, 
+			isdel_yn,
+			COUNT(users_id) as usrCount,
+			(SELECT COUNT(c.dept_seq) FROM c_dept_mgt as c WHERE a.app_seq = c.a_pol_seq AND c.rst_seq = 0 AND c.cud_cd != 'D') as deptCount
+			<isNotEmpty prepend="," property="admin_id">
+				ifnull((select 'Y' from c_user_mgt c where rst_seq = 0 and cud_cd != 'D' and a.crt_id = c.users_id and c.users_id = #admin_id#), 'N') as modify_auth
+			</isNotEmpty>
+			<isEmpty prepend="," property="admin_id">
+				'Y' as modify_auth
+			</isEmpty>
+		FROM
+			f_pol_approval_mgt a
+			LEFT JOIN
+				(SELECT 
+					users_id, user.a_pol_seq
+				FROM
+					c_user_mgt user, c_dept_mgt dept
+				WHERE
+					user.dept_seq = dept.dept_seq
+					AND user.rst_seq = 0
+					AND user.cud_cd != 'D'
+					AND dept.rst_seq = 0
+					AND dept.cud_cd != 'D' 
+					AND auth_cd = 5) AS b ON (a.app_seq = b.a_pol_seq)
+		WHERE
+			a.rst_seq = 0 
+			AND a.np_cd = 'I'
+			AND a.cud_cd != 'D'
+			<isNotEmpty prepend="AND" property="admin_id">
+				crt_id in (select users_id from c_user_mgt where rst_seq = 0 and (auth_cd = 1 or users_id = #admin_id#))
+			</isNotEmpty>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_notUsed"/>
+		group by
+			app_seq, app_nm, a.note, a.isdel_yn
+		ORDER BY
+			FIELD(APP_SEQ, 'N')=0, APP_SEQ
+		<isGreaterThan compareValue="0" property="pageListSize">
+			limit $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+	
+	
+	<select id="selectFPolApprMgtList" resultClass="ApprovalPolicyForm">
+		/* ApprovalPolicy.selectFPolApprMgtList */
+		SELECT 
+			*
+		FROM
+			F_POL_APPROVAL_MGT
+		WHERE
+				CUD_CD <![CDATA[!=]]> 'D'
+			AND
+				RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="app_seq">
+				APP_SEQ <![CDATA[=]]> #app_seq#
+			</isNotEmpty>
+	</select>
+	
+
+	<select id="selectApprovalPolicyListCount" resultClass="int">
+		/* ApprovalPolicy.selectApprovalPolicyListCount */
+		SELECT COUNT(app_seq)
+		FROM(SELECT
+				*
+			FROM
+				F_POL_APPROVAL_MGT a
+			<include refid="where_basicCondition"/>
+			<include refid="where_searchFieldQuery"/>
+			<include refid="where_notUsed"/>
+			<isNotEmpty prepend="AND" property="admin_id">
+				crt_id in (select users_id from c_user_mgt where rst_seq = 0 and (auth_cd = 1 or users_id = #admin_id#))
+			</isNotEmpty>
+			GROUP BY APP_SEQ
+		)as A
+	</select>
+	
+	<select id="selectApprovalPolicyUserList" resultClass="ApprovalPolicyForm">
+		/* ApprovalPolicy.selectApprovalPolicyUserList */
+		SELECT
+			app_seq, app_nm, a.note, c.dept_nm, users_id, users_nm
+		FROM
+			F_POL_APPROVAL_MGT a
+			LEFT JOIN
+				c_user_mgt as b on (a.app_seq = b.a_pol_seq AND b.rst_seq = 0 AND b.cud_cd != 'D' AND auth_cd = 5)
+			JOIN
+				c_dept_mgt as c on (b.dept_seq = c.dept_seq AND c.rst_seq = 0 AND c.cud_cd != 'D')
+		WHERE
+			a.rst_seq = 0 AND a.np_cd = 'I' AND a.cud_cd != 'D' AND APP_SEQ != 'N'
+		<include refid="where_searchField_UsersQuery"/>
+		<isNotEmpty property="app_seq" prepend="AND">
+				a.app_seq = #app_seq#
+		</isNotEmpty>
+		ORDER BY
+			dept_nm,
+			users_nm
+		<isGreaterThan compareValue="0" property="pageListSize">
+			limit $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+
+	<select id="selectApprovalPolicyUserListCount" resultClass="int">
+		/* ApprovalPolicy.selectApprovalPolicyUserListCount */
+		SELECT
+			COUNT(users_id)
+		FROM
+			F_POL_APPROVAL_MGT a
+			LEFT JOIN
+				c_user_mgt as b on (a.app_seq = b.a_pol_seq AND b.rst_seq = 0 AND b.cud_cd != 'D' AND auth_cd = 5)
+			JOIN
+				c_dept_mgt as c on (b.dept_seq = c.dept_seq AND c.rst_seq = 0 AND c.cud_cd != 'D')
+		WHERE
+			a.rst_seq = 0
+			AND a.np_cd = 'I'
+			AND a.cud_cd != 'D'
+		<include refid="where_searchField_UsersQuery"/>
+		<include refid="where_notUsed"/>
+		<isNotEmpty property="app_seq" prepend="AND">
+				a.app_seq = #app_seq#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectApprovalPolicyDeptList" resultClass="ApprovalPolicyForm">
+		/* ApprovalPolicy.selectApprovalPolicyDeptList */
+		SELECT
+			dept_seq,
+			dept_nm
+		FROM
+			c_dept_mgt c
+		WHERE
+		rst_seq = 0
+		AND cud_cd != 'D'
+		AND use_yn = 'Y'
+		<isNotEmpty property="app_seq" prepend="AND">
+				a_pol_seq = #app_seq#
+		</isNotEmpty>
+		<include refid="where_searchField_UsersQuery"/>
+		ORDER BY
+			dept_seq
+		<isGreaterThan compareValue="0" property="pageListSize">
+			limit $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+
+	<select id="selectApprovalPolicyDeptListCount" resultClass="int">
+		/* ApprovalPolicy.selectApprovalPolicyDeptListCount */
+		SELECT
+			COUNT(dept_seq)
+		FROM
+			c_dept_mgt c
+		WHERE
+		rst_seq = 0
+		AND cud_cd != 'D'
+		AND use_yn = 'Y'
+		<isNotEmpty property="app_seq" prepend="AND">
+				a_pol_seq = #app_seq#
+		</isNotEmpty>
+		<include refid="where_searchField_UsersQuery"/>
+	</select>
+
+	<select id="selectApprovalLabel" resultClass="ApprovalPolicyForm">
+		/* ApprovalPolicy.selectApprovalLabel */
+		SELECT 
+			app_seq, app_nm, note
+		FROM 
+			f_pol_approval_mgt
+		WHERE
+			rst_seq = '0'
+			AND cud_cd != 'D'
+		<isNotEmpty prepend="AND">
+				app_seq = #app_seq#
+		</isNotEmpty>
+		ORDER BY
+        CRT_DATE DESC LIMIT 1  
+	</select>
+	
+	<select id="selectApprovalPolicySeq" resultClass="int">
+		SELECT seq
+		  FROM F_POL_APPROVAL_MGT
+		 WHERE APP_SEQ = #app_seq#
+		   AND RST_SEQ = 0
+	</select>
+	
+	<select id="selectApprovalPolicyMaxNumber" resultClass="int">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(APP_SEQ, 2, length(APP_SEQ)-1)), 0)  AS APP_SEQ
+		FROM
+			F_POL_APPROVAL_MGT
+		WHERE
+			RST_SEQ = 0
+	</select>
+
+	<insert id="insertApprovalPolicy">
+	    INSERT INTO F_POL_APPROVAL_MGT (
+			APP_SEQ,
+			NP_CD,
+			RST_SEQ,
+			CUD_CD,
+			APP_NM,
+			SAME_APPLY,
+			USE_YN,
+			APP_LEVEL,
+			SELF_APP_YN,
+			PROXY_APP_YN,
+			AFTER_APP_YN,
+			AFTER_APP_TYPE,
+			AFTER_APP_LOCK_PERIOD,
+			ABSENCE_APP_YN,
+			TOGETHER_APP_YN,
+			ISDEL_YN,
+			NOTE,
+			CRT_ID,
+			CRT_DATE,
+			MOD_ID,
+			MOD_DATE
+		) VALUES (
+			#app_seq#,
+			#np_cd#,
+			#rst_seq#,
+			#cud_cd#,
+			#app_nm#,
+			#same_apply#,
+			#use_yn#,
+			#app_level#,
+			#self_app_yn#,
+			#proxy_app_yn#,
+			#after_app_yn#,
+			#after_app_type#,
+			#after_app_lock_period#,
+			#absence_app_yn#,
+			#together_app_yn#,
+			#isdel_yn#,
+			#note#,
+			#crt_id#,
+			now(),
+			#mod_id#,
+			now()
+		)
+		<selectKey resultClass="int">
+			SELECT seq from F_POL_APPROVAL_MGT where APP_SEQ = #app_seq# AND NP_CD = #np_cd# AND RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+
+	<update id="updateApprovalPolicy">
+		UPDATE F_POL_APPROVAL_MGT
+		<dynamic prepend="SET">
+			RST_SEQ =
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							F_POL_APPROVAL_MGT
+						WHERE
+							<isNotEmpty prepend="AND" property="app_seq">
+								APP_SEQ = #app_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+			mod_date = NOW()
+		</dynamic>
+		WHERE APP_SEQ = #app_seq#
+	      and RST_SEQ = 0			
+	</update>
+	
+	<select id="selectApprovalPolicyInfo" resultClass="ApprovalPolicyForm">
+		SELECT
+			*
+		FROM
+			F_POL_APPROVAL_MGT
+		WHERE RST_SEQ =0
+		AND  APP_SEQ = #a_pol_seq#
+		ORDER BY CRT_DATE DESC LIMIT 1
+	</select>
+	
+	<select id="selecApprovalPolicyUseCount" resultClass="Integer">
+		<isNotEmpty property="seqs">
+			SELECT SUM(a) FROM
+			(
+				SELECT COUNT(*) as a FROM C_USER_MGT U , F_POL_APPROVAL_MGT F WHERE F.APP_SEQ = U.A_POL_SEQ AND U.RST_SEQ = 0 AND U.CUD_CD != 'D' AND U.USE_YN = 'Y' AND F.RST_SEQ = 0 AND F.CUD_CD != 'D'
+				<iterate prepend="AND A_POL_SEQ in" property="seqs" open="(" close=")" conjunction=",">#seqs[]#</iterate>
+				
+				UNION ALL
+				
+				SELECT COUNT(*) as a FROM C_DEPT_MGT D , F_POL_APPROVAL_MGT F WHERE F.APP_SEQ = D.A_POL_SEQ AND D.RST_SEQ = 0 AND D.CUD_CD != 'D' AND D.USE_YN = 'Y' AND F.RST_SEQ = 0 AND F.CUD_CD != 'D'
+				<iterate prepend="AND A_POL_SEQ in" property="seqs" open="(" close=")" conjunction=",">#seqs[]#</iterate>
+			) a
+		</isNotEmpty>
+	</select>
+	
+	<select id="selectUserActiveApprovalPolicyListCount" resultClass="Integer">
+		/* selectUserActiveApprovalPolicyListCount */
+		SELECT COUNT(ap.app_seq)
+		FROM f_pol_approval_mgt ap
+		WHERE ap.rst_seq = 0
+			AND ap.cud_cd in ('C', 'U')
+			AND np_cd = #np_cd#
+			AND EXISTS (
+				SELECT us.a_pol_seq
+				FROM c_user_mgt us
+				WHERE us.rst_seq = 0
+					AND us.use_yn = 'Y'
+					AND us.a_pol_seq = ap.app_seq
+			)
+	</select>
+	
+	<select id="selectUserExtsApprovalPolicyListCount" resultClass="Integer">
+		/* 	selectUserExtsApprovalPolicyListCount */
+		SELECT COUNT(pol_seq)
+		FROM f_pol_file_info 
+		WHERE rst_seq =0
+		AND   exts_ap_yn= #exts_ap_yn#
+		AND   io_cd = #io_cd#
+		AND   pol_seq = #pol_seq#
+	</select>
+	
+	<select id="selectUserActiveExtsApprovalPolicyListCount" resultClass="Integer">
+		/* 	selectUserActiveExtsApprovalPolicyListCount */
+		SELECT COUNT(*)
+		FROM  f_pol_file_mgt AS fm
+		INNER JOIN f_pol_file_info AS fi 
+		ON  fi.pol_seq=fm.pol_seq 
+			AND fi.rst_seq = 0
+			AND fi.io_cd = #io_cd#
+			AND fi.exts_ap_yn= 'Y'
+			AND fi.cud_cd != 'D'
+		WHERE fm.rst_seq =0
+			AND fm.cud_cd != 'D'
+			AND fm.use_yn = 'Y'
+			AND fm.isdel_yn = 'N'
+			AND EXISTS (
+			   SELECT us.f_pol_seq
+			   FROM c_user_mgt us
+			   WHERE us.rst_seq = 0
+			      AND us.use_yn = 'Y'
+			      AND us.cud_cd != 'D'
+			      AND us.f_pol_seq = fm.pol_seq
+			)
+	</select>
+	
+	<update id="updateUserAppPolicy">
+		UPDATE
+			c_user_mgt
+		<dynamic prepend="SET">
+				a_pol_seq = #a_pol_seq#
+		</dynamic>
+		WHERE 
+			users_id = #users_id#
+			AND
+			rst_seq = 0
+	</update>
+</sqlMap> 

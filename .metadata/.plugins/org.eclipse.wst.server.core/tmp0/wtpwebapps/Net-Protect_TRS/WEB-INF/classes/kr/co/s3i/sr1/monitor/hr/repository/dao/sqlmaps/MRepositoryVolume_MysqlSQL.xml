@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MRepositoryVolume">
+	<typeAlias alias="repositoryVolumeForm" type="kr.co.s3i.sr1.policy.repository.model.RepositoryVolumeForm"/>
+
+	<sql id="default_where">
+		custom_section = 'USER'
+		AND custom_type = 'USVL'
+		AND custom_column = 'F_POL_SEQ'
+	</sql>
+	
+	<select id="selectNowRepositoryVolumeInfo" resultClass="repositoryVolumeForm">
+		/* MRepositoryVolume.selectNowRepositoryVolumeInfo */
+		SELECT 
+			id AS users_id, 
+			value1 AS f_pol_seq
+		FROM c_admin_custom_edit
+		WHERE <include refid="default_where"/>
+			AND rst_seq = 0
+			AND cud_cd != 'D'
+			AND status IN ('WT', 'SS') /* 대기, 적용중 */
+			AND now() BETWEEN start_date AND end_date
+	</select>
+	
+	<select id="selectExpiredRepositoryVolumeUserIdList" resultClass="java.lang.String">
+		/* MRepositoryVolume.selectExpiredRepositoryVolumeUserIdList */
+		SELECT 
+			id
+		FROM c_admin_custom_edit
+		WHERE <include refid="default_where"/>
+			AND rst_seq = 0
+			AND cud_cd != 'D'
+			AND status IN ('SS') /* 적용중 */
+			AND NOT ( now() BETWEEN  start_date AND end_date )
+	</select>
+	
+	<update id="updateRepositoryRstSeqToMaxBulk">
+		/* MRepositoryVolume.updateRepositoryRstSeqToMaxBulk */
+		UPDATE c_admin_custom_edit main
+		SET
+			rst_seq = (
+				SELECT a.rst_seq 
+				FROM (
+					SELECT IFNULL(MAX(rst_seq) + 1, 0) AS rst_seq , id
+					FROM c_admin_custom_edit 
+					WHERE <include refid="default_where"/>
+						GROUP BY id
+						
+				) AS a
+				WHERE id = main.id	),
+			mod_date = NOW()
+		WHERE <include refid="default_where"/>
+			AND rst_seq = 0
+			<isNotNull open="AND main.id IN">
+				<iterate open="(" close=")" prepend="," property="userIdList">
+					#userIdList[]#
+				</iterate> 
+			</isNotNull>
+	</update>
+	
+	<update id="updateRepositoryRstSeqToMax">
+		/* MRepositoryVolume.updateRepositoryRstSeqToMax */
+		UPDATE c_admin_custom_edit main
+		SET
+			rst_seq = (
+				SELECT * 
+				FROM (
+					SELECT IFNULL(MAX(rst_seq) + 1, 0) AS rst_seq
+					FROM c_admin_custom_edit 
+					WHERE <include refid="default_where"/>
+						AND id = #id#
+						
+				) AS a ),
+			mod_date = NOW()
+		WHERE <include refid="default_where"/>
+			AND rst_seq = 0
+			AND id = #id#
+	</update>
+	
+	<select id="selectRepositoryVolumeInfo" resultClass="repositoryVolumeForm">
+		/* MRepositoryVolume.selectRepositoryVolumeInfo */
+		SELECT ifnull(e.custom_seq, 0) AS volume_seq, 
+			e.rst_seq AS rst_seq, 
+			e.cud_cd AS cud_cd,
+			e.id AS users_id,
+			e.value1 AS f_pol_seq, 
+			e.start_date as start_date, 
+			e.end_date as end_date, 
+			e.status, 
+			e.crt_date as crt_date,
+			e.crt_id,
+			e.mod_date as mod_date,
+			e.mod_id
+		FROM c_admin_custom_edit e
+		WHERE <include refid="default_where"/>
+			AND rst_seq = #rst_seq#
+			AND cud_cd != 'D'
+			<isGreaterThan prepend=" AND" property="custom_seq" compareValue="0">
+				custom_seq = #custom_seq#
+			</isGreaterThan>
+			<isNotEmpty prepend=" AND" property="id">
+				id = #id#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND" property="value1">
+				value1 = #value1#
+			</isNotEmpty>
+			<isPropertyAvailable property="onlyOne">
+				limit 1
+			</isPropertyAvailable>
+			 
+	</select>
+	
+	<insert id="insertRepositoryVolume" parameterClass="repositoryVolumeForm"> 
+		/* MRepositoryVolume.insertRepositoryVolume */
+		INSERT INTO c_admin_custom_edit(
+			rst_seq,
+			cud_cd,
+			custom_section,
+			id,
+			custom_type,
+			custom_column,
+			value1,
+			start_date,
+			end_date,
+			status,
+			<isNotNull property="crt_date" close=",">
+			crt_date
+			</isNotNull>
+			crt_id,
+			mod_date,
+			mod_id
+		) VALUES (
+			0,
+			#cud_cd#,
+			'USER',
+			#users_id#,
+			'USVL',
+			'F_POL_SEQ',
+			#f_pol_seq#,
+			#start_date#,
+			#end_date#,
+			#status#,
+			<isNotNull property="crt_date" close=",">
+				#crt_date#
+			</isNotNull> 
+			#crt_id#,
+			NOW(),
+			#mod_id#
+		)
+	</insert>
+	
+	<delete id="deleteRepositoryVolume">
+		/* MRepositoryVolume.deleteRepositoryVolume */
+		DELETE FROM c_admin_custom_edit
+		WHERE <include refid="default_where"/>
+			<isNotNull property="deleteList">
+				<iterate property="deleteList" open="(" close=")" prepend="AND id IN " conjunction=",">
+					#deleteList[].users_id#
+				</iterate>
+			</isNotNull>
+	</delete>
+</sqlMap>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HrSync_kins">
+	<typeAlias alias="UserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.UsersSyncForm" />
+	<typeAlias alias="DeptSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptSyncForm" />
+	<typeAlias alias="DeptApprovalUserSyncForm" type="kr.co.s3i.sr1.monitor.hr.sync.model.DeptApprovalUserSyncForm" />
+
+	<select id="selectSiteDeptList_kins" resultClass="DeptSyncForm">
+		SELECT
+		 	DEPT AS dept_seq,
+			DEPT_NM AS dept_nm,
+			COALESCE( DEPT_SEQ, 0 ) AS "ORDER",
+			UP_DEPT AS p_dept_seq,
+			LBL AS depth,
+			USER_YN AS USE_YN,
+			TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') AS CRT_TIME,
+			'admin' as CRTR_ID
+		FROM 
+			VI_MIDAS_DEPT_TREE 
+		WHERE
+			DEPT_USE_YN = 'Y'
+			AND USER_YN = 'Y'
+			AND DEPTMG_DIV = '2'
+			AND DEPT IS NOT NULL
+	</select>
+
+	<select id="selectSiteUserList_kins" resultClass="UserSyncForm">
+		SELECT
+			USER_ID AS users_id,
+			PSWD AS users_pw,
+			NAME AS users_nm,
+			COALESCE( USER_ORD, 0 ) AS order1,
+			DEPT AS dept_seq,
+			POSI AS position_id,
+			POSI_NM AS position_nm,
+			TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') AS crt_time,
+			'SYSTEM' AS crtr_id,
+			USE_YN AS use_yn,
+			EMAIL as EMAIL
+		FROM
+			VI_MIDAS_HR_BASE
+		WHERE
+			IOFFC_DiV != 3
+			AND USER_DIV_CD = '001'
+			AND USE_YN = 'Y'
+			AND TEMP_USER = 'Y'
+			AND DEPT_DIV = 'Y' 
+	</select>
+
+	<select id="selectSiteDeptApprovalUser_kins" resultClass="DeptApprovalUserSyncForm">
+		SELECT 
+			a.dept_seq, users_id, users_nm, order1
+		FROM
+			c_user_mgt a, (SELECT 
+			dept_seq, MIN(order1) AS min_order
+		FROM
+			c_user_mgt
+		WHERE
+			position_nm IS NOT NULL
+			AND position_nm != ''
+			AND position_nm != '0'
+			AND custom_add_yn = 'N'
+			GROUP BY dept_seq) b
+		WHERE
+			a.dept_seq = b.dept_seq
+			AND a.order1 = b.min_order
+	</select>
+</sqlMap>

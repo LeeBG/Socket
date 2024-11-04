@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="LoginAudit">
+	<typeAlias alias="LoginAudit" type="kr.co.s3i.sr1.audit.loginAudit.model.LoginAudit" />
+	<typeAlias alias="LoginAuditForm" type="kr.co.s3i.sr1.audit.loginAudit.model.LoginAuditForm" />
+	<typeAlias alias="LoginLockForm" type="kr.co.s3i.sr1.audit.loginAudit.model.LoginLockForm" />
+	<typeAlias alias="cPolLoginMgtForm" type="kr.co.s3i.sr1.policy.loginPolicy.model.CPolLoginMgtForm" />
+
+	<sql id="where_searchDate">
+		AND crt_date BETWEEN #startDate# AND #endDate#
+	</sql>
+
+	<sql id="where_searchDateOrTime_custom">
+		<isNotEmpty property="startDay">
+			<isEmpty property="startHour">
+				AND crt_time <![CDATA[>=]]> concat(#startDay#,' ','00',':','00',':','00')				
+			</isEmpty>
+			<isNotEmpty property="startHour">
+				<isEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':','00',':','00')				
+				</isEmpty>
+				<isNotEmpty property="startMin">
+					AND crt_time <![CDATA[>=]]> concat(#startDay#,' ',#startHour#,':',#startMin#,':','00')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="endDay">
+			<isEmpty property="endHour">
+				AND crt_time <![CDATA[<=]]> concat(#endDay#,' ','23',':','59',':','59')				
+			</isEmpty>
+			<isNotEmpty property="endHour">
+				<isEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':','59',':','59')				
+				</isEmpty>
+				<isNotEmpty property="endMin">
+					AND crt_time <![CDATA[<=]]> concat(#endDay#,' ',#endHour#,':',#endMin#,':','59')
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="include_adminManagement">
+		<isEqual prepend="AND" property="isAdminManageUse" compareValue="true">
+			EXISTS(SELECT 1 FROM vw_manage_user_list_d a, (SELECT @users_id:=#admin_id#) b WHERE a.users_id = u.users_id)
+		</isEqual>
+	</sql>
+	
+	<select id="selectLastLoginAudit" resultClass="LoginAuditForm">
+		SELECT
+			*
+		FROM
+			login_audit
+		WHERE
+			users_id = #users_id#
+		ORDER BY crt_date DESC
+		LIMIT 1
+	</select>
+	
+	<select id="selectLastLoginAuditNpCd" resultClass="LoginAudit">
+		SELECT
+			*
+		FROM
+			login_audit
+		WHERE
+			users_id = #users_id#
+			AND np_cd = #np_cd#
+		ORDER BY crt_date DESC
+		LIMIT 1
+	</select>
+
+	<select id="selectExistLoginLock" resultClass="LoginLockForm">
+		SELECT
+			*
+		FROM
+			login_lock
+		WHERE
+			end_date <![CDATA[>]]> now()
+		AND
+			clear_date IS NULL
+		AND
+			users_id = #users_id#
+	</select>
+
+	<select id="selectLoginAuditList" resultClass="LoginAuditForm">
+		SELECT A.*,
+		IFNULL(c.cd_des, '-') AS login_type_nm
+		FROM 
+		(
+			SELECT
+				l.*,
+				u.users_nm,
+				l.crt_date as crt_time
+			FROM
+				login_audit l
+			LEFT JOIN
+				c_user_mgt u
+				ON l.users_id = u.users_id and u.rst_seq = 0
+			WHERE
+			  l.display_yn = 'Y'
+			<isNotEmpty prepend="AND" property="system_cd">
+				system_cd = #system_cd#
+			</isNotEmpty>
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isEqual property="searchField" compareValue="users_id">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						l.users_id LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isEqual>
+				<isNotEqual property="searchField" compareValue="users_id">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isNotEqual>
+			</isNotEmpty>
+		) AS A
+		LEFT JOIN 
+			(SELECT 
+				cd_cate_type, cd_val, cd_des 
+			FROM 
+				code 
+			WHERE 
+				(SELECT CD_CATE_TYPE FROM code_category WHERE CD_CATE='LOGIN_TYPE_CD') = cd_cate_type
+			) c ON ( c.cd_val = A.login_type )
+		WHERE
+			1=1
+			<include refid="where_searchDateOrTime_custom"/>
+		ORDER BY A.crt_date  DESC, seq  DESC
+		LIMIT
+			$offSet$, $pageListSize$
+	</select>
+	
+	<select id="selectLoginAuditExcelList" resultClass="LoginAuditForm">
+		SELECT A.*,
+		IFNULL(c.cd_des, '-') AS login_type_nm
+		FROM 
+		(
+			SELECT
+				l.*,
+				u.users_nm,
+				l.crt_date as crt_time
+			FROM
+				login_audit l
+			LEFT JOIN
+				c_user_mgt u
+				ON l.users_id = u.users_id and u.rst_seq = 0
+			WHERE 
+			  l.display_yn = 'Y' 
+			<isNotEmpty prepend="AND" property="system_cd">
+				system_cd = #system_cd#
+			</isNotEmpty>
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isEqual property="searchField" compareValue="users_id">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						l.users_id LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isEqual>
+				<isNotEqual property="searchField" compareValue="users_id">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isNotEqual>
+			</isNotEmpty>
+		) as A
+		LEFT JOIN 
+			(SELECT 
+				cd_cate_type, cd_val, cd_des 
+			FROM 
+				code 
+			WHERE 
+				(SELECT CD_CATE_TYPE FROM code_category WHERE CD_CATE='LOGIN_TYPE_CD') = cd_cate_type
+			) c ON ( c.cd_val = A.login_type )
+		WHERE
+			1=1
+			<include refid="where_searchDateOrTime_custom"/>
+		ORDER BY A.crt_date  DESC, seq  DESC
+	</select>
+
+	<select id="selectLoginAuditListCount" resultClass="Integer">
+		SELECT COUNT(*)
+		FROM 
+		(
+			SELECT
+				l.*,
+				l.crt_date as crt_time
+			FROM
+				login_audit l
+			LEFT JOIN
+				c_user_mgt u
+				ON l.users_id = u.users_id and u.rst_seq = 0
+			WHERE 
+			  l.display_yn = 'Y'
+			<isNotEmpty prepend="AND" property="system_cd">
+				system_cd = #system_cd#
+			</isNotEmpty>
+			<include refid="include_adminManagement"/>
+			<isNotEmpty property="searchField">
+				<isEqual property="searchField" compareValue="users_id">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						l.users_id LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isEqual>
+				<isNotEqual property="searchField" compareValue="users_id">
+					<isNotEmpty prepend="AND" property="filterSearchValue">
+						$searchField$ LIKE CONCAT('%',#filterSearchValue#,'%')
+					</isNotEmpty>
+				</isNotEqual>
+			</isNotEmpty>
+		) as A
+		WHERE
+			1=1
+			<include refid="where_searchDateOrTime_custom"/>
+	</select>
+
+	<select id="selectLoginLockList" resultClass="LoginLockForm">
+		SELECT
+			l.*,
+			u.users_nm
+		FROM
+			login_lock l,
+			c_user_mgt u
+		WHERE l.users_id = u.users_id 
+		  AND u.rst_seq = 0
+		  AND end_date <![CDATA[>]]> now()
+		  AND clear_date IS NULL
+		  <include refid="include_adminManagement"/>
+		LIMIT
+			$offSet$, $pageListSize$
+	</select>
+
+	<select id="selectLoginLockListCount" resultClass="Integer">
+		SELECT count(l.users_id)
+		  FROM login_lock l,
+			   c_user_mgt u
+		 WHERE l.users_id = u.users_id 
+		   AND u.rst_seq = 0
+		   AND	end_date <![CDATA[>]]> now()
+		   AND clear_date IS NULL
+		   <include refid="include_adminManagement"/>
+	</select>
+
+	<insert id="insertLoginAudit" parameterClass="LoginAudit">
+		INSERT INTO login_audit (
+			users_id,
+			connect_ip,
+			connect_mac,
+			login_type,
+			try_count,
+			login_yn,
+			login_cd,
+			np_cd,
+			system_cd,
+			crt_date
+		) VALUES (
+			#users_id#,
+			#connect_ip#,
+			#connect_mac#,
+			#login_type#,
+			#try_count#,
+			#login_yn#,
+			#login_cd#,
+			#np_cd#,
+			#system_cd#,
+			now()
+		)
+	</insert>
+
+	<insert id="insertLoginLock" parameterClass="LoginLockForm">
+		INSERT INTO login_lock (
+			users_id,
+			crt_date,
+			end_date
+		) VALUES (
+			#users_id#,
+			now(),
+			date_add(now(), interval $fail_delay$ minute)
+		)
+	</insert>
+
+	<update id="updateLoginLock">
+		UPDATE 
+			login_lock
+		SET
+			clear_date = now()
+		WHERE
+			seq = #seq#
+	</update>
+	
+	<select id="selectCPolLoginMgtPwCycle" resultClass="cPolLoginMgtForm">
+		SELECT
+			*
+		FROM
+			C_POL_LOGIN_MGT
+		WHERE
+			login_seq = (SELECT l_pol_seq FROM C_USER_MGT WHERE rst_seq = 0 and users_id = #users_id#)
+			AND cud_cd in ('C','U')
+			AND rst_seq = 0
+			ORDER BY RST_SEQ DESC LIMIT 1
+	</select>
+	
+	<select id="selectCPolLoginMgtPwCycleDefault" resultClass="cPolLoginMgtForm">
+		SELECT
+			*
+		FROM
+			C_POL_LOGIN_MGT
+		WHERE
+			seq = 1
+	</select>
+</sqlMap>

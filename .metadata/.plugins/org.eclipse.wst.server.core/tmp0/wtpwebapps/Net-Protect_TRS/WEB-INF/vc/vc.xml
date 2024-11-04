@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workProcess>
+	<VCUpdateJNIMain>
+		<class>kr.co.s3i.sr1.vaccine.common.VCUpdateJNIMain</class>
+		<path></path>
+		<month>*</month>
+		<day>*</day>
+		<hour>*</hour>
+		<minute>*</minute>
+		<keep>-1</keep>
+		<type></type>
+	</VCUpdateJNIMain>
+<!--
+	<DbSyncThread>
+                <class>com.s3i.sr1.monitor.common.DbSyncThread</class>
+                <path></path>
+                <month>*</month>
+                <day>*</day>
+                <hour>05</hour>
+                <minute>01</minute>
+                <keep>-1</keep>
+                <type></type>
+        </DbSyncThread>
+-->
+</workProcess>

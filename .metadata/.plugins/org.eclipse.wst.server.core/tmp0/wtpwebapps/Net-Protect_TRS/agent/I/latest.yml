@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: Net-ProtectClientAgent-local-I-Setup-1.0.0.exe
+    sha512: frYE99eRjXNRkiW/KEm/cR9uG2OBQh5ZqtRUgI8RURQUeQ7T7fjPuZLozfEedVp1wt2yKQWRtt1VhlnTNcPkJg==
+    size: 44665008
+path: Net-ProtectClientAgent-local-I-Setup-1.0.0.exe
+sha512: frYE99eRjXNRkiW/KEm/cR9uG2OBQh5ZqtRUgI8RURQUeQ7T7fjPuZLozfEedVp1wt2yKQWRtt1VhlnTNcPkJg==
+releaseDate: '2020-04-08T02:41:51.922Z'

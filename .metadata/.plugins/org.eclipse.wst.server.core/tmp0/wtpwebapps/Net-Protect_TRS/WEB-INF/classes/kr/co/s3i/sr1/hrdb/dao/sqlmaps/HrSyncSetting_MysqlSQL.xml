@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HrSyncSetting">
+	<typeAlias alias="hrSyncSettingCode" type="kr.co.s3i.sr1.hrdb.model.HrSyncSettingCode" />
+
+	<select id="selectValue" resultClass="java.lang.String">
+		SELECT
+			value
+		FROM
+			c_hr_sync_setting
+		WHERE
+			setting_category = #setting_category#
+			<isNotNull prepend="AND " property="setting_code">
+				setting_code = #setting_code#
+			</isNotNull>
+			<isNotNull prepend="AND setting_code " property="setting_codes">
+				<iterate prepend="IN " conjunction="," open="(" close=")">
+					#setting_code[]#
+				</iterate>
+			</isNotNull>
+	</select>
+	
+	<select id="findAllSettingCode" resultClass="hrSyncSettingCode">
+		SELECT
+			setting_category,
+			setting_code,
+			code_desc,
+			value
+		FROM
+			c_hr_sync_setting
+	</select>
+	
+	<select id="selectCode" resultClass="hrSyncSettingCode">
+		SELECT *
+		FROM
+			c_hr_sync_setting
+		WHERE 1=1
+			<isNotNull prepend="AND " property="setting_category">
+			setting_category = #setting_category#
+			</isNotNull>
+			<isNotNull prepend="AND " property="setting_code">
+				setting_code = #setting_code#
+			</isNotNull>
+			<isNotNull prepend="AND setting_code " property="setting_codes">
+				<iterate prepend="IN " conjunction="," open="(" close=")">
+					#setting_code[]#
+				</iterate>
+			</isNotNull>
+	</select>
+	
+	<update id="updateCode">
+		UPDATE c_hr_sync_setting
+		   SET value = #value#
+		WHERE setting_category = #setting_category#
+			AND setting_code = #setting_code#
+	</update>
+	
+	<select id="selectValueList" resultClass="String">
+		/* HrSyncSetting.selectValueList */
+		SELECT
+			value
+		FROM
+			c_hr_sync_setting
+		WHERE
+			setting_code = #setting_code#
+	</select>
+	
+	<update id="updateUtilHrSync">
+		/* HrSyncSetting.updateUtilHrSync */
+		UPDATE
+			c_hr_sync_setting
+		SET
+			value = #value#
+		WHERE
+			setting_code = #setting_code#;
+	</update>
+</sqlMap>

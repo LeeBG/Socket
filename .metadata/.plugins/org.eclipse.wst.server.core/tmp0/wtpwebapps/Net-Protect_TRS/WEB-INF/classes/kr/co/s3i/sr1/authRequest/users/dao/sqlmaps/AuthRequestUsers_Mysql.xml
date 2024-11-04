@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AuthRequestUsers">
+	<typeAlias alias="authRequestUsersForm" type="kr.co.s3i.sr1.authRequest.users.model.AuthRequestUsersForm" />
+
+	<select id="selectUsers" resultClass="authRequestUsersForm">
+		<![CDATA[
+			/** selectUsers */
+			select a.seq
+		 , a.USERS_ID
+		 , a.rst_seq
+		 , a.cud_cd
+		 , a.USERS_PW
+		 , a.USERS_NM
+		 , a.AUTH_CD
+		 , a.DEPT_SEQ
+		 , a.HP
+		 , a.EMAIL
+		 , a.POSITION_ID
+		 , a.POSITION_NM
+		 , a.JOB_ID
+		 , a.JOB_NM
+		 , a.NOTE
+		 , a.A_POL_SEQ
+		 , a.L_POL_SEQ
+	     , a.F_POL_SEQ
+	     , a.FP_POL_SEQ
+		 , a.CUSTOM_ADD_YN
+		 , a.INIT_PWD_YN
+		 , a.USE_YN
+		 , a.INNER_IP
+		 , a.OUTER_IP
+		 , a.INNER_MAC
+		 , a.OUTER_MAC
+		 , a.ORDER1
+		 , a.ORDER2
+		 , a.ORDER3
+		 , a.PWD_MOD_DATE
+		 , a.PKI_INFO
+		 , a.AGENT_UUID
+		 , a.CRT_DATE
+		 , a.CRT_ID
+		 , a.MOD_DATE
+		 , a.MOD_ID
+		 , b.DEPT_NM
+	from c_user_mgt a
+	   , c_dept_mgt b
+	where a.rst_seq = 0
+	  and b.rst_seq = 0
+	  and a.dept_seq = b.dept_seq
+	  AND a.users_id = #users_id#	
+	  ]]>	    
+	</select>
+
+</sqlMap>

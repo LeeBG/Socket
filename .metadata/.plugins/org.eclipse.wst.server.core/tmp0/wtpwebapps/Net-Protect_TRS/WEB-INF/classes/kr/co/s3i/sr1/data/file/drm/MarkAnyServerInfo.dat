@@ -1,0 +1,71 @@
+#
+# DocSafer ServerInformation
+#
+
+# MA_PROP_TAG_DDS_IP			1 (IP String)
+# MA_PROP_TAG_DDS_PORT			2 (Port Number)
+# MA_PROP_TAG_DEC_IP			3 (IP String)
+# MA_PROP_TAG_DEC_PORT			4 (Port Number)
+# MA_PROP_TAG_FILECHK_IP		5 (IP String)
+# MA_PROP_TAG_FILECHK_PORT		6 (Port Number)
+# MA_PROP_TAG_TIMEOUT 			7 (milisecond Number)
+# MA_PROP_TAG_CREATED_BY		8 (0 server drm)
+# MA_PROP_TAG_DEBUG				9 (0 release, 1~3 debug level)
+#
+# MA_PROP_TAG_FAILOVER			10 (ON, OFF)
+# MA_PROP_TAG_DDS2_IP			11 (IP String)
+# MA_PROP_TAG_DDS2_PORT			12 (Port Number)
+# MA_PROP_TAG_DEC2_IP			13 (IP String)
+# MA_PROP_TAG_DEC2_PORT			14 (Port Number)
+# MA_PROP_TAG_FILECHK2_IP		15 (IP String)
+# MA_PROP_TAG_FILECHK2_PORT		16 (Port Number)
+#
+# MA_PROP_TAG_ENC_VERSION 		17 (Enc Version - v30 v31 v51014 vmuccf v6)
+# MA_PROP_TAG_NEW_CID			18 (NEW Company Id)
+# MA_PROP_TAG_NEW_EID			19 (NEW Enterprise Id)
+# MA_PROP_TAG_ODS_VER 			20 (ODS1 Version)
+# MA_PROP_TAG_ODS_IP 			21 (Ods1 IP String)
+# MA_PROP_TAG_ODS_PORT 			22 (Ods1 Port Number)
+# MA_PROP_TAG_ODS_CID 			23 (Ods1 Company Id)
+# MA_PROP_TAG_ODS_EID 			24 (Ods1 Enterprise Id)
+# MA_PROP_TAG_ODS2_VER 			25 (Ods2 Version)
+# MA_PROP_TAG_ODS2_IP 			26 (Ods2 IP String)
+# MA_PROP_TAG_ODS2_PORT 		27 (Ods2 Port Number)
+# MA_PROP_TAG_ODS2_CID 			28 (Ods2 Company Id)
+# MA_PROP_TAG_ODS2_EID 			29 (Ods2 Enterprise Id)
+# MA_PROP_TAG_ODS_SERVER_ADDR 	30 (Ods server address)
+# MA_PROP_TAG_ONNARA_UID        31 (user id for onnara system to calling java-service)
+
+MAXTAG=31
+TAG#1=127.0.0.1
+TAG#2=60001
+TAG#3=127.0.0.1
+TAG#4=60002
+TAG#5=127.0.0.1
+TAG#6=60003
+TAG#7=10000
+TAG#8=0
+TAG#9=0
+TAG#10=OFF
+TAG#11=127.0.0.1
+TAG#12=60001
+TAG#13=127.0.0.1
+TAG#14=60002
+TAG#15=127.0.0.1
+TAG#16=60003
+TAG#17=v6
+TAG#18=MMA-4EF9-075E-4BF2
+TAG#19=MMAG-D1AC-D1FD-4266
+TAG#20=v2010r1
+TAG#21=127.0.0.1
+TAG#22=60004
+TAG#23=MMA
+TAG#24=
+TAG#25=v30
+TAG#26=127.0.0.1
+TAG#27=60006
+TAG#28=MMA
+TAG#29=
+TAG#30=
+TAG#31=
+

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FilePolicy">
+	<typeAlias alias="fPolFileMgtForm" type="kr.co.s3i.sr1.policy.filePolicy.model.FPolFileMgtForm" />
+	<typeAlias alias="fPolFileInfoForm" type="kr.co.s3i.sr1.policy.filePolicy.model.FPolFileInfoForm" />
+
+	<sql id="where_basicCondition">
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="pol_seq">
+			POL_SEQ <![CDATA[=]]> #pol_seq#
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="where_notUsed">
+		<isNotEmpty property="NotUse">
+			AND POL_SEQ != 'N'
+		</isNotEmpty>
+	</sql>
+
+	<sql id="where_searchFieldQuery">
+		<isEqual property="searchField" compareValue="pol_seq">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				pol_seq LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="pol_nm">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				pol_nm LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchField" compareValue="note">
+			<isNotEmpty prepend="AND" property="filterSearchValue">
+				note LIKE CONCAT('%',#filterSearchValue#,'%')
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<select id="selectFPolFileMgt" resultClass="fPolFileMgtForm">
+		SELECT
+			*
+		FROM
+			F_POL_FILE_MGT
+		<include refid="where_basicCondition"/>
+		<isNotEmpty prepend="AND" property="isdel_yn">
+			ISDEL_YN <![CDATA[=]]> #isdel_yn#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectFPolFileMgtList" resultClass="fPolFileMgtForm">
+		SELECT
+			*
+		FROM
+			F_POL_FILE_MGT
+		<include refid="where_basicCondition"/>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_notUsed"/>
+		ORDER BY
+			FIELD(POL_SEQ, 'N')=0, POL_SEQ
+		<isGreaterThan compareValue="0" property="pageListSize">
+			limit $offSet$, $pageListSize$
+		</isGreaterThan>
+	</select>
+
+	<select id="selectFPolFileMgtListCount" resultClass="Integer">
+		SELECT
+			COUNT(pol_seq)
+		FROM
+			F_POL_FILE_MGT
+		<include refid="where_basicCondition"/>
+		<include refid="where_searchFieldQuery"/>
+		<include refid="where_notUsed"/>
+	</select>
+
+	<select id="selectFPolFileMgtMaxNumber" resultClass="int">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(POL_SEQ, 2, length(POL_SEQ)-1)), 0) AS POL_SEQ
+		FROM
+			F_POL_FILE_MGT
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+	</select>
+
+	<select id="selectFPolFileInfo" resultClass="fPolFileInfoForm">
+		SELECT
+			*
+		FROM
+			F_POL_FILE_INFO
+		WHERE
+				CUD_CD <![CDATA[!=]]> 'D'
+			AND
+				RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				POL_SEQ <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</select>
+
+	<insert id="insertFPolFileInfo">
+		INSERT INTO F_POL_FILE_INFO (
+			POL_SEQ,
+			IO_CD,
+			RST_SEQ,
+			CUD_CD,
+			M_SIZE,
+			M_SIZE_CS,
+			ONE_M_SIZE,
+			ONE_M_SIZE_CS,
+			UP_M_SIZE,
+			UP_M_USE_YN,
+			UP_F_CNT,
+			UP_F_CNT_CS,
+			TITLE_SIZE_MIN,
+			TITLE_SIZE_MAX,
+			TITLE_USE_YN,
+			DEPTH_SIZE,
+			<isNotEmpty property="mail_file_size">
+			MAIL_FILE_SIZE,
+			</isNotEmpty>
+			<isNotEmpty property="mail_yn">
+			MAIL_YN,
+			</isNotEmpty>
+			VC_YN,
+			CF_CHK_YN,
+			EXTS_AP_YN,
+			EXTS_AP_SEQ,
+			BW_CD,
+			EXTS_SEQ,
+			ENCRYPT_FILTER,
+			ENC_EXTS_SEQ,
+			COMPRESS_YN,
+			CRT_ID,
+			CRT_DATE,
+			MOD_ID,
+			MOD_DATE,
+			VC_CATEGORY,
+			DLP_YN,
+			DLP_TIMEOUT,
+			DLP_SEND_YN,
+			APT_YN,
+			APT_SEND_YN,
+			APT_FILE_SIZE_FILTER_USE_YN,
+			APT_SCAN_MAX_FILE_SIZE,
+			OLE_YN,
+			OLE_FAIL_SEND_YN,
+			CLIPBOARD_YN,
+			CLIPBOARD_SIZE,
+			TX_DOWNLOAD_YN
+		) VALUES (
+			#pol_seq#,
+			#io_cd#,
+			#rst_seq#,
+			#cud_cd#,
+			#m_size#,
+			#m_size_cs#,
+			#one_m_size#,
+			#one_m_size_cs#,
+			#up_m_size#,
+			#up_m_use_yn#,
+			#up_f_cnt#,
+			#up_f_cnt_cs#,
+			#title_size_min#,
+			#title_size_max#,
+			#title_use_yn#,
+			#depth_size#,
+			<isNotEmpty property="mail_file_size">
+			#mail_file_size#,
+			</isNotEmpty>
+			<isNotEmpty property="mail_yn">
+			#mail_yn#,
+			</isNotEmpty>
+			#vc_yn#,
+			#cf_chk_yn#,
+			#exts_ap_yn#,
+			#exts_ap_seq#,
+			#bw_cd#,
+			#exts_seq#,
+			#encrypt_filter#,
+			#enc_exts_seq#,
+			#compress_yn#,
+			#crt_id#,
+			NOW(),
+			#mod_id#,
+			NOW(),
+			#vc_category#,
+			#dlp_yn#,
+			#dlp_timeout#,
+			#dlp_send_yn#,
+			#apt_yn#,
+			#apt_send_yn#,
+			#apt_file_size_filter_use_yn#,
+			#apt_scan_max_file_size#,
+			#ole_yn#,
+			#ole_fail_send_yn#,
+			#clipboard_yn#,
+			#clipboard_size#,
+			#tx_download_yn#
+		)
+		<selectKey resultClass="int">
+			SELECT seq from F_POL_FILE_INFO where POL_SEQ = #pol_seq# AND IO_CD = #io_cd# AND RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+
+	<insert id="insertFPolFileMgt">
+		INSERT INTO F_POL_FILE_MGT (
+			POL_SEQ,
+			RST_SEQ,
+			CUD_CD,
+			POL_NM,
+			USE_YN,
+			ISDEL_YN,
+			NOTE,
+			CRT_ID,
+			CRT_DATE,
+			MOD_ID,
+			MOD_DATE
+		) VALUES (
+			#pol_seq#,
+			#rst_seq#,
+			#cud_cd#,
+			#pol_nm#,
+			'Y',
+			#isdel_yn#,
+			#note#,
+			#crt_id#,
+			NOW(),
+			#mod_id#,
+			NOW()
+		)
+		<selectKey resultClass="int">
+			SELECT seq from F_POL_FILE_MGT where POL_SEQ = #pol_seq# AND RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+
+	<update id="updateFPolFileMgtRSTSequence">
+		UPDATE
+			F_POL_FILE_MGT
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							F_POL_FILE_MGT
+						WHERE
+							POL_SEQ = #pol_seq#
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ = 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				POL_SEQ <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+		
+	</update>
+
+	<update id="updateFPolFileInfoRSTSequence">
+		UPDATE
+			F_POL_FILE_INFO
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							F_POL_FILE_INFO
+						WHERE
+							<isNotEmpty prepend="AND" property="pol_seq">
+								POL_SEQ <![CDATA[=]]> #pol_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="pol_seq">
+				POL_SEQ <![CDATA[=]]> #pol_seq#
+			</isNotEmpty>
+	</update>
+	
+	<select id="selecFilePolicyUseCount" resultClass="Integer">
+		<isNotEmpty property="seqs">
+			SELECT SUM(a) FROM
+			(
+				SELECT COUNT(*) as a FROM C_USER_MGT U , F_POL_FILE_MGT F WHERE F.POL_SEQ = U.F_POL_SEQ AND U.RST_SEQ = 0 AND U.CUD_CD != 'D' AND U.USE_YN = 'Y' AND F.RST_SEQ = 0 AND F.CUD_CD != 'D' 
+				<iterate prepend="AND F_POL_SEQ in" property="seqs" open="(" close=")" conjunction=",">#seqs[]#</iterate>
+				
+				UNION ALL
+				
+				SELECT COUNT(*) as a FROM C_DEPT_MGT D , F_POL_FILE_MGT F WHERE F.POL_SEQ = D.F_POL_SEQ AND D.RST_SEQ = 0 AND D.CUD_CD != 'D' AND D.USE_YN = 'Y' AND F.RST_SEQ = 0 AND F.CUD_CD != 'D'
+				<iterate prepend="AND F_POL_SEQ in" property="seqs" open="(" close=")" conjunction=",">#seqs[]#</iterate>
+			) a
+		</isNotEmpty>
+	</select>
+</sqlMap>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DestObject">
+	
+	<typeAlias alias="DestObjectForm" type="kr.co.s3i.sr1.policy.destObjectPolicy.model.DestObjectForm" />
+	
+	<sql id="where_searchFieldQueryDestObject">
+		WHERE
+			CUD_CD <![CDATA[!=]]> 'D'
+		AND
+			RST_SEQ <![CDATA[=]]> 0
+		<isNotEmpty prepend="AND" property="obj_nm">
+			obj_nm LIKE CONCAT('%',#obj_nm#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="del_yn">
+			del_yn = #del_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="io_cd">
+			io_cd = #io_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rey_ip">
+			rey_ip LIKE CONCAT('%',#rey_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="rey_port">
+			rey_port = #rey_port#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dst_ip">
+			dst_ip LIKE CONCAT('%',#dst_ip#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="dst_port">
+			dst_port = #dst_port#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="proto_cd">
+			proto_cd = #proto_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="note">
+			note = #note#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="notSeqList">
+			<iterate prepend="seq not in" property="notSeqList" open="(" close=")" conjunction=",">
+				#notSeqList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="startDay">
+			<isNotEmpty prepend="AND" property="endDay">
+				CRT_DATE BETWEEN #startDay# AND #endDay#
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<insert id="insertDestObject">
+		INSERT INTO S_DEST_OBJECT
+		(
+    		OBJ_SEQ, CUD_CD, RST_SEQ, OBJ_NM, TUNN_IDX,
+    		IO_CD, PORT_OBJ_CD, REY_IP, rey_st_port, rey_ed_port, DST_IP, dst_st_port, dst_ed_port,
+    		PROTO_CD, NOTE, DEL_YN, ISDEL_YN, CRT_DATE,
+    		CRT_ID, MOD_DATE, MOD_ID
+		)
+		VALUES
+		(
+			#obj_seq#, #cud_cd#, #rst_seq#, #obj_nm#, #tunn_idx#,
+    		#io_cd#, #port_obj_cd#, #rey_ip#, #rey_st_port#, #rey_ed_port#, #dst_ip#, #dst_st_port#, #dst_ed_port#,
+    		#proto_cd#, #note#, #del_yn#, #isdel_yn#, NOW(),
+    		#crt_id#, NOW(), #mod_id#
+		)
+		<selectKey resultClass="Integer">
+			SELECT
+				SEQ
+			FROM
+				S_DEST_OBJECT
+			WHERE
+				OBJ_SEQ = #obj_seq#
+			AND
+				RST_SEQ = #rst_seq#
+		</selectKey>
+	</insert>
+	
+	<update id="updateDestObjectRSTSequence">
+		UPDATE
+			S_DEST_OBJECT
+		<dynamic prepend="SET">
+			RST_SEQ <![CDATA[=]]>
+				(SELECT
+					*
+				FROM
+					(
+						SELECT
+							MAX(RST_SEQ)+1
+						FROM
+							S_DEST_OBJECT
+						WHERE
+							<isNotEmpty prepend="AND" property="obj_seq">
+								OBJ_SEQ <![CDATA[=]]> #obj_seq#
+							</isNotEmpty>
+					)
+				AS RST_SEQ),
+				mod_date = NOW()
+		</dynamic>
+		WHERE
+			RST_SEQ <![CDATA[=]]> 0
+			<isNotEmpty prepend="AND" property="obj_seq">
+				OBJ_SEQ <![CDATA[=]]> #obj_seq#
+			</isNotEmpty>
+	</update>
+	
+	<select id="selectDestObjectFormList" resultClass="DestObjectForm">
+		<![CDATA[/*@selectDestObjectFormList@*/]]>
+		SELECT c.*, (select cd_nm
+						from code_category a, code b
+						where a.cd_cate_type = b.cd_cate_type and b.cd_val = c.proto_cd
+						and a.cd_cate = 'PROTO_CD') as proto_val 
+			FROM S_DEST_OBJECT c
+		<include refid="where_searchFieldQueryDestObject"/>
+		ORDER BY ISDEL_YN ASC, SEQ DESC
+		LIMIT $offSet$, $pageListSize$
+	</select>
+
+	<select id="selectDestObjectFormListCount" resultClass="Integer">
+		<![CDATA[/*@selectDestObjectFormListCount@*/]]>
+		SELECT COUNT(*) FROM S_DEST_OBJECT
+		<include refid="where_searchFieldQueryDestObject"/>
+	</select>
+	
+	<select id="selectDestObjectSeqList" resultClass="DestObjectForm">
+		<isNotEmpty property="seqList">
+			SELECT c.*, (select cd_nm
+						from code_category a, code b
+						where a.cd_cate_type = b.cd_cate_type and b.cd_val = c.proto_cd
+						and a.cd_cate = 'PROTO_CD') as proto_val  FROM S_DEST_OBJECT c
+			<iterate prepend="WHERE seq in" property="seqList" open="(" close=")" conjunction=",">
+				#seqList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+
+	<select id="selectDestObjectUsedList" resultClass="DestObjectForm">
+		SELECT C.* , A.OBJ_GROUP_NM
+			FROM S_DEST_OBJECT_GROUP A, S_OBJECT_MAP B, S_DEST_OBJECT C
+			WHERE A.SEQ = B.OBJ_GROUP_SEQ
+			  AND B.OBJ_TYPE <![CDATA[=]]> 'D'
+			  AND A.RST_SEQ <![CDATA[=]]> 0
+			  AND A.CUD_CD <![CDATA[!=]]> 'D'
+			  AND B.OBJ_SEQ <![CDATA[=]]> C.SEQ
+			  AND B.OBJ_SEQ <![CDATA[=]]> #obj_seq#
+	</select>
+	
+	<select id="selectDestObject" resultClass="DestObjectForm">
+		SELECT * FROM S_DEST_OBJECT WHERE SEQ = #seq#
+	</select>
+	
+	<select id="selectMaxObjSeqNumber" resultClass="Integer">
+		SELECT 
+			IFNULL(MAX(SUBSTRING(OBJ_SEQ, 2, length(OBJ_SEQ)-1)), 0) AS OBJ_SEQ
+		FROM
+			S_DEST_OBJECT
+	</select>
+</sqlMap> 
