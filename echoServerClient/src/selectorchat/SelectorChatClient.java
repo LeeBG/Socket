@@ -19,7 +19,7 @@ public class SelectorChatClient {
 			systemOut = new Thread(new SystemOut(socket));
 			// 입력을 담당할 스레드 생성 및 실행
 			systemIn = new Thread(new SystemIn(socket));
-			
+
 			systemIn.start();
 			systemOut.start();
 
@@ -50,7 +50,7 @@ class SystemOut implements Runnable {
 	public void run() {
 		ByteBuffer buf = ByteBuffer.allocate(1024); // JVM의 힙 영역에 버퍼를 할당합니다.
 		try {
-			while (true) {
+			while (socketChannel != null) {
 				buf.clear();
 				int bytesRead = socketChannel.read(buf);
 				if (bytesRead == -1) {
@@ -59,7 +59,6 @@ class SystemOut implements Runnable {
 				buf.flip(); // 버퍼를 읽기 모드로 전환
 				String receiveMessage = new String(buf.array(), 0, bytesRead); // 받은 메시지
 				System.out.print(receiveMessage);
-				buf.clear(); // Buffer 클리어 position=0으로 세팅
 			}
 		} catch (SocketException e) {
 			System.out.println("서버 연결 해제 " + e.getMessage());
@@ -67,9 +66,7 @@ class SystemOut implements Runnable {
 		} catch (IOException e) {
 			System.out.println("출력 중 에러 발생 " + e.getMessage());
 			e.printStackTrace();
-		} 
-		finally {
-			buf.clear();
+		} finally {
 			try {
 				socketChannel.close();
 			} catch (IOException e) {
@@ -90,20 +87,22 @@ class SystemIn implements Runnable {
 
 	@Override
 	public void run() {
+
 		ByteBuffer buf = ByteBuffer.allocate(1024);
 		String sendMessage = "";
 		try (Scanner scanner = new Scanner(System.in);) {
-			while (sendMessage != null && !(sendMessage.equalsIgnoreCase("exit"))) {
+			while (socketChannel != null) {
 				sendMessage = scanner.nextLine();
-				buf = ByteBuffer.wrap(sendMessage.getBytes()); // 데이터 쓰기
-//				buf.put(sendMessage.getBytes()); // 데이터를 쓴다.
-				socketChannel.write(buf); // 입력한 내용을 서버로 출력
-				buf.clear(); // clear()
+				if (sendMessage.equalsIgnoreCase("exit")) {
+					break; // "exit" 입력 시 종료
+				}
+				buf = ByteBuffer.wrap(sendMessage.getBytes());
+				socketChannel.write(buf);
+				buf.clear();
 			}
 		} catch (IOException e) {
 			System.err.println("채팅 불가. " + e.getMessage());
 		} finally {
-			buf.clear();
 			try {
 				System.out.println("입력도중 연결이 끊어졌습니다.");
 				socketChannel.close();

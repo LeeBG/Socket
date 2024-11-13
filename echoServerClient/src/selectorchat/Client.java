@@ -12,7 +12,7 @@ class Client {
 	}
 
 	// 닉네임을 입력받으면 false로 변경
-	private void setCheck() {
+	void setCheck() {
 		isNickCheck = false;
 	}
 

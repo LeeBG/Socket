@@ -19,9 +19,10 @@ public class SelectorChatServer {
 	private Selector selector; // Selector 객체: 여러 채널을 관리
 	private ServerSocketChannel serverChannel;
 	private final static Integer MAX_CONN = 5; // 최대 연결 가능 횟수를 5회로 제한
+	private final static Integer MAX_READY = 5; // 대기열 최대 채널 갯수
 	private Set<SocketChannel> allClient = Collections.synchronizedSet(new HashSet<>()); // 동기화 HashSet
-	private BlockingQueue<SocketChannel> waitingQueue = new LinkedBlockingQueue<>(); // 대기 중인 클라이언트 목록
-	private Set<String> nicknames = Collections.synchronizedSet(new HashSet<>()); // 현재 사용중인 닉네임 중복입력 제거를 위한 동기화 HashSET
+	private BlockingQueue<SocketChannel> waitingQueue = new LinkedBlockingQueue<>(MAX_READY); // 대기 중인 클라이언트 목록
+	private Set<String> nicknames = Collections.synchronizedSet(new HashSet<>()); // 현재 사용중인 닉네임 중복입력 제거를 위한 동기화 HashSet
 
 	// 생성자 - 초기화
 	public SelectorChatServer(int port) {
@@ -104,7 +105,7 @@ public class SelectorChatServer {
 						nextClient.configureBlocking(false);
 						nextClient.register(selector, SelectionKey.OP_READ, new Client());
 						allClient.add(nextClient);
-						System.out.println("다음 클라이언트가 대기열에서 대기 중 : " + nextClient.getRemoteAddress());
+						System.out.println("다음 클라이언트가 대기열에서 빠져나와 연결됨 : " + nextClient.getRemoteAddress());
 
 						// 클라이언트에게 닉네임 입력 요청
 						ByteBuffer buffer = ByteBuffer.wrap("닉네임을 입력해주세요: ".getBytes());
@@ -136,14 +137,24 @@ public class SelectorChatServer {
 		SocketChannel clientChannel = serverChannel.accept();
 		// 비차단 모드로 설정
 		clientChannel.configureBlocking(false);
-		if (allClient.size() >= MAX_CONN) {
-			try {
-				waitingQueue.put(clientChannel);
-				System.out.println("클라이언트 연결 대기 : " + clientChannel.getRemoteAddress());
-				clientChannel.write(ByteBuffer.wrap("현재 최대 연결 수를 초과했습니다. 대기중\n".getBytes()));
-				return;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+
+		// 사이즈를 확인하는 동안에 다른 스레드가 클라이언트를 추가/제거할 수 있기 때문에 동기화
+		synchronized (allClient) {
+			if (allClient.size() >= MAX_CONN) {
+				try {
+					if(waitingQueue.size() < SelectorChatServer.MAX_READY) {
+						waitingQueue.put(clientChannel);
+					}else {
+						clientChannel.write(ByteBuffer.wrap("대기열이 가득 찼습니다. 연결종료\n".getBytes()));
+						clientChannel.close();
+						return;
+					}
+					System.out.println("클라이언트 연결 대기 : " + clientChannel.getRemoteAddress());
+					clientChannel.write(ByteBuffer.wrap("현재 최대 연결 수를 초과했습니다. 대기중\n".getBytes()));
+					return;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -185,16 +196,22 @@ public class SelectorChatServer {
 		// 닉네임 설정
 		Client client = (Client) key.attachment();
 		if (client.isNick()) {
-			if (!nicknames.isEmpty() && nicknames.contains(message)) { // 닉네임 중복에 대한 처리
-				System.out.println(message + "은 이미 사용중인 닉네임입니다.");
-				buffer = ByteBuffer.wrap((message + "은 사용할 수 없는 닉네임입니다. 다시 입력하세요:").getBytes());
-				clientChannel.write(buffer); // 클라이언트에게 메시지 전송
-				buffer.clear();
-			} else {
-				client.setNick(message); // 닉네임 저장
-				System.out.println("Client set nickname: " + message);
-				broadcastMessage(clientChannel, message + "님이 입장하셨습니다.\n");
-				nicknames.add(message);
+			// 닉네임 중복 처리 부분
+			// 닉네임 중복체크와 닉네임 등록을 하는 과정에서 nicknames Set에 대한 접근은 동기화 되어있지만
+			// 닉네임 메시지 전송과정에서 동기화 필요
+			synchronized (nicknames) {
+				if (!nicknames.isEmpty() && nicknames.contains(message)) {
+					System.out.println(message + "은 이미 사용중인 닉네임입니다.");
+					buffer = ByteBuffer.wrap((message + "은 사용할 수 없는 닉네임입니다. 다시 입력하세요:").getBytes());
+					clientChannel.write(buffer); // 클라이언트에게 메시지 전송
+					buffer.clear();
+				} else {
+					client.setNick(message); // 닉네임 저장
+					System.out.println("Client set nickname: " + message);
+					client.setCheck(); // 닉네임 등록 완료 isNick() = false
+					broadcastMessage(clientChannel, message + "님이 입장하셨습니다.\n");
+					nicknames.add(message);
+				}
 			}
 			return;
 		}
@@ -211,6 +228,7 @@ public class SelectorChatServer {
 
 	// 채팅 발송
 	private void broadcastMessage(SocketChannel sender, String message) throws IOException {
+		// 채팅 발송 도중 새로운 클라이언트가 연결이 추가/제거 될 수 있기 때문에 동기화
 		synchronized (allClient) {
 			// 모든 연결된 클라이언트에게 메시지를 전송
 			for (SocketChannel recipient : allClient) {

@@ -5250,3 +5250,1958 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.248
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.248
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 14:49:37.249
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 14:49:37.249
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.244
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.244
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 15:34:02.245
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 15:34:02.245
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.926
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.926
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:29.927
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:29.927
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.378
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.378
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:01:41.379
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:01:41.379
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.001
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.001
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:19.002
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:19.002
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.775
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.775
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:30:27.776
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:30:27.776
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jface 4 0 2024-11-13 16:50:06.783
+!MESSAGE Unhandled event loop exception during blocked modal context.
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "org.eclipse.gef.GraphicalEditPart.getFigure()" because the return value of "org.eclipse.wst.xsd.ui.internal.adt.design.ADTFloatingToolbar.getContents()" is null
+	at org.eclipse.wst.xsd.ui.internal.adt.editor.ADTMultiPageEditor$InternalLayout.layout(ADTMultiPageEditor.java:92)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1335)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1341)
+	at org.eclipse.swt.widgets.Composite.updateLayout(Composite.java:1320)
+	at org.eclipse.swt.widgets.Composite.setLayoutDeferred(Composite.java:1127)
+	at org.eclipse.swt.widgets.Display.runDeferredLayouts(Display.java:4078)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3635)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.block(ModalContext.java:166)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:368)
+	at org.eclipse.jface.dialogs.ProgressMonitorDialog.run(ProgressMonitorDialog.java:470)
+	at org.eclipse.ui.internal.progress.ProgressMonitorJobsDialog.run(ProgressMonitorJobsDialog.java:230)
+	at org.eclipse.ui.internal.progress.ProgressManager.lambda$26(ProgressManager.java:836)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.internal.progress.ProgressManager.busyCursorWhile(ProgressManager.java:869)
+	at org.eclipse.ui.internal.progress.ProgressManager.busyCursorWhile(ProgressManager.java:845)
+	at org.eclipse.wst.xsd.ui.internal.text.XSDModelAdapter.createSchema(XSDModelAdapter.java:137)
+	at org.eclipse.wst.xsd.ui.internal.text.XSDModelAdapter.lookupOrCreateSchema(XSDModelAdapter.java:215)
+	at org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor.buildModel(InternalXSDMultiPageEditor.java:249)
+	at org.eclipse.wst.xsd.ui.internal.adt.editor.ADTMultiPageEditor.createPages(ADTMultiPageEditor.java:175)
+	at org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor.createPages(InternalXSDMultiPageEditor.java:570)
+	at org.eclipse.ui.part.MultiPageEditorPart.createPartControl(MultiPageEditorPart.java:333)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityPart.createPartControl(CompatibilityPart.java:158)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor.createPartControl(CompatibilityEditor.java:96)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityPart.create(CompatibilityPart.java:365)
+	at jdk.internal.reflect.GeneratedMethodAccessor89.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:995)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:960)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.internalInject(InjectorImpl.java:140)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.internalMake(InjectorImpl.java:403)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.make(InjectorImpl.java:330)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.make(ContextInjectionFactory.java:202)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.createFromBundle(ReflectionContributionFactory.java:91)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.doCreate(ReflectionContributionFactory.java:60)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.create(ReflectionContributionFactory.java:42)
+	at org.eclipse.e4.ui.workbench.renderers.swt.ContributedPartRenderer.createWidget(ContributedPartRenderer.java:132)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createWidget(PartRenderingEngine.java:995)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:659)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:763)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$2.run(PartRenderingEngine.java:728)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createGui(PartRenderingEngine.java:712)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.lambda$0(PartServiceImpl.java:105)
+	at org.eclipse.e4.ui.services.internal.events.UIEventHandler.lambda$0(UIEventHandler.java:38)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:183)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:133)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4785)
+	at org.eclipse.e4.ui.workbench.swt.DisplayUISynchronize.syncExec(DisplayUISynchronize.java:34)
+	at org.eclipse.e4.ui.services.internal.events.UIEventHandler.handleEvent(UIEventHandler.java:38)
+	at org.eclipse.equinox.internal.event.EventHandlerWrapper.handleEvent(EventHandlerWrapper.java:205)
+	at org.eclipse.equinox.internal.event.EventHandlerTracker.dispatchEvent(EventHandlerTracker.java:203)
+	at org.eclipse.equinox.internal.event.EventHandlerTracker.dispatchEvent(EventHandlerTracker.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:234)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:151)
+	at org.eclipse.equinox.internal.event.EventAdminImpl.dispatchEvent(EventAdminImpl.java:133)
+	at org.eclipse.equinox.internal.event.EventAdminImpl.sendEvent(EventAdminImpl.java:75)
+	at org.eclipse.equinox.internal.event.EventComponent.sendEvent(EventComponent.java:44)
+	at org.eclipse.e4.ui.services.internal.events.EventBroker.send(EventBroker.java:55)
+	at org.eclipse.e4.ui.internal.workbench.UIEventPublisher.notifyChanged(UIEventPublisher.java:63)
+	at org.eclipse.emf.common.notify.impl.BasicNotifierImpl.eNotify(BasicNotifierImpl.java:424)
+	at org.eclipse.e4.ui.model.application.ui.impl.ElementContainerImpl.setSelectedElementGen(ElementContainerImpl.java:170)
+	at org.eclipse.e4.ui.model.application.ui.impl.ElementContainerImpl.setSelectedElement(ElementContainerImpl.java:188)
+	at org.eclipse.e4.ui.internal.workbench.ModelServiceImpl.showElementInWindow(ModelServiceImpl.java:660)
+	at org.eclipse.e4.ui.internal.workbench.ModelServiceImpl.bringToTop(ModelServiceImpl.java:624)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.delegateBringToTop(PartServiceImpl.java:790)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.showPart(PartServiceImpl.java:1261)
+	at org.eclipse.ui.internal.WorkbenchPage.busyOpenEditor(WorkbenchPage.java:3210)
+	at org.eclipse.ui.internal.WorkbenchPage.lambda$9(WorkbenchPage.java:3100)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.internal.WorkbenchPage.openEditor(WorkbenchPage.java:3098)
+	at org.eclipse.ui.internal.WorkbenchPage.openEditor(WorkbenchPage.java:3068)
+	at org.eclipse.ui.internal.WorkbenchPage.openEditor(WorkbenchPage.java:3051)
+	at org.eclipse.ui.ide.IDE.openEditorOnFileStore(IDE.java:1340)
+	at org.eclipse.lsp4e.LSPEclipseUtils.openFileLocationInEditor(LSPEclipseUtils.java:709)
+	at org.eclipse.lsp4e.LSPEclipseUtils.open(LSPEclipseUtils.java:581)
+	at org.eclipse.lsp4e.LSPEclipseUtils.open(LSPEclipseUtils.java:567)
+	at org.eclipse.lsp4e.LSPEclipseUtils.openInEditor(LSPEclipseUtils.java:559)
+	at org.eclipse.lsp4e.LSPEclipseUtils.openInEditor(LSPEclipseUtils.java:555)
+	at org.eclipse.lsp4e.operations.declaration.LSBasedHyperlink.open(LSBasedHyperlink.java:75)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseUp(HyperlinkManager.java:426)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:224)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4256)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4054)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3642)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Text Search
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.358
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.358
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_koreg.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/renewal_login_gpki.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_kins.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.359
+!MESSAGE File 'trs_upgrade/WebContent/css/new_login_posid.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.search 4 0 2024-11-13 16:51:07.359
+!MESSAGE Problems encountered during text search.
+!SUBENTRY 2 org.eclipse.search 4 4 2024-11-13 16:51:07.360
+!MESSAGE File 'trs_upgrade/WebContent/css/calendar.css' has been skipped, problem while reading: ('(').
+!STACK 0
+java.io.UnsupportedEncodingException: (
+	at java.base/sun.nio.cs.StreamDecoder.forInputStreamReader(StreamDecoder.java:80)
+	at java.base/java.io.InputStreamReader.<init>(InputStreamReader.java:100)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.initializeReader(FileCharSequenceProvider.java:276)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.reset(FileCharSequenceProvider.java:268)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider$FileCharSequence.<init>(FileCharSequenceProvider.java:254)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.getCharSequence(FileCharSequenceProvider.java:56)
+	at org.eclipse.search.internal.core.text.FileCharSequenceProvider.newCharSequence(FileCharSequenceProvider.java:49)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.processFile(TextSearchVisitor.java:220)
+	at org.eclipse.search.internal.core.text.TextSearchVisitor$TextSearchJob.run(TextSearchVisitor.java:185)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
