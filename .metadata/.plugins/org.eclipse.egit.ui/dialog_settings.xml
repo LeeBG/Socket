@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item key="org.eclipse.egit.ui.internal.clone.GitSelectWizardPageWizardSel" value="2"/>
+	<list key="RepositorySelectionPage.UsedUris">
+		<item value="http://192.168.30.99/net-protect_v3.0/trs_upgrade.git"/>
+		<item value="LeeBG@192.168.30.99:net-protect_v3.0/trs_upgrade.git"/>
+		<item value="git@192.168.30.99:net-protect_v3.0/trs_upgrade.git"/>
+	</list>
+	<list key="EGit.KnownHosts">
+		<item value="bitbucket.org"/>
+		<item value="github.com"/>
+		<item value="git.eclipse.org"/>
+		<item value="192.168.30.99"/>
+	</list>
 	<section name="GitCommitSearchPage">
 		<item key="HISTORY_SIZE" value="0"/>
+	</section>
+	<section name="GitImportWizard">
 	</section>
 </section>

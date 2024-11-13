@@ -30,7 +30,7 @@
 		<section name="HISTORY0">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="log4j"/>
+			<item key="pattern" value="selectExistDeptApproval"/>
 			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
@@ -42,7 +42,7 @@
 		<section name="HISTORY1">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="MakeKeyUpddteClip"/>
+			<item key="pattern" value="@Component"/>
 			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
@@ -54,8 +54,8 @@
 		<section name="HISTORY2">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="SendMail1"/>
-			<item key="limitTo" value="3"/>
+			<item key="pattern" value="@Aspect"/>
+			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
 			<item key="isCaseSensitive" value="true"/>
@@ -66,8 +66,8 @@
 		<section name="HISTORY3">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="SendMail"/>
-			<item key="limitTo" value="3"/>
+			<item key="pattern" value="log4j"/>
+			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
 			<item key="isCaseSensitive" value="true"/>
@@ -78,8 +78,8 @@
 		<section name="HISTORY4">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="/api/download"/>
-			<item key="limitTo" value="3"/>
+			<item key="pattern" value="MakeKeyUpddteClip"/>
+			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
 			<item key="isCaseSensitive" value="true"/>
@@ -90,7 +90,7 @@
 		<section name="HISTORY5">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="LOGIN_OTP_AUTH_YN"/>
+			<item key="pattern" value="SendMail1"/>
 			<item key="limitTo" value="3"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
@@ -102,6 +102,42 @@
 		<section name="HISTORY6">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
+			<item key="pattern" value="SendMail"/>
+			<item key="limitTo" value="3"/>
+			<item key="matchLocations" value="0"/>
+			<item key="javaElement" value=""/>
+			<item key="isCaseSensitive" value="true"/>
+			<item key="includeMask" value="15"/>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY7">
+			<item key="searchFor" value="0"/>
+			<item key="scope" value="0"/>
+			<item key="pattern" value="/api/download"/>
+			<item key="limitTo" value="3"/>
+			<item key="matchLocations" value="0"/>
+			<item key="javaElement" value=""/>
+			<item key="isCaseSensitive" value="true"/>
+			<item key="includeMask" value="15"/>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY8">
+			<item key="searchFor" value="0"/>
+			<item key="scope" value="0"/>
+			<item key="pattern" value="LOGIN_OTP_AUTH_YN"/>
+			<item key="limitTo" value="3"/>
+			<item key="matchLocations" value="0"/>
+			<item key="javaElement" value=""/>
+			<item key="isCaseSensitive" value="true"/>
+			<item key="includeMask" value="15"/>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY9">
+			<item key="searchFor" value="0"/>
+			<item key="scope" value="0"/>
 			<item key="pattern" value="LOGIN_OTP_AUTH_YN*"/>
 			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
@@ -111,7 +147,7 @@
 			<list key="workingSets">
 			</list>
 		</section>
-		<section name="HISTORY7">
+		<section name="HISTORY10">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
 			<item key="pattern" value="*LOGIN_OTP_AUTH_YN*"/>
@@ -123,46 +159,10 @@
 			<list key="workingSets">
 			</list>
 		</section>
-		<section name="HISTORY8">
-			<item key="searchFor" value="0"/>
-			<item key="scope" value="0"/>
-			<item key="pattern" value="/**P*/"/>
-			<item key="limitTo" value="2"/>
-			<item key="matchLocations" value="0"/>
-			<item key="javaElement" value=""/>
-			<item key="isCaseSensitive" value="false"/>
-			<item key="includeMask" value="15"/>
-			<list key="workingSets">
-			</list>
-		</section>
-		<section name="HISTORY9">
-			<item key="searchFor" value="0"/>
-			<item key="scope" value="0"/>
-			<item key="pattern" value="logger"/>
-			<item key="limitTo" value="2"/>
-			<item key="matchLocations" value="0"/>
-			<item key="javaElement" value=""/>
-			<item key="isCaseSensitive" value="false"/>
-			<item key="includeMask" value="15"/>
-			<list key="workingSets">
-			</list>
-		</section>
-		<section name="HISTORY10">
-			<item key="searchFor" value="0"/>
-			<item key="scope" value="0"/>
-			<item key="pattern" value="*queryForObject*"/>
-			<item key="limitTo" value="2"/>
-			<item key="matchLocations" value="0"/>
-			<item key="javaElement" value=""/>
-			<item key="isCaseSensitive" value="false"/>
-			<item key="includeMask" value="15"/>
-			<list key="workingSets">
-			</list>
-		</section>
 		<section name="HISTORY11">
 			<item key="searchFor" value="0"/>
 			<item key="scope" value="0"/>
-			<item key="pattern" value="queryForObject"/>
+			<item key="pattern" value="/**P*/"/>
 			<item key="limitTo" value="2"/>
 			<item key="matchLocations" value="0"/>
 			<item key="javaElement" value=""/>
@@ -282,5 +282,7 @@
 		<item key="DIALOG_WIDTH" value="531"/>
 		<item key="DIALOG_HEIGHT" value="678"/>
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+	</section>
+	<section name="BreadcrumbItemDropDown">
 	</section>
 </section>

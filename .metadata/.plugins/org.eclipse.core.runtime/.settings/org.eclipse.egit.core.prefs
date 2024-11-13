@@ -1,3 +1,3 @@
-GitRepositoriesView.GitDirectories=C\:\\code\\.git;
-GitRepositoriesView.GitDirectories.relative=C\:\\code\\.git;
+GitRepositoriesView.GitDirectories=C\:\\code\\.git;C\:\\TRS_upgrade\\trs_upgrade\\.git;
+GitRepositoriesView.GitDirectories.relative=C\:\\code\\.git;C\:\\TRS_upgrade\\trs_upgrade\\.git;
 eclipse.preferences.version=1

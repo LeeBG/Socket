@@ -6,31 +6,26 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="conn_count"/>
+		<item key="selection" value=""/>
 		<list key="findhistory">
-			<item value="conn_count"/>
-			<item value="byteR"/>
-			<item value="byte"/>
-			<item value="//데"/>
-			<item value="close()"/>
-			<item value="close"/>
-			<item value="start"/>
-			<item value="run"/>
-			<item value="closeAllConnections"/>
-			<item value="clearAllSockets"/>
-			<item value="최대"/>
-			<item value="impl"/>
-			<item value=".run"/>
-			<item value="values"/>
-			<item value="HashMap"/>
+			<item value="update"/>
+			<item value="forEach"/>
+			<item value="!="/>
+			<item value="#"/>
+			<item value="=="/>
+			<item value="isNotEmpty"/>
+			<item value="where_searchDateOrTime"/>
+			<item value="where_searchFieldQuery"/>
 		</list>
 		<list key="replacehistory">
+			<item value="if"/>
 			<item value=""/>
+			<item value="ChatServer"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="90"/>
-		<item key="DIALOG_Y_ORIGIN" value="584"/>
+		<item key="DIALOG_X_ORIGIN" value="28"/>
+		<item key="DIALOG_Y_ORIGIN" value="802"/>
 		<item key="DIALOG_WIDTH" value="322"/>
 		<item key="DIALOG_HEIGHT" value="391"/>
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
