@@ -93,7 +93,7 @@ public class SelectorChatServer {
 				allClient.remove(clientChannel);
 				Client removeClient = (Client) key.attachment();
 				nicknames.remove(removeClient.getNick());
-				System.out.println("nicknames:" + nicknames);
+				System.out.println("닉네임 목록:" + nicknames);
 				System.out.println("Client disconnected: " + clientChannel.getRemoteAddress());
 				if (clientChannel != null) {
 					clientChannel.close();

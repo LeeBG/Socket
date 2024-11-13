@@ -15,12 +15,14 @@ public class SelectorChatClient {
 		// 서버 IP와 포트로 연결되는 소켓채널 생성(I/O)
 		try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("192.168.30.215", 12345))) {
 
-			// 출력을 담당할 스레드 생성 및 실행
+			// 출력을 담당할 스레드 생성
 			systemOut = new Thread(new SystemOut(socket));
-			// 입력을 담당할 스레드 생성 및 실행
+			// 입력을 담당할 스레드 생성
 			systemIn = new Thread(new SystemIn(socket));
-
+			
+          	// 출력 스레드 실행
 			systemIn.start();
+          	// 입력 스레드 실행
 			systemOut.start();
 
 			// 메인 스레드가 두 스레드가 종료될 때까지 대기
