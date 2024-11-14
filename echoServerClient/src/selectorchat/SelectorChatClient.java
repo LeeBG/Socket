@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class SelectorChatClient {
     public static void main(String[] args) {
-        try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("192.168.30.215", 12345))) {
+        try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("192.168.219.42", 12345))) {
             Thread systemOut = new Thread(new SystemOut(socket));
             Thread systemIn = new Thread(new SystemIn(socket));
 
@@ -67,6 +68,7 @@ class SystemOut implements Runnable {
 // 입력을 담당하는 스레드
 class SystemIn implements Runnable {
     private final SocketChannel socketChannel;
+    private static final int CHUNK_SIZE = 1024; // 조각 크기
 
     SystemIn(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
@@ -80,13 +82,22 @@ class SystemIn implements Runnable {
                 String sendMessage = scanner.nextLine();
                 if ("exit".equalsIgnoreCase(sendMessage)) break;
 
-                buffer = ByteBuffer.wrap(sendMessage.getBytes());
-                socketChannel.write(buffer);
+                // 데이터 조각화 전송
+                sendMessageInChunks(sendMessage);
             }
         } catch (IOException e) {
             System.err.println("입력 중 오류 발생: " + e.getMessage());
         } finally {
             closeChannel();
+        }
+    }
+
+    // 데이터 조각화 전송
+    private void sendMessageInChunks(String message) throws IOException {
+        for (int i = 0; i < message.length(); i += CHUNK_SIZE) {
+            String chunk = message.substring(i, Math.min(i + CHUNK_SIZE, message.length()));
+            ByteBuffer buffer = ByteBuffer.wrap(chunk.getBytes(StandardCharsets.UTF_8));
+            socketChannel.write(buffer);
         }
     }
 
