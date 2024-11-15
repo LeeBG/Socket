@@ -59,7 +59,6 @@ public class SelectorChatServer {
 			selector.select();
 			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // 선택된 키 집합
 			Iterator<SelectionKey> iterator = selectedKeys.iterator(); // 키집합을 순회하는 Iterator
-
 			// 선택된 키를 반복
 			while (iterator.hasNext()) {
 				SelectionKey key = iterator.next();
@@ -69,18 +68,13 @@ public class SelectorChatServer {
 						acceptConnection(key);
 					} else if (key.isReadable()) {
 						// 클라이언트로부터 메시지 읽기
-						readMessage(key);
+						readBroadcastMessage(key);
 					}
 				} catch (IOException e) {
 					System.err.println("클라이언트 연결 관련 예외 발생 : " + e.getMessage());
 					closeClientConnection(key);
 				}
 				iterator.remove(); // 처리한 키는 제거
-			}
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -137,7 +131,6 @@ public class SelectorChatServer {
 		SocketChannel clientChannel = serverChannel.accept();
 		// 비차단 모드로 설정
 		clientChannel.configureBlocking(false);
-
 		// 사이즈를 확인하는 동안에 다른 스레드가 클라이언트를 추가/제거할 수 있기 때문에 동기화
 		synchronized (allClient) {
 			if (allClient.size() >= MAX_CONN) {
@@ -158,7 +151,7 @@ public class SelectorChatServer {
 			}
 		}
 
-		// Selector에 클라이언트 소켓 채널 등록, 읽기 이벤트를 감지
+		// Selector에 클라이언트 소켓 채널 등록, 읽기 이벤트를 감지, Client 객체 등록
 		clientChannel.register(selector, SelectionKey.OP_READ, new Client());
 		allClient.add(clientChannel);
 		System.out.println("새 클라이언트 연결: " + clientChannel.getRemoteAddress());
@@ -170,7 +163,7 @@ public class SelectorChatServer {
 	}
 
 	// 메시지 읽기 메소드
-	private void readMessage(SelectionKey key) throws IOException {
+	private void readBroadcastMessage(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel) key.channel();
 		ByteBuffer buffer = ByteBuffer.allocate(1024);
 		int bytesRead = 0;
@@ -184,21 +177,17 @@ public class SelectorChatServer {
 			closeClientConnection(key);
 			return;
 		}
-
 		if (bytesRead == -1) {
 			System.out.println("클라이언트 연결이 끊어졌습니다.: " + clientChannel.getRemoteAddress());
 			closeClientConnection(key);
 			return;
 		}
-
 		String message = new String(buffer.array()).trim();
 
-		// 닉네임 설정
-		Client client = (Client) key.attachment();
+		
+		Client client = (Client) key.attachment(); 
 		if (client.isNick()) {
 			// 닉네임 중복 처리 부분
-			// 닉네임 중복체크와 닉네임 등록을 하는 과정에서 nicknames Set에 대한 접근은 동기화 되어있지만
-			// 닉네임 메시지 전송과정에서 동기화 필요
 			synchronized (nicknames) {
 				if (!nicknames.isEmpty() && nicknames.contains(message)) {
 					System.out.println(message + "은 이미 사용중인 닉네임입니다.");
@@ -213,22 +202,18 @@ public class SelectorChatServer {
 					nicknames.add(message);
 				}
 			}
-			return;
 		}
-
 		// "exit" 메시지를 받으면 해당 클라이언트 종료
 		if ("exit".equalsIgnoreCase(message)) {
 			System.out.println("클라이언트의 종료 요청: " + clientChannel.getRemoteAddress());
 			closeClientConnection(key); // 자원해제
 			return;
 		}
-
 		broadcastMessage(clientChannel, client.getNick() + ": " + message + "\n");
 	}
 
 	// 채팅 발송
 	private void broadcastMessage(SocketChannel sender, String message) throws IOException {
-		// 채팅 발송 도중 새로운 클라이언트가 연결이 추가/제거 될 수 있기 때문에 동기화
 		synchronized (allClient) {
 			// 모든 연결된 클라이언트에게 메시지를 전송
 			for (SocketChannel recipient : allClient) {

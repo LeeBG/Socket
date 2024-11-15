@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class SelectorChatClient {
     public static void main(String[] args) {
-        try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("192.168.219.42", 12345))) {
+        try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("192.168.30.216", 12345))) {
             Thread systemOut = new Thread(new SystemOut(socket));
             Thread systemIn = new Thread(new SystemIn(socket));
 
@@ -33,7 +33,6 @@ class SystemOut implements Runnable {
     SystemOut(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
-
     @Override
     public void run() {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
@@ -42,7 +41,6 @@ class SystemOut implements Runnable {
                 buffer.clear();
                 int bytesRead = socketChannel.read(buffer);
                 if (bytesRead == -1) break;
-
                 buffer.flip();
                 String receivedMessage = new String(buffer.array(), 0, bytesRead);
                 System.out.print(receivedMessage);
@@ -68,12 +66,11 @@ class SystemOut implements Runnable {
 // 입력을 담당하는 스레드
 class SystemIn implements Runnable {
     private final SocketChannel socketChannel;
-    private static final int CHUNK_SIZE = 1024; // 조각 크기
+    private static final int CHUNK_SIZE = 512; // 조각 크기
 
     SystemIn(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
-
     @Override
     public void run() {
         ByteBuffer buffer;
@@ -81,7 +78,6 @@ class SystemIn implements Runnable {
             while (socketChannel.isOpen()) {
                 String sendMessage = scanner.nextLine();
                 if ("exit".equalsIgnoreCase(sendMessage)) break;
-
                 // 데이터 조각화 전송
                 sendMessageInChunks(sendMessage);
             }
@@ -101,9 +97,10 @@ class SystemIn implements Runnable {
         }
     }
 
+    // 자원해제
     private void closeChannel() {
         try {
-            if (socketChannel.isOpen()) {
+            if (socketChannel != null && socketChannel.isOpen()) {
                 socketChannel.close();
             }
         } catch (IOException e) {
