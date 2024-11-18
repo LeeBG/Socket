@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class SelectorChatClient {
     public static void main(String[] args) {
-        try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("192.168.219.42", 12345))) {
+        try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("127.0.0.1", 12345))) {
             Thread systemOut = new Thread(new SystemOut(socket));
             Thread systemIn = new Thread(new SystemIn(socket));
 
@@ -19,9 +19,9 @@ public class SelectorChatClient {
             systemOut.join();
             systemIn.join();
         } catch (IOException e) {
-            System.err.println("서버와의 연결 실패: " + e.getMessage());
+            System.err.println("[에러] 서버와의 연결 실패: " + e.getMessage());
         } catch (InterruptedException e) {
-            System.err.println("스레드 종료 대기 중 오류 발생: " + e.getMessage());
+            System.err.println("[에러] 스레드 종료 대기 중 오류 발생: " + e.getMessage());
         }
     }
 }
@@ -36,23 +36,35 @@ class SystemOut implements Runnable {
 
     @Override
     public void run() {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(4096);
         try {
-            while (socketChannel.isOpen()) {
+            while (socketChannel != null && socketChannel.isOpen()) {
                 buffer.clear();
                 int bytesRead = socketChannel.read(buffer);
-                if (bytesRead == -1) break;
+                if (bytesRead == -1) {
+                    // 서버가 소켓을 닫은 경우 정상적으로 종료
+                    System.out.println("[알림] 서버 연결이 종료되었습니다.");
+                    break;
+                }
 
                 buffer.flip();
-                String receivedMessage = new String(buffer.array(), 0, bytesRead);
+                String receivedMessage = new String(buffer.array(), 0, bytesRead, StandardCharsets.UTF_8);
+                receivedMessage = receivedMessage.replace("\\n", "\n").replace("\\r", "\r");
                 System.out.print(receivedMessage);
             }
         } catch (IOException e) {
-            System.out.println("출력 중 오류 발생: " + e.getMessage());
+            // Null-safe 예외 메시지 처리
+            String errorMessage = e.getMessage() != null ? e.getMessage() : "서버와 연결이 종료되었습니다.";
+            if (errorMessage.equalsIgnoreCase("서버와 연결이 종료되었습니다.")) {
+                System.out.println("[알림] 서버와의 연결이 종료되었습니다.");
+            } else {
+                System.out.println("[에러] 출력 중 오류 발생: " + errorMessage);
+            }
         } finally {
             closeChannel();
         }
     }
+
 
     private void closeChannel() {
         try {
@@ -60,7 +72,7 @@ class SystemOut implements Runnable {
                 socketChannel.close();
             }
         } catch (IOException e) {
-            System.err.println("출력 스레드 자원 해제 중 오류 발생: " + e.getMessage());
+            System.err.println("[에러] 출력 스레드 자원 해제 중 오류 발생: " + e.getMessage());
         }
     }
 }
@@ -68,7 +80,6 @@ class SystemOut implements Runnable {
 // 입력을 담당하는 스레드
 class SystemIn implements Runnable {
     private final SocketChannel socketChannel;
-    private static final int CHUNK_SIZE = 1024; // 조각 크기
 
     SystemIn(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
@@ -76,38 +87,40 @@ class SystemIn implements Runnable {
 
     @Override
     public void run() {
-        ByteBuffer buffer;
+    	ByteBuffer buffer = ByteBuffer.allocate(4096);
         try (Scanner scanner = new Scanner(System.in)) {
-            while (socketChannel.isOpen()) {
+            while (socketChannel != null && socketChannel.isOpen()) {
                 String sendMessage = scanner.nextLine();
                 if ("exit".equalsIgnoreCase(sendMessage)) break;
-
-                // 데이터 조각화 전송
-                sendMessageInChunks(sendMessage);
+                // 데이터 전송
+                sendMessageToServer(buffer, sendMessage);
             }
         } catch (IOException e) {
-            System.err.println("입력 중 오류 발생: " + e.getMessage());
+        	String errorMessage = e.getMessage() != null ? e.getMessage() : "알 수 없는 오류";
+            if ("Connection reset".equalsIgnoreCase(errorMessage)) {
+                System.out.println("[알림] 서버와의 연결이 종료되었습니다.");
+            } else {
+                System.out.println("[에러] 입력 중 오류 발생: " + errorMessage);
+            }
         } finally {
             closeChannel();
         }
     }
 
-    // 데이터 조각화 전송
-    private void sendMessageInChunks(String message) throws IOException {
-        for (int i = 0; i < message.length(); i += CHUNK_SIZE) {
-            String chunk = message.substring(i, Math.min(i + CHUNK_SIZE, message.length()));
-            ByteBuffer buffer = ByteBuffer.wrap(chunk.getBytes(StandardCharsets.UTF_8));
-            socketChannel.write(buffer);
-        }
+    // 데이터 전송
+    private void sendMessageToServer(ByteBuffer buffer,String message) throws IOException {
+    	buffer.clear();
+        buffer = ByteBuffer.wrap(message.getBytes());
+        socketChannel.write(buffer);
     }
 
     private void closeChannel() {
         try {
-            if (socketChannel.isOpen()) {
+            if (socketChannel != null && socketChannel.isOpen()) {
                 socketChannel.close();
             }
         } catch (IOException e) {
-            System.err.println("입력 스레드 자원 해제 중 오류 발생: " + e.getMessage());
+            System.err.println("[에러] 입력 스레드 자원 해제 중 오류 발생: " + e.getMessage());
         }
     }
 }

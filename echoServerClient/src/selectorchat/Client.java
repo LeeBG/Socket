@@ -4,7 +4,7 @@ package selectorchat;
 class Client {
 	// 아직 닉네임 입력이 안된 경우 true
 	private boolean isNickCheck = true;
-	private String nick;
+	private String nick = "미지정닉네임";
 
 	// 닉네임이 들어있는지 확인
 	boolean isNick() {
