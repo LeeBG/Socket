@@ -71,7 +71,7 @@ public class SelectorChatServer {
 						acceptConnection(key);
 					} else if (key.isReadable()) {
 						// 클라이언트로부터 메시지 읽기
-						readMessage(key);
+						readBroadcastMessage(key);
 					}
 				} catch (IOException e) {
 					System.err.println("[에러] 클라이언트 연결 관련 예외 발생 : " + e.getMessage());
@@ -118,7 +118,7 @@ public class SelectorChatServer {
 					nextClient.write(buffer);
 				}
 			} catch (IOException e) {
-				System.err.println("[오류] 클라이언트 연결 종료 중 예외 발생: " + e.getMessage());
+				System.err.println("[오류] 대기 중 클라이언트 연결 종료 중 예외 발생: " + e.getMessage());
 				e.printStackTrace();
 			} finally {
 				System.out.println("[현재 대기 중인 클라이언트]: " + waitingQueue);
@@ -165,7 +165,7 @@ public class SelectorChatServer {
 	}
 
 	// 메시지 읽기 메소드
-	private void readMessage(SelectionKey key) throws IOException {
+	private void readBroadcastMessage(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel) key.channel();
 		ByteBuffer buffer = ByteBuffer.allocate(4096);
 		int bytesRead = 0;
@@ -200,13 +200,27 @@ public class SelectorChatServer {
 		    return;
 		}
 		
-		// 닉네임 설정 또는 메시지 처리
 		Client client = (Client) key.attachment();
+		// 닉네임 설정
+		handleNickname(clientChannel, client, message);
+		
+		if ("exit".equalsIgnoreCase(message)) {
+			System.out.println("[알림] 클라이언트 '" + client.getNick() + "'가 종료를 요청했습니다. (주소: "
+					+ clientChannel.getRemoteAddress() + ")");
+			closeClientConnection(key);
+			return;
+		}
+		// 메시지 브로드캐스팅
+		broadcastMessage(clientChannel, client.getNick() + ": " + message + "\n");
+	}
+	
+	private void handleNickname(SocketChannel clientChannel, Client client, String message) throws IOException {
+		// 닉네임이 설정되어 있지 않다면
 		if (client.isNick()) {
 			synchronized (nicknames) {
 				if (!nicknames.isEmpty() && nicknames.contains(message)) {
 					System.out.println("[알림] 닉네임 '" + message + "'은 이미 사용 중입니다.");
-					buffer = ByteBuffer.wrap((message + "은 사용할 수 없는 닉네임입니다. 다시 입력하세요:").getBytes());
+					ByteBuffer buffer = ByteBuffer.wrap((message + "은 사용할 수 없는 닉네임입니다. 다시 입력하세요:").getBytes());
 					clientChannel.write(buffer);
 					buffer.clear();
 				} else {
@@ -217,18 +231,9 @@ public class SelectorChatServer {
 					nicknames.add(message);
 				}
 			}
-			return;
 		}
-
-		if ("exit".equalsIgnoreCase(message)) {
-			System.out.println("[알림] 클라이언트 '" + client.getNick() + "'가 종료를 요청했습니다. (주소: "
-					+ clientChannel.getRemoteAddress() + ")");
-			closeClientConnection(key);
-			return;
-		}
-
-		broadcastMessage(clientChannel, client.getNick() + ": " + message + "\n");
 	}
+	
 
 	// 채팅 발송
 	private void broadcastMessage(SocketChannel sender, String message) throws IOException {

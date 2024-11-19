@@ -8,10 +8,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class SelectorChatClient {
+	public static volatile boolean isNickNameInput = true; // 닉네임 입력 상태 플래그
     public static void main(String[] args) {
         try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("127.0.0.1", 12345))) {
-            Thread systemOut = new Thread(new SystemOut(socket));
-            Thread systemIn = new Thread(new SystemIn(socket));
+            Thread systemOut = new Thread(new ReceiveChat(socket));
+            Thread systemIn = new Thread(new SendChat(socket));
 
             systemOut.start();
             systemIn.start();
@@ -27,10 +28,10 @@ public class SelectorChatClient {
 }
 
 // 출력을 담당하는 스레드
-class SystemOut implements Runnable {
+class ReceiveChat implements Runnable {
     private final SocketChannel socketChannel;
 
-    SystemOut(SocketChannel socketChannel) {
+    ReceiveChat(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
 
@@ -50,7 +51,9 @@ class SystemOut implements Runnable {
                 buffer.flip();
                 String receivedMessage = new String(buffer.array(), 0, bytesRead, StandardCharsets.UTF_8);
                 receivedMessage = receivedMessage.replace("\\n", "\n").replace("\\r", "\r");
-                System.out.print(receivedMessage);
+                if(receivedMessage.contains("[알림]") ||!SelectorChatClient.isNickNameInput) {
+                	 System.out.print(receivedMessage);
+                }
             }
         } catch (IOException e) {
             // Null-safe 예외 메시지 처리
@@ -78,10 +81,10 @@ class SystemOut implements Runnable {
 }
 
 // 입력을 담당하는 스레드
-class SystemIn implements Runnable {
+class SendChat implements Runnable {
     private final SocketChannel socketChannel;
 
-    SystemIn(SocketChannel socketChannel) {
+    SendChat(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
 
@@ -91,7 +94,13 @@ class SystemIn implements Runnable {
         try (Scanner scanner = new Scanner(System.in)) {
             while (socketChannel != null && socketChannel.isOpen()) {
                 String sendMessage = scanner.nextLine();
+                
                 if ("exit".equalsIgnoreCase(sendMessage)) break;
+                // 닉네임 설정
+                if (SelectorChatClient.isNickNameInput) {
+                	System.out.println("[알림] 닉네임을 \' "+ sendMessage+"\'으로 설정합니다.");
+                	SelectorChatClient.isNickNameInput = false;
+                }
                 // 데이터 전송
                 sendMessageToServer(buffer, sendMessage);
             }
