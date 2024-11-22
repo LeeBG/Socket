@@ -11,14 +11,14 @@ public class SelectorChatClient {
 	public static volatile boolean isNickNameInput = true; // 닉네임 입력 상태 플래그
     public static void main(String[] args) {
         try (SocketChannel socket = SocketChannel.open(new InetSocketAddress("127.0.0.1", 12345))) {
-            Thread systemOut = new Thread(new ReceiveChat(socket));
-            Thread systemIn = new Thread(new SendChat(socket));
+            Thread ReceiveChat = new Thread(new ReceiveChat(socket));
+            Thread SendChat = new Thread(new SendChat(socket));
 
-            systemOut.start();
-            systemIn.start();
+            ReceiveChat.start();
+            SendChat.start();
 
-            systemOut.join();
-            systemIn.join();
+            ReceiveChat.join();
+            SendChat.join();
         } catch (IOException e) {
             System.err.println("[에러] 서버와의 연결 실패: " + e.getMessage());
         } catch (InterruptedException e) {
@@ -34,24 +34,29 @@ class ReceiveChat implements Runnable {
     ReceiveChat(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
+    
+    private int recieveMessageFromServer(SocketChannel socketChannel, ByteBuffer buffer) throws IOException {
+    	 buffer.clear();
+         int bytesRead = socketChannel.read(buffer);
+         return bytesRead;
+    }
 
     @Override
     public void run() {
         ByteBuffer buffer = ByteBuffer.allocate(4096);
         try {
             while (socketChannel != null && socketChannel.isOpen()) {
-                buffer.clear();
-                int bytesRead = socketChannel.read(buffer);
+                int bytesRead = recieveMessageFromServer(socketChannel, buffer); 
                 if (bytesRead == -1) {
                     // 서버가 소켓을 닫은 경우 정상적으로 종료
                     System.out.println("[알림] 서버 연결이 종료되었습니다.");
                     break;
                 }
-
+                // 메시지 읽기
                 buffer.flip();
                 String receivedMessage = new String(buffer.array(), 0, bytesRead, StandardCharsets.UTF_8);
                 receivedMessage = receivedMessage.replace("\\n", "\n").replace("\\r", "\r");
-                if(receivedMessage.contains("[알림]") ||!SelectorChatClient.isNickNameInput) {
+                if(receivedMessage.contains("[대기]") || receivedMessage.contains("[알림]") ||!SelectorChatClient.isNickNameInput) {
                 	 System.out.print(receivedMessage);
                 }
             }
@@ -68,7 +73,7 @@ class ReceiveChat implements Runnable {
         }
     }
 
-
+    // 소켓 채널 닫기
     private void closeChannel() {
         try {
             if (socketChannel.isOpen()) {
@@ -88,6 +93,13 @@ class SendChat implements Runnable {
         this.socketChannel = socketChannel;
     }
 
+    //데이터 전송
+    private void sendMessageToServer(ByteBuffer buffer,String message) throws IOException {
+    	buffer.clear();
+        buffer = ByteBuffer.wrap(message.getBytes());
+        socketChannel.write(buffer);
+    }
+    
     @Override
     public void run() {
     	ByteBuffer buffer = ByteBuffer.allocate(4096);
@@ -98,7 +110,7 @@ class SendChat implements Runnable {
                 if ("exit".equalsIgnoreCase(sendMessage)) break;
                 // 닉네임 설정
                 if (SelectorChatClient.isNickNameInput) {
-                	System.out.println("[알림] 닉네임을 \' "+ sendMessage+"\'으로 설정합니다.");
+                	System.out.println("[알림] 닉네임을 \'"+sendMessage+"\'으로 설정합니다.");
                 	SelectorChatClient.isNickNameInput = false;
                 }
                 // 데이터 전송
@@ -115,14 +127,7 @@ class SendChat implements Runnable {
             closeChannel();
         }
     }
-
-    // 데이터 전송
-    private void sendMessageToServer(ByteBuffer buffer,String message) throws IOException {
-    	buffer.clear();
-        buffer = ByteBuffer.wrap(message.getBytes());
-        socketChannel.write(buffer);
-    }
-
+    // 스레드가 끝나는 시점에 실행됨
     private void closeChannel() {
         try {
             if (socketChannel != null && socketChannel.isOpen()) {

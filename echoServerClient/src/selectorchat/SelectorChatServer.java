@@ -8,6 +8,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,9 +22,14 @@ public class SelectorChatServer {
 	private ServerSocketChannel serverChannel;
 	private final static Integer MAX_CONN = 5; // 최대 연결 가능 횟수를 5회로 제한
 	private final static Integer MAX_READY = 5; // 대기열 최대 채널 갯수
-	private Set<SocketChannel> allClient = Collections.synchronizedSet(new HashSet<>()); // 동기화 HashSet
-	private Queue<SocketChannel> waitingQueue = new ConcurrentLinkedQueue<>(); // 대기 중인 클라이언트 목록
-	private Set<String> nicknames = Collections.synchronizedSet(new HashSet<>()); // 현재 사용중인 닉네임 중복입력 제거를 위한 동기화 HashSet
+	
+	// 동기화 HashSet 래퍼(채팅 중인 SocketChannel 목록)
+	private Set<SocketChannel> ChattingClients = Collections.synchronizedSet(new HashSet<>()); 
+	// 스레드 안전한 큐 (대기 중인 클라이언트 목록)
+	private Queue<SocketChannel> waitingQueue = new ConcurrentLinkedQueue<>(); 
+	// 현재 사용중인 닉네임 중복입력 제거를 위한 동기화 HashSet 래퍼
+	private Set<String> nicknames = Collections.synchronizedSet(new HashSet<>());
+	
 
 	// 생성자 - 초기화
 	public SelectorChatServer(int port) {
@@ -89,7 +95,7 @@ public class SelectorChatServer {
 		if (clientChannel != null) {
 			try {
 				// 연결된 클라이언트와 닉네임 정보를 제거
-				allClient.remove(clientChannel);
+				ChattingClients.remove(clientChannel);
 				Client removeClient = (Client) key.attachment();
 				if (removeClient != null) {
 					String nickname = removeClient.getNick();
@@ -111,10 +117,10 @@ public class SelectorChatServer {
 				if (nextClient != null) {
 					nextClient.configureBlocking(false);
 					nextClient.register(selector, SelectionKey.OP_READ, new Client());
-					allClient.add(nextClient);
+					ChattingClients.add(nextClient);
 					System.out.println("[알림] 대기 중이던 클라이언트가 연결되었습니다. (주소: " + nextClient.getRemoteAddress() + ")");
 					// 클라이언트에게 닉네임 입력 요청
-					ByteBuffer buffer = ByteBuffer.wrap("[알림]입장 대기가 끝났습니다. 채팅창에 입장합니다. \\n닉네임을 입력해주세요: ".getBytes());
+					ByteBuffer buffer = ByteBuffer.wrap(("[알림]입장 대기가 끝났습니다. 채팅창에 입장합니다."+System.lineSeparator()+"닉네임을 입력해주세요: ").getBytes());
 					nextClient.write(buffer);
 				}
 			} catch (IOException e) {
@@ -138,24 +144,24 @@ public class SelectorChatServer {
 		clientChannel.configureBlocking(false);
 
 		// 사이즈를 확인하는 동안에 다른 스레드가 클라이언트를 추가/제거할 수 있기 때문에 동기화
-		synchronized (allClient) {
-			if (allClient.size() >= MAX_CONN) {
+		synchronized (ChattingClients) {
+			if (ChattingClients.size() >= MAX_CONN) {
 				if (waitingQueue.size() < SelectorChatServer.MAX_READY) {
 					waitingQueue.offer(clientChannel);
 				} else {
-					clientChannel.write(ByteBuffer.wrap("[종료]대기열이 가득 찼습니다. 연결종료\n".getBytes()));
+					clientChannel.write(ByteBuffer.wrap("[알림]대기열이 가득 찼습니다. 연결종료\n".getBytes()));
 					clientChannel.close();
 					return;
 				}
 				System.out.println("[대기]클라이언트 연결 대기 : " + clientChannel.getRemoteAddress());
-				clientChannel.write(ByteBuffer.wrap("[대기]현재 최대 연결 수를 초과했습니다. 대기중\n".getBytes()));
+				clientChannel.write(ByteBuffer.wrap(("[대기]현재 최대 연결 수를 초과했습니다.대기중... 대기번호["+(waitingQueue.size())+"] \n").getBytes()));
 				return;
 			}
 		}
 
 		// Selector에 클라이언트 소켓 채널 등록, 읽기 이벤트를 감지
 		clientChannel.register(selector, SelectionKey.OP_READ, new Client());
-		allClient.add(clientChannel);
+		ChattingClients.add(clientChannel);
 		System.out.println("[연결] 새 클라이언트 연결: " + clientChannel.getRemoteAddress());
 
 		// 대기열에 있던 클라이언트에게 닉네임 입력 요청
@@ -166,53 +172,57 @@ public class SelectorChatServer {
 
 	// 메시지 읽기 메소드
 	private void readBroadcastMessage(SelectionKey key) throws IOException {
-		SocketChannel clientChannel = (SocketChannel) key.channel();
-		ByteBuffer buffer = ByteBuffer.allocate(4096);
-		int bytesRead = 0;
+	    SocketChannel clientChannel = (SocketChannel) key.channel();
+	    ByteBuffer buffer = ByteBuffer.allocate(4096);
+	    
+	    try {
+	        if (clientChannel != null && clientChannel.isOpen()) {
+	            int bytesRead = clientChannel.read(buffer);
+	            
+	            if (bytesRead == -1) {
+	                System.out.println("[알림] 클라이언트가 연결을 종료했습니다. (주소: " 
+	                                   + clientChannel.getRemoteAddress() + ")");
+	                closeClientConnection(key);
+	                return;
+	            }
 
-		try {
-			if (clientChannel != null && clientChannel.isOpen()) {
-				bytesRead = clientChannel.read(buffer);
-			}
-		} catch (SocketException e) {
-			// 소켓 리셋 예외를 정상적인 종료로 간주
-			System.out.println("[알림] 클라이언트가 연결을 종료했습니다. (주소: " + clientChannel.getRemoteAddress() + ")");
-			closeClientConnection(key);
-			return;
-		} catch (IOException e) {
-			System.out.println("[오류] 클라이언트 데이터 읽기 중 연결이 리셋되었습니다. (주소: " + clientChannel.getRemoteAddress() + ")");
-			closeClientConnection(key);
-			return;
-		}
+	            buffer.flip(); // 데이터를 읽을 준비
+	            String message = new String(buffer.array(), 0, bytesRead, StandardCharsets.UTF_8).trim();
 
-		if (bytesRead == -1) {
-			System.out.println("[알림] 클라이언트가 연결을 종료했습니다. (주소: " + clientChannel.getRemoteAddress() + ")");
-			closeClientConnection(key);
-			return;
-		}
+	            if (message.length() > 1024) {
+	                System.out.println("[경고] 클라이언트가 너무 긴 메시지를 보냈습니다. (주소: " 
+	                                   + clientChannel.getRemoteAddress() + ")");
+	                ByteBuffer responseBuffer = ByteBuffer.wrap("[알림] 메시지 길이는 최대 1024자로 제한됩니다.".getBytes());
+	                clientChannel.write(responseBuffer);
+	                return;
+	            }
 
-		String message = new String(buffer.array()).trim();
+	            Client client = (Client) key.attachment();
+	            // 닉네임 설정 처리
+	            handleNickname(clientChannel, client, message);
 
-		if (message.length() > 1024) {
-		    System.out.println("[경고] 클라이언트가 너무 긴 메시지를 보냈습니다. (주소: " + clientChannel.getRemoteAddress() + ")");
-		    ByteBuffer responseBuffer = ByteBuffer.wrap("[알림] 메시지 길이는 최대 1024자로 제한됩니다.".getBytes());
-		    clientChannel.write(responseBuffer);
-		    return;
-		}
-		
-		Client client = (Client) key.attachment();
-		// 닉네임 설정
-		handleNickname(clientChannel, client, message);
-		
-		if ("exit".equalsIgnoreCase(message)) {
-			System.out.println("[알림] 클라이언트 '" + client.getNick() + "'가 종료를 요청했습니다. (주소: "
-					+ clientChannel.getRemoteAddress() + ")");
-			closeClientConnection(key);
-			return;
-		}
-		// 메시지 브로드캐스팅
-		broadcastMessage(clientChannel, client.getNick() + ": " + message + "\n");
+	            if ("exit".equalsIgnoreCase(message)) {
+	                System.out.println("[알림] 클라이언트 '" + client.getNick() 
+	                                   + "'가 종료를 요청했습니다. (주소: " + clientChannel.getRemoteAddress() + ")");
+	                closeClientConnection(key);
+	                return;
+	            }
+
+	            // 메시지 브로드캐스팅
+	            if(!message.equals(client.getNick())) {
+	            	broadcastMessage(clientChannel, client.getNick() + ": " + message + "\n");
+	            }
+	        }
+	    } catch (SocketException e) {
+	        // 소켓 리셋 예외를 정상적인 종료로 간주
+	        System.out.println("[알림] 클라이언트가 연결을 종료했습니다. (주소: " + clientChannel.getRemoteAddress() + ")");
+	        closeClientConnection(key);
+	    } catch (IOException e) {
+	        System.out.println("[오류] 클라이언트 데이터 읽기 중 IO 예외발생. (주소: " + clientChannel.getRemoteAddress() + ")");
+	        closeClientConnection(key);
+	    }
 	}
+
 	
 	private void handleNickname(SocketChannel clientChannel, Client client, String message) throws IOException {
 		// 닉네임이 설정되어 있지 않다면
@@ -237,8 +247,8 @@ public class SelectorChatServer {
 
 	// 채팅 발송
 	private void broadcastMessage(SocketChannel sender, String message) throws IOException {
-		synchronized (allClient) {
-			for (SocketChannel recipient : allClient) {
+		synchronized (ChattingClients) {
+			for (SocketChannel recipient : ChattingClients) {
 				if (recipient != sender) {
 					ByteBuffer buffer = ByteBuffer.wrap(message.getBytes());
 					recipient.write(buffer);
